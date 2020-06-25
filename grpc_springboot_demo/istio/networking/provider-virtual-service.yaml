@@ -1,0 +1,36 @@
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: provider
+spec:
+  gateways:
+    - grpc-gateway
+  hosts:
+    - provider
+  http:
+    - match:
+        - uri:
+            prefix: /org.feuyeux.grpc.Greeter/SayBye
+      name: bye-routes
+      route:
+        - destination:
+            host: provider
+            subset: v1
+          weight: 50
+        - destination:
+            host: provider
+            subset: v2
+          weight: 50
+    - match:
+        - uri:
+            prefix: /org.feuyeux.grpc.Greeter/SayHello
+      name: hello-route
+      route:
+        - destination:
+            host: provider
+            subset: v1
+          weight: 10
+        - destination:
+            host: provider
+            subset: v2
+          weight: 90

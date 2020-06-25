@@ -1,0 +1,48 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: consumer
+  labels:
+    app: consumer
+    service: consumer
+spec:
+  ports:
+    - port: 9001
+      name: http
+  selector:
+    app: consumer
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: grpc-consumer
+  labels:
+    account: consumer
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: consumer-v1
+  labels:
+    app: consumer
+    version: v1
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: consumer
+      version: v1
+  template:
+    metadata:
+      labels:
+        app: consumer
+        version: v1
+    spec:
+      serviceAccountName: grpc-consumer
+      containers:
+        - name: consumer
+          image: feuyeux/grpc_consumer:1.0.0
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 9001
+---

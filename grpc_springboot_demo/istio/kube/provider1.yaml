@@ -1,0 +1,48 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: provider
+  labels:
+    app: provider
+    service: provider
+spec:
+  ports:
+    - port: 6565
+      name: grpc
+      protocol: TCP
+  selector:
+    app: provider
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: grpc-provider
+  labels:
+    account: provider
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: provider-v1
+  labels:
+    app: provider
+    version: v1
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: provider
+      version: v1
+  template:
+    metadata:
+      labels:
+        app: provider
+        version: v1
+    spec:
+      serviceAccountName: grpc-provider
+      containers:
+        - name: provider
+          image: feuyeux/grpc_provider_v1:1.0.0
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 6565
