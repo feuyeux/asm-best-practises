@@ -1,0 +1,84 @@
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: http-hello-sa
+  labels:
+    account: http-hello-deploy
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: http-hello-deploy-v1
+  labels:
+    app: http-hello-deploy
+    version: v1
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: http-hello-deploy
+      version: v1
+  template:
+    metadata:
+      labels:
+        app: http-hello-deploy
+        version: v1
+    spec:
+      serviceAccountName: http-hello-sa
+      containers:
+        - name: http-hello-deploy
+          image: feuyeux/http_springboot_v1:1.0.0
+          ports:
+            - containerPort: 7001
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: http-hello-deploy-v2
+  labels:
+    app: http-hello-deploy
+    version: v2
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: http-hello-deploy
+      version: v2
+  template:
+    metadata:
+      labels:
+        app: http-hello-deploy
+        version: v2
+    spec:
+      serviceAccountName: http-hello-sa
+      containers:
+        - name: http-hello-deploy
+          image: feuyeux/http_springboot_v2:1.0.0
+          ports:
+            - containerPort: 7001
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: http-hello-deploy-v3
+  labels:
+    app: http-hello-deploy
+    version: v3
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: http-hello-deploy
+      version: v3
+  template:
+    metadata:
+      labels:
+        app: http-hello-deploy
+        version: v3
+    spec:
+      serviceAccountName: http-hello-sa
+      containers:
+        - name: http-hello-deploy
+          image: feuyeux/http_springboot_v3:1.0.0
+          ports:
+            - containerPort: 7001
