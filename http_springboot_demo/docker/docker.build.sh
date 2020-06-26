@@ -1,19 +1,22 @@
 #!/usr/bin/env bash
-SCRIPT_PATH="$( cd "$(dirname "$0")" >/dev/null 2>&1 ; pwd -P )/"
+SCRIPT_PATH="$(
+  cd "$(dirname "$0")" >/dev/null 2>&1
+  pwd -P
+)/"
 cd "$SCRIPT_PATH" || exit
 
 echo "start to build jars"
 cd ..
 cp src/main/java/org/feuyeux/http/api/HttpController1.cafe src/main/java/org/feuyeux/http/api/HttpController.java
-mvn clean install > /dev/null
+mvn clean install >/dev/null
 cp target/http_springboot_demo-1.0.0.jar docker/http_springboot_demo_1.jar
 
 cp src/main/java/org/feuyeux/http/api/HttpController2.cafe src/main/java/org/feuyeux/http/api/HttpController.java
-mvn clean install > /dev/null
+mvn clean install >/dev/null
 cp target/http_springboot_demo-1.0.0.jar docker/http_springboot_demo_2.jar
 
 cp src/main/java/org/feuyeux/http/api/HttpController3.cafe src/main/java/org/feuyeux/http/api/HttpController.java
-mvn clean install > /dev/null
+mvn clean install >/dev/null
 cp target/http_springboot_demo-1.0.0.jar docker/http_springboot_demo_3.jar
 
 cd docker

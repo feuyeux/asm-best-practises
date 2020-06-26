@@ -1,7 +1,7 @@
 apiVersion: istio.alibabacloud.com/v1beta1
 kind: IstioGateway
 metadata:
-  name: ingress-gateway
+  name: ingressgateway
   namespace: istio-system
 spec:
   clusterIds:

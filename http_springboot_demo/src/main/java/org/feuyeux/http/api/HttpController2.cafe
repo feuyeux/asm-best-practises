@@ -17,9 +17,7 @@ public class HttpController {
     @GetMapping(path = "/hello/{msg}")
     public String sayHello(@PathVariable String msg) throws InterruptedException {
         String result = "Bonjour " + msg;
-        long t = this.timeout.addAndGet(100);
-        TimeUnit.MILLISECONDS.sleep(t);
-        LOGGER.info("{}, {}ms", result, t);
+        LOGGER.info("{}", result);
         return result;
     }
 }

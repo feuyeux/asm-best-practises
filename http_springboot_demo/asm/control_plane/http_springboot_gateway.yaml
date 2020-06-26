@@ -4,7 +4,7 @@ metadata:
   name: http-hello-gateway
 spec:
   selector:
-    istio: ingress-gateway
+    istio: ingressgateway
   servers:
     - port:
         number: 7001
@@ -23,6 +23,6 @@ spec:
   gateways:
     - http-hello-gateway
   http:
-      route:
-        - destination:
-            host: http-hello-vs
+    route:
+      - destination:
+          host: http-hello-svc

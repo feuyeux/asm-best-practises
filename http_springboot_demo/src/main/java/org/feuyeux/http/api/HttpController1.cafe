@@ -12,14 +12,11 @@ import java.util.concurrent.atomic.AtomicLong;
 @RestController
 public class HttpController {
     private static final Logger LOGGER = LoggerFactory.getLogger(HttpController.class);
-    private AtomicLong timeout = new AtomicLong();
 
     @GetMapping(path = "/hello/{msg}")
     public String sayHello(@PathVariable String msg) throws InterruptedException {
         String result = "Hello " + msg;
-        long t = this.timeout.addAndGet(100);
-        TimeUnit.MILLISECONDS.sleep(t);
-        LOGGER.info("{}, {}ms", result, t);
+        LOGGER.info("{}", result);
         return result;
     }
 }
