@@ -7,6 +7,7 @@
     <version>1.0.0</version>
     <properties>
         <spring-boot.version>2.3.0.RELEASE</spring-boot.version>
+        <okhttp.version>4.7.2</okhttp.version>
     </properties>
     <modelVersion>4.0.0</modelVersion>
 
@@ -20,6 +21,11 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-logging</artifactId>
             <version>${spring-boot.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.squareup.okhttp3</groupId>
+            <artifactId>okhttp</artifactId>
+            <version>${okhttp.version}</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>

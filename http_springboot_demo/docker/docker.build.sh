@@ -7,6 +7,13 @@ cd "$SCRIPT_PATH" || exit
 
 echo "start to build jars"
 cd ..
+
+cp src/main/resources/application-proxy src/main/resources/application.properties
+cp src/main/java/org/feuyeux/http/api/HttpController0.cafe src/main/java/org/feuyeux/http/api/HttpController.java
+mvn clean install
+cp target/http_springboot_demo-1.0.0.jar docker/http_springboot_proxy.jar
+
+cp src/main/resources/application-hello src/main/resources/application.properties
 cp src/main/java/org/feuyeux/http/api/HttpController1.cafe src/main/java/org/feuyeux/http/api/HttpController.java
 mvn clean install >/dev/null
 cp target/http_springboot_demo-1.0.0.jar docker/http_springboot_demo_1.jar
@@ -21,10 +28,13 @@ cp target/http_springboot_demo-1.0.0.jar docker/http_springboot_demo_3.jar
 
 cd docker
 echo "start to build images"
-docker build -f dockerfile1 -t feuyeux/http_springboot_v1:1.0.0 .
-docker build -f dockerfile2 -t feuyeux/http_springboot_v2:1.0.0 .
-docker build -f dockerfile3 -t feuyeux/http_springboot_v3:1.0.0 .
+docker build -f proxy-dockerfile -t registry.cn-beijing.aliyuncs.com/asm_repo/http_springboot_proxy:1.0.0 .
+docker build -f dockerfile1 -t registry.cn-beijing.aliyuncs.com/asm_repo/http_springboot_v1:1.0.0 .
+docker build -f dockerfile2 -t registry.cn-beijing.aliyuncs.com/asm_repo/http_springboot_v2:1.0.0 .
+docker build -f dockerfile3 -t registry.cn-beijing.aliyuncs.com/asm_repo/http_springboot_v3:1.0.0 .
 
 rm -f http_*.jar
 cd ..
 mvn clean
+rm -f src/main/resources/application.properties
+rm -f src/main/java/org/feuyeux/http/api/HttpController.java

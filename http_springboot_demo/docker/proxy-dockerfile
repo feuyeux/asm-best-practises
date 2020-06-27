@@ -1,0 +1,4 @@
+FROM openjdk:8-jdk-alpine
+ARG JAR_FILE=http_springboot_proxy.jar
+COPY ${JAR_FILE} http_springboot_demo.jar
+ENTRYPOINT ["java","-jar","/http_springboot_demo.jar"]

@@ -40,7 +40,19 @@ kubectl \
   --kubeconfig ~/shop/zjk_asm_config \
   apply -f asm/control_plane/http_springboot_virtualservice.yaml
 
+kubectl \
+  --kubeconfig ~/shop/zjk_asm_config \
+  get virtualservices
+
+kubectl \
+  --kubeconfig ~/shop/zjk_asm_config \
+  get virtualservices.networking.istio.io http-hello-vs -o yaml
+
 echo "setup destination rule"
 kubectl \
   --kubeconfig ~/shop/zjk_asm_config \
   apply -f asm/control_plane/http_springboot_destinationrule.yaml
+
+kubectl \
+  --kubeconfig ~/shop/zjk_asm_config \
+  get destinationrules
