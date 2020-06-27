@@ -1,9 +1,40 @@
 apiVersion: v1
 kind: ServiceAccount
 metadata:
+  name: hello-proxy-sa
+  labels:
+    account: http-hello-proxy-deploy
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
   name: http-hello-sa
   labels:
     account: http-hello-deploy
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: http-hello-proxy
+  labels:
+    app: http-hello-proxy-deploy
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: http-hello-proxy-deploy
+  template:
+    metadata:
+      labels:
+        app: http-hello-proxy-deploy
+    spec:
+      serviceAccountName: hello-proxy-sa
+      containers:
+        - name: http-hello-proxy-deploy
+          image: registry.cn-beijing.aliyuncs.com/asm_repo/http_springboot_proxy:1.0.0
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 7001
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -28,8 +59,9 @@ spec:
       containers:
         - name: http-hello-deploy
           image: registry.cn-beijing.aliyuncs.com/asm_repo/http_springboot_v1:1.0.0
+          imagePullPolicy: Always
           ports:
-            - containerPort: 7001
+            - containerPort: 8001
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -54,8 +86,9 @@ spec:
       containers:
         - name: http-hello-deploy
           image: registry.cn-beijing.aliyuncs.com/asm_repo/http_springboot_v2:1.0.0
+          imagePullPolicy: Always
           ports:
-            - containerPort: 7001
+            - containerPort: 8001
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -80,5 +113,6 @@ spec:
       containers:
         - name: http-hello-deploy
           image: registry.cn-beijing.aliyuncs.com/asm_repo/http_springboot_v3:1.0.0
+          imagePullPolicy: Always
           ports:
-            - containerPort: 7001
+            - containerPort: 8001

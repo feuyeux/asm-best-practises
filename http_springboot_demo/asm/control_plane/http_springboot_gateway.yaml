@@ -25,4 +25,4 @@ spec:
   http:
     route:
       - destination:
-          host: http-hello-svc
+          host: hello-proxy-svc

@@ -1,4 +1,5 @@
 FROM openjdk:8-jdk-alpine
+RUN apk --no-cache add curl
 ARG JAR_FILE=http_springboot_demo_3.jar
 COPY ${JAR_FILE} http_springboot_demo.jar
 ENTRYPOINT ["java","-jar","/http_springboot_demo.jar"]
