@@ -3,13 +3,13 @@ kind: Service
 metadata:
   name: hello-proxy-svc
   labels:
-    app: http-hello-proxy-deploy
+    app: hello-proxy-deploy
 spec:
   ports:
     - port: 7001
       name: http
   selector:
-    app: http-hello-proxy-deploy
+    app: hello-proxy-deploy
 ---
 apiVersion: v1
 kind: Service

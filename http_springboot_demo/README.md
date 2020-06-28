@@ -1,5 +1,11 @@
+## Http Traffic Shifting
 
-
+### build docker
 ```sh
-$ mvn spring-boot:run 
+$ sh docker/docker.build.sh
+```
+
+### deploy to asm
+```sh
+$ sh asm/deploy.sh
 ```

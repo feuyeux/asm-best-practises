@@ -11,7 +11,13 @@ spec:
         name: http
         protocol: HTTP
       hosts:
-        - '*'
+        - "*"
+    - port:
+        number: 8001
+        name: http
+        protocol: HTTP
+      hosts:
+        - "*"
 ---
 apiVersion: networking.istio.io/v1alpha3
 kind: VirtualService
@@ -23,6 +29,13 @@ spec:
   gateways:
     - http-hello-gateway
   http:
-    route:
-      - destination:
-          host: hello-proxy-svc
+    - match:
+        - port: 7001
+      route:
+        - destination:
+            host: hello-proxy-svc
+    - match:
+        - port: 8001
+      route:
+        - destination:
+            host: http-hello-svc

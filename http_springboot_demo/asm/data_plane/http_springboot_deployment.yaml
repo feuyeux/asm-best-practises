@@ -3,7 +3,7 @@ kind: ServiceAccount
 metadata:
   name: hello-proxy-sa
   labels:
-    account: http-hello-proxy-deploy
+    account: hello-proxy-deploy
 ---
 apiVersion: v1
 kind: ServiceAccount
@@ -17,20 +17,23 @@ kind: Deployment
 metadata:
   name: http-hello-proxy
   labels:
-    app: http-hello-proxy-deploy
+    app: hello-proxy-deploy
+    version: v1
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: http-hello-proxy-deploy
+      app: hello-proxy-deploy
+      version: v1
   template:
     metadata:
       labels:
-        app: http-hello-proxy-deploy
+        app: hello-proxy-deploy
+        version: v1
     spec:
       serviceAccountName: hello-proxy-sa
       containers:
-        - name: http-hello-proxy-deploy
+        - name: hello-proxy-deploy
           image: registry.cn-beijing.aliyuncs.com/asm_repo/http_springboot_proxy:1.0.0
           imagePullPolicy: Always
           ports:

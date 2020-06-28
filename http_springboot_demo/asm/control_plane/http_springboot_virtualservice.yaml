@@ -6,9 +6,10 @@ spec:
   hosts:
     - hello-proxy-svc
   http:
-    route:
-      - destination:
-          host: http-hello-svc
+    - route:
+        - destination:
+            host: hello-proxy-svc
+            subset: v1
 ---
 apiVersion: networking.istio.io/v1alpha3
 kind: VirtualService
@@ -18,16 +19,16 @@ spec:
   hosts:
     - http-hello-svc
   http:
-    route:
-      - destination:
-          host: http-hello-svc
-          subset: v1
-        weight: 100
-      - destination:
-          host: http-hello-svc
-          subset: v2
-        weight: 0
-      - destination:
-          host: http-hello-svc
-          subset: v3
-        weight: 0
+    - route:
+        - destination:
+            host: http-hello-svc
+            subset: v1
+          weight: 70
+        - destination:
+            host: http-hello-svc
+            subset: v2
+          weight: 20
+        - destination:
+            host: http-hello-svc
+            subset: v3
+          weight: 10
