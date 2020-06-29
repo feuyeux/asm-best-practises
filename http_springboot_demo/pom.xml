@@ -3,7 +3,7 @@
          xmlns="http://maven.apache.org/POM/4.0.0"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <groupId>org.feuyeux.http</groupId>
-    <artifactId>http_springboot_demo</artifactId>
+    <artifactId>spring-boot-http</artifactId>
     <version>1.0.0</version>
     <properties>
         <spring-boot.version>2.3.0.RELEASE</spring-boot.version>
