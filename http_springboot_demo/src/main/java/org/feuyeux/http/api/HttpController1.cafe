@@ -11,9 +11,15 @@ public class HttpController {
     private static final Logger LOGGER = LoggerFactory.getLogger(HttpController.class);
 
     @GetMapping(path = "/hello/{msg}")
-    public String sayHello(@PathVariable String msg) throws InterruptedException {
+    public String sayHello(@PathVariable String msg) {
         String result = "Hello " + msg;
         LOGGER.info("{}", result);
         return result;
+    }
+
+    @GetMapping(path = "/bye")
+    public String sayBye() {
+        LOGGER.info(".");
+        return "Bye bye";
     }
 }

@@ -1,12 +1,26 @@
 apiVersion: networking.istio.io/v1alpha3
 kind: VirtualService
 metadata:
-  name: hello-proxy-vs
+  name: proxy-hello-vs
 spec:
   hosts:
     - hello-proxy-svc
   http:
-    - route:
+    - name: proxy-hello-route
+      match:
+        - uri:
+            prefix: /hello
+      timeout: 1s
+      route:
+        - destination:
+            host: hello-proxy-svc
+            subset: v1
+    - name: proxy-bye-route
+      match:
+        - uri:
+            prefix: /bye
+      timeout: 5s
+      route:
         - destination:
             host: hello-proxy-svc
             subset: v1
@@ -19,16 +33,42 @@ spec:
   hosts:
     - http-hello-svc
   http:
-    - route:
+    - name: http-hello-route
+      match:
+        - uri:
+            prefix: /hello
+      fault.delay:
+        percent:
+          value: 100
+        fixedDelay: 2s
+      route:
         - destination:
             host: http-hello-svc
             subset: v1
-          weight: 70
+          weight: 50
         - destination:
             host: http-hello-svc
             subset: v2
-          weight: 20
+          weight: 25
         - destination:
             host: http-hello-svc
             subset: v3
-          weight: 10
+          weight: 25
+    - name: http-bye-route
+      match:
+        - uri:
+            exact: /bye
+      route:
+        - destination:
+            host: http-hello-svc
+            subset: v1
+          weight: 90
+        - destination:
+            host: http-hello-svc
+            subset: v2
+          weight: 9
+        - destination:
+            host: http-hello-svc
+            subset: v3
+          weight: 1
+---

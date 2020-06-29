@@ -11,20 +11,20 @@ cd ..
 cp src/main/resources/application-proxy src/main/resources/application.properties
 cp src/main/java/org/feuyeux/http/api/HttpController0.cafe src/main/java/org/feuyeux/http/api/HttpController.java
 mvn clean install
-cp target/http_springboot_demo-1.0.0.jar docker/http_springboot_proxy.jar
+cp target/spring-boot-http-1.0.0.jar docker/http_springboot_proxy.jar
 
 cp src/main/resources/application-hello src/main/resources/application.properties
 cp src/main/java/org/feuyeux/http/api/HttpController1.cafe src/main/java/org/feuyeux/http/api/HttpController.java
 mvn clean install >/dev/null
-cp target/http_springboot_demo-1.0.0.jar docker/http_springboot_demo_1.jar
+cp target/spring-boot-http-1.0.0.jar docker/http_springboot_demo_1.jar
 
 cp src/main/java/org/feuyeux/http/api/HttpController2.cafe src/main/java/org/feuyeux/http/api/HttpController.java
 mvn clean install >/dev/null
-cp target/http_springboot_demo-1.0.0.jar docker/http_springboot_demo_2.jar
+cp target/spring-boot-http-1.0.0.jar docker/http_springboot_demo_2.jar
 
 cp src/main/java/org/feuyeux/http/api/HttpController3.cafe src/main/java/org/feuyeux/http/api/HttpController.java
 mvn clean install >/dev/null
-cp target/http_springboot_demo-1.0.0.jar docker/http_springboot_demo_3.jar
+cp target/spring-boot-http-1.0.0.jar docker/http_springboot_demo_3.jar
 
 cd docker
 echo "start to build images"
