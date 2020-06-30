@@ -37,10 +37,11 @@ spec:
       match:
         - uri:
             prefix: /hello
-      fault.delay:
-        percent:
-          value: 100
-        fixedDelay: 2s
+#      fault:
+#        delay:
+#          fixedDelay: 2s
+#          percent:
+#            value: 100
       route:
         - destination:
             host: http-hello-svc
