@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-IP=39.106.56.130
+IP=39.106.142.220
 echo "Ingress gateway ip:$IP"
 curl http://$IP:7001/hello/feuyeux
 echo

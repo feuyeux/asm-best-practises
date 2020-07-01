@@ -1,6 +1,6 @@
-MESH_CONFIG=~/shop_config/bj_mesh_config
 USER_CONFIG=~/shop_config/bj_config
-ISTIO_HOME=~/shop/istio-1.6.3
+MESH_CONFIG=~/shop_config/bj_164_config
+ISTIO_HOME=~/shop/istio-1.6.4
 
 GatewayUrl() {
   INGRESS_HOST=$(kubectl --kubeconfig "$USER_CONFIG" \
@@ -31,6 +31,8 @@ DeployBookInfoApplication() {
   kubectl --kubeconfig "$USER_CONFIG" wait --for=condition=ready pod -l app=ratings
   kubectl --kubeconfig "$USER_CONFIG" wait --for=condition=ready pod -l app=details
 
+  kubectl --kubeconfig "$USER_CONFIG" get pod
+
   pod=$(kubectl \
     --kubeconfig "$USER_CONFIG" \
     get pod -l app=ratings -o jsonpath='{.items[0].metadata.name}')
@@ -40,10 +42,10 @@ DeployBookInfoApplication() {
     exec -it "$pod" -c ratings -- curl productpage:9080/productpage | grep -o "<title>.*</title>")
 
   if [[ $RESULT != "<title>Simple Bookstore App</title>" ]]; then
-    echo "Unexpected result:$RESULT"
+    echo "Unexpected result1:$RESULT"
     exit
   fi
-
+  echo "Pass"
   kubectl --kubeconfig "$MESH_CONFIG" \
     apply -f $ISTIO_HOME/samples/bookinfo/networking/bookinfo-gateway.yaml
   kubectl --kubeconfig "$MESH_CONFIG" \
@@ -51,9 +53,10 @@ DeployBookInfoApplication() {
 
   GATEWAY_URL=$(GatewayUrl)
 
+  echo "GATEWAY_URL=$GATEWAY_URL"
   RESULT=$(curl -s "http://${GATEWAY_URL}/productpage" | grep -o "<title>.*</title>")
   if [[ $RESULT != "<title>Simple Bookstore App</title>" ]]; then
-    echo "Unexpected result:$RESULT"
+    echo "Unexpected result2:$RESULT"
     exit
   fi
   echo "Done"
@@ -80,6 +83,6 @@ FaultInjection() {
   # Sorry, product reviews are currently unavailable for this book.
 }
 
-# CleanUpBookInfoApplication
+CleanUpBookInfoApplication
 DeployBookInfoApplication
 FaultInjection

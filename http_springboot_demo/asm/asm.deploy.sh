@@ -5,8 +5,8 @@ SCRIPT_PATH="$(
 )/"
 cd "$SCRIPT_PATH" || exit
 
-MESH_CONFIG=~/shop_config/bj_mesh_config
 USER_CONFIG=~/shop_config/bj_config
+MESH_CONFIG=~/shop_config/bj_164_config
 
 echo "initialize..."
 kubectl \

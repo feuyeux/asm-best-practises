@@ -1,21 +1,15 @@
 #!/usr/bin/env bash
+# https://istio.io/latest/docs/tasks/security/authorization/authz-jwt/
+
 SCRIPT_PATH="$(
   cd "$(dirname "$0")" >/dev/null 2>&1 || exit
   pwd -P
 )/"
 cd "$SCRIPT_PATH" || exit
 
-# https://istio.io/latest/docs/tasks/security/authorization/authz-jwt/
-MESH_CONFIG=~/shop_config/bj_mesh_staging
-USER_CONFIG=~/shop_config/bj_staging
-ISTIO_HOME=~/shop/istio-1.6.3
-ISTIO_VERSION=1.6
-
-# https://istio.io/v1.5/docs/tasks/security/authorization/authz-jwt/
-#MESH_CONFIG=~/shop_config/bj_mesh_config
-#USER_CONFIG=~/shop_config/bj_config
-#ISTIO_HOME=~/shop/istio-1.5.6
-#ISTIO_VERSION=1.5
+USER_CONFIG=~/shop_config/bj_config
+MESH_CONFIG=~/shop_config/bj_164_config
+ISTIO_HOME=~/shop/istio-1.6.4
 
 POD_TIME_OUT=20s
 RA_TIMEOUT=10s
@@ -72,7 +66,7 @@ jwt_experiment() {
 
   kubectl \
     --kubeconfig "$MESH_CONFIG" \
-    apply -f $ISTIO_VERSION/jwt-example.yaml
+    apply -f jwt-example.yaml
 
   kubectl \
     --kubeconfig "$MESH_CONFIG" \
@@ -137,7 +131,7 @@ jwt_experiment() {
 
   kubectl \
     --kubeconfig "$MESH_CONFIG" \
-    apply -f $ISTIO_VERSION/require-jwt.yaml
+    apply -f require-jwt.yaml
 
   echo "7. Verify that a request with a valid JWT is allowed(200)"
   TOKEN='eyJhbGciOiJSUzI1NiIsImtpZCI6IkRIRmJwb0lVcXJZOHQyenBBMnFYZkNtcjVWTzVaRXI0UnpIVV8tZW52dlEiLCJ0eXAiOiJKV1QifQ.eyJleHAiOjQ2ODU5ODk3MDAsImZvbyI6ImJhciIsImlhdCI6MTUzMjM4OTcwMCwiaXNzIjoidGVzdGluZ0BzZWN1cmUuaXN0aW8uaW8iLCJzdWIiOiJ0ZXN0aW5nQHNlY3VyZS5pc3Rpby5pbyJ9.CfNnxWP2tcnR9q0vxyxweaF3ovQYHYZl82hAUsn21bwQd9zP7c-LS9qd_vpdLG4Tn1A15NxfCjp5f7QNBUo-KC9PJqYpgGbaXhaGx7bEdFWjcwv3nZzvc7M__ZpaCERdwU7igUmJqYGBYQ51vr2njU9ZimyKkfDe3axcyiBZde7G6dabliUosJvvKOPcKIWPccCgefSj_GNfwIip3-SsFdlR7BtbVUcqR-yv-XOxJ3Uc1MI0tz3uMiiZcyPV7sNCU4KRnemRIMHVOfuvHsU60_GhGbiSFzgPTAa9WTltbnarTbxudb_YEOx12JiwYToeX0DCPb43W1tzIBxgm8NxUg'
@@ -184,7 +178,7 @@ jwt_experiment() {
 
   kubectl \
     --kubeconfig "$MESH_CONFIG" \
-    apply -f $ISTIO_VERSION/require-jwt-group.yaml
+    apply -f require-jwt-group.yaml
 
   echo "10. Verify that a request with the JWT that includes group1 in the groups claim is allowed(200)"
   TOKEN_GROUP='eyJhbGciOiJSUzI1NiIsImtpZCI6IkRIRmJwb0lVcXJZOHQyenBBMnFYZkNtcjVWTzVaRXI0UnpIVV8tZW52dlEiLCJ0eXAiOiJKV1QifQ.eyJleHAiOjM1MzczOTExMDQsImdyb3VwcyI6WyJncm91cDEiLCJncm91cDIiXSwiaWF0IjoxNTM3MzkxMTA0LCJpc3MiOiJ0ZXN0aW5nQHNlY3VyZS5pc3Rpby5pbyIsInNjb3BlIjpbInNjb3BlMSIsInNjb3BlMiJdLCJzdWIiOiJ0ZXN0aW5nQHNlY3VyZS5pc3Rpby5pbyJ9.EdJnEZSH6X8hcyEii7c8H5lnhgjB5dwo07M5oheC8Xz8mOllyg--AHCFWHybM48reunF--oGaG6IXVngCEpVF0_P5DwsUoBgpPmK1JOaKN6_pe9sh0ZwTtdgK_RP01PuI7kUdbOTlkuUi2AO-qUyOm7Art2POzo36DLQlUXv8Ad7NBOqfQaKjE9ndaPWT7aexUsBHxmgiGbz1SyLH879f7uHYPbPKlpHU6P9S-DaKnGLaEchnoKnov7ajhrEhGXAQRukhDPKUHO9L30oPIr5IJllEQfHYtt6IZvlNUGeLUcif3wpry1R5tBXRicx2sXMQ7LyuDremDbcNy_iE76Upg'

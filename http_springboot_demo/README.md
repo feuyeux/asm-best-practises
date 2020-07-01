@@ -38,3 +38,7 @@ $ sh test/asm/test_mesh.sh
 ```sh
 docker/docker.build.sh && docker/docker.push.sh && asm/asm.deploy.sh && sleep 20s && test/asm/test_mesh.sh
 ```
+
+```sh
+asm/asm.deploy.sh && sleep 20s && test/asm/test_mesh.sh
+```

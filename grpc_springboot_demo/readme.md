@@ -64,6 +64,11 @@ echo "LOCAL=${LOCAL}"
 docker run --name provider -e GRPC_PROVIDER_HOST=${LOCAL} -p 9001:9001 feuyeux/grpc_consumer
 ```
 
+### deploy
+```sh
+istio/deploy.sh && sleep 20s && test/asm/test.sh
+```
+
 ### appendix
 ```sh
 $ brew install grpcurl

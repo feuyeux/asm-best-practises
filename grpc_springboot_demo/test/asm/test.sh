@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-HOST=47.94.204.134
+HOST=39.106.142.220
 echo ":::: ${HOST}:9001/hello/feuyeux ::::"
 curl "${HOST}:9001/hello/feuyeux"
 echo
