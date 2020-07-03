@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 # https://istio.io/latest/docs/tasks/security/authorization/authz-jwt/
+# sleep --(token)--> httpbin
 
 SCRIPT_PATH="$(
   cd "$(dirname "$0")" >/dev/null 2>&1 || exit
@@ -11,8 +12,7 @@ USER_CONFIG=~/shop_config/bj_config
 MESH_CONFIG=~/shop_config/bj_164_config
 ISTIO_HOME=~/shop/istio-1.6.4
 
-POD_TIME_OUT=20s
-RA_TIMEOUT=10s
+kubectl --kubeconfig "$USER_CONFIG" version --short
 
 jwt_experiment() {
   echo "0. Initialize"
@@ -36,8 +36,8 @@ jwt_experiment() {
     -n foo \
     apply -f "$ISTIO_HOME"/samples/sleep/sleep.yaml
 
-  echo "wait $POD_TIME_OUT for pod creating ..."
-  sleep $POD_TIME_OUT
+  kubectl --kubeconfig "$USER_CONFIG" -n foo wait --for=condition=ready pod -l app=httpbin
+  kubectl --kubeconfig "$USER_CONFIG" -n foo wait --for=condition=ready pod -l app=sleep
 
   kubectl \
     --kubeconfig "$USER_CONFIG" \
@@ -73,8 +73,7 @@ jwt_experiment() {
     -n foo \
     get requestauthentication
 
-  echo "wait $RA_TIMEOUT seconds for request authentication available ..."
-  sleep $RA_TIMEOUT
+  sleep 15s
 
   echo "4. Verify that a request with an invalid JWT is denied(401)"
   for ((i = 1; i <= 10; i++)); do
@@ -223,37 +222,19 @@ jwt_experiment() {
 }
 
 clean_up() {
-  kubectl \
-    --kubeconfig "$MESH_CONFIG" \
-    delete -f jwt-example.yaml >/dev/null 2>&1
-
-  kubectl \
-    --kubeconfig "$MESH_CONFIG" \
-    delete -f require-jwt.yaml >/dev/null 2>&1
-
-  kubectl \
-    --kubeconfig "$MESH_CONFIG" \
-    delete -f require-jwt-group.yaml >/dev/null 2>&1
-
-  kubectl \
-    --kubeconfig "$USER_CONFIG" \
-    -n foo \
-    delete -f "$ISTIO_HOME"/samples/httpbin/httpbin.yaml
-
-  kubectl \
-    --kubeconfig "$USER_CONFIG" \
-    -n foo \
-    delete -f "$ISTIO_HOME"/samples/sleep/sleep.yaml
+  kubectl --kubeconfig "$MESH_CONFIG" delete -f jwt-example.yaml >/dev/null 2>&1
+  kubectl --kubeconfig "$MESH_CONFIG" delete -f require-jwt.yaml >/dev/null 2>&1
+  kubectl --kubeconfig "$MESH_CONFIG" delete -f require-jwt-group.yaml >/dev/null 2>&1
+  kubectl --kubeconfig "$USER_CONFIG" -n foo delete -f "$ISTIO_HOME"/samples/httpbin/httpbin.yaml
+  kubectl --kubeconfig "$USER_CONFIG" -n foo delete -f "$ISTIO_HOME"/samples/sleep/sleep.yaml
 }
 
 clean_up_all() {
-  kubectl \
-    --kubeconfig "$USER_CONFIG" \
-    delete namespace foo >/dev/null 2>&1
-
-  kubectl \
-    --kubeconfig "$MESH_CONFIG" \
-    delete namespace foo >/dev/null 2>&1
+  kubectl --kubeconfig "$USER_CONFIG" delete namespace foo >/dev/null 2>&1
+  # ignore:
+  # namespace "foo" deleted
+  # Error from server (NotFound): namespaces "foo" not found
+  kubectl --kubeconfig "$MESH_CONFIG" delete namespace foo >/dev/null 2>&1
 }
 
 clean_up_all
