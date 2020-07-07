@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: http-hello-deploy-v1
+  labels:
+    app: http-hello-deploy
+    version: v4
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: http-hello-deploy
+      version: v4
+  template:
+    metadata:
+      labels:
+        app: http-hello-deploy
+        version: v4
+    spec:
+      serviceAccountName: http-hello-sa
+      containers:
+        - name: http-hello-deploy
+          image: registry.cn-beijing.aliyuncs.com/asm_repo/http_springboot_v1:1.0.0
+          env:
+            - name: HTTP_HELLO_BACKEND
+              value: "http-hello-svc"
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8001
