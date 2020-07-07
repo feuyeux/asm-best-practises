@@ -1,0 +1,92 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: hello
+  name: hello2-deploy-v1
+  labels:
+    app: hello2-deploy
+    version: v1
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: hello2-deploy
+      version: v1
+  template:
+    metadata:
+      labels:
+        app: hello2-deploy
+        version: v1
+    spec:
+      serviceAccountName: http-hello-sa
+      containers:
+        - name: hello-v1-deploy
+          image: feuyeux/http_springboot_v1:1.0.1
+          env:
+            - name: HTTP_HELLO_BACKEND
+              value: "hello3-svc.hello.svc.cluster.local"
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8001
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: hello
+  name: hello2-deploy-v2
+  labels:
+    app: hello2-deploy
+    version: v2
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: hello2-deploy
+      version: v2
+  template:
+    metadata:
+      labels:
+        app: hello2-deploy
+        version: v2
+    spec:
+      serviceAccountName: http-hello-sa
+      containers:
+        - name: hello-v2-deploy
+          image: feuyeux/http_springboot_v2:1.0.1
+          env:
+            - name: HTTP_HELLO_BACKEND
+              value: "hello3-svc.hello.svc.cluster.local"
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8001
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: hello
+  name: hello2-deploy-v3
+  labels:
+    app: hello2-deploy
+    version: v3
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: hello2-deploy
+      version: v3
+  template:
+    metadata:
+      labels:
+        app: hello2-deploy
+        version: v3
+    spec:
+      serviceAccountName: http-hello-sa
+      containers:
+        - name: hello-v3-deploy
+          image: feuyeux/http_springboot_v3:1.0.1
+          env:
+            - name: HTTP_HELLO_BACKEND
+              value: "hello3-svc.hello.svc.cluster.local"
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8001

@@ -28,10 +28,10 @@ cp target/spring-boot-http-1.0.0.jar docker/http_springboot_demo_3.jar
 
 cd docker
 echo "start to build images"
-docker build -f proxy-dockerfile -t registry.cn-beijing.aliyuncs.com/asm_repo/http_springboot_proxy:1.0.0 .
-docker build -f dockerfile1 -t registry.cn-beijing.aliyuncs.com/asm_repo/http_springboot_v1:1.0.0 .
-docker build -f dockerfile2 -t registry.cn-beijing.aliyuncs.com/asm_repo/http_springboot_v2:1.0.0 .
-docker build -f dockerfile3 -t registry.cn-beijing.aliyuncs.com/asm_repo/http_springboot_v3:1.0.0 .
+docker build -f proxy-dockerfile -t feuyeux/http_springboot_proxy:1.0.1 .
+docker build -f dockerfile1 -t feuyeux/http_springboot_v1:1.0.1 .
+docker build -f dockerfile2 -t feuyeux/http_springboot_v2:1.0.1 .
+docker build -f dockerfile3 -t feuyeux/http_springboot_v3:1.0.1 .
 
 rm -f http_*.jar
 cd ..

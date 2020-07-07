@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: hello
+  name: hello3-deploy
+  labels:
+    app: hello3-deploy
+    version: v1
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: hello3-deploy
+      version: v1
+  template:
+    metadata:
+      labels:
+        app: hello3-deploy
+        version: v1
+    spec:
+      serviceAccountName: http-hello-sa
+      containers:
+        - name: hello-v1-deploy
+          image: feuyeux/http_springboot_v1:1.0.1
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8001
