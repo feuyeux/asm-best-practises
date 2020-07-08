@@ -28,6 +28,7 @@ spec:
     - "*"
   gateways:
     - hello-gateway
+#   - hello-gateway-mesh
   http:
     - match:
         - port: 7001
