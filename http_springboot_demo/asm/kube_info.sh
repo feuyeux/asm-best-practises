@@ -25,4 +25,11 @@ k exec "$v3_pod" -c istio-proxy -n hello -- ls -al /etc/istio/pod
 printf "\n/var/lib/istio/data (istio-data)\n"
 k exec "$v3_pod" -c istio-proxy -n hello -- ls -al /var/lib/istio/data
 
-#k exec -it "$v3_pod" -c istio-proxy -n hello -- /bin/bash
+printf "\n/var/run/secrets/kubernetes.io/serviceaccount (http-hello-sa-token-6zvb7)\n"
+k exec "$v3_pod" -c istio-proxy -n hello -- ls -al /var/run/secrets/kubernetes.io/serviceaccount
+
+####
+USER_CONFIG=~/shop_config/ack_zjk_cluster
+alias k="kubectl --kubeconfig $USER_CONFIG"
+v3_pod=$(k get pod -l app=http-hello-deploy -n hello -o jsonpath='{.items[2].metadata.name}')
+k exec -it "$v3_pod" -c istio-proxy -n hello -- /bin/bash
