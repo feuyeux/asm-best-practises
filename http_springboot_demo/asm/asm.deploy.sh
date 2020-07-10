@@ -1,12 +1,10 @@
 #!/usr/bin/env bash
-USER_CONFIG=~/shop_config/bj_config
-MESH_CONFIG=~/shop_config/bj_164_config
-
 SCRIPT_PATH="$(
   cd "$(dirname "$0")" >/dev/null 2>&1
   pwd -P
 )/"
 cd "$SCRIPT_PATH" || exit
+source asm.config
 echo "initialize..."
 kubectl \
   --kubeconfig "$USER_CONFIG" \
@@ -23,7 +21,7 @@ kubectl \
 kubectl \
   --kubeconfig "$USER_CONFIG" \
   label ns hello istio-injection=enabled
-  
+
 echo "setup deployment"
 kubectl \
   --kubeconfig "$USER_CONFIG" \
@@ -46,19 +44,11 @@ kubectl \
   -n hello \
   get po
 
-#echo "setup ingress gateway"
-#CID=
-#sed "s#{CLUSTER_ID}#$CID#g" data_plane/http_springboot_ingressgateway.yaml.template >/tmp/http_springboot_ingressgateway.yaml
-#kubectl \
-#  --kubeconfig $HOME/shop_config/bj_mesh_config \
-#  -n hello \
-#  apply -f /tmp/http_springboot_ingressgateway.yaml
-
 echo "setup gateway"
 kubectl \
   --kubeconfig "$MESH_CONFIG" \
-  create ns hello
-  
+  create ns hello >/dev/null 2>&1
+
 kubectl \
   --kubeconfig "$MESH_CONFIG" \
   -n hello \
