@@ -7,15 +7,15 @@ $ sh docker/docker.build.sh
 
 #### test docker
 ```sh
-test/docker/start.http_springboot_v3.sh
+docker/test/start.http_springboot_v3.sh
 ```
 
 ```sh
-test/docker/start.http_springboot_proxy.sh 
+docker/test/start.http_springboot_proxy.sh 
 ```
 
 ```sh
-test/docker/test.sh 
+docker/test/test.sh 
 ```
 
 ### 2 push docker

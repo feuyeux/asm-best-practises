@@ -25,7 +25,9 @@ public class HttpController {
             return result;
         } else {
             String url = "http://" + HTTP_HELLO_BACKEND + ":8001/hello/" + msg;
-            return helloService.sayHello(url);
+            String backServiceResult = helloService.sayHello(url);
+            String result = "Hello " + msg;
+            return backServiceResult + ";" +result;
         }
     }
 
