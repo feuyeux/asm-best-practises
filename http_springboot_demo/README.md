@@ -11,7 +11,8 @@ docker/test/start.http_springboot_v3.sh
 ```
 
 ```sh
-docker/test/start.http_springboot_proxy.sh 
+docker/test/start.http_springboot_v3_proxy.sh
+#docker/test/start.http_springboot_proxy.sh 
 ```
 
 ```sh
@@ -20,6 +21,7 @@ docker/test/test.sh
 
 ### 2 push docker
 ```sh
+docker login --username= registry.cn-beijing.aliyuncs.com
 docker/docker.push.sh
 ```
 
