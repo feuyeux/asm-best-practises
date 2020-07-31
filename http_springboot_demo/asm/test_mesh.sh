@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 SCRIPT_PATH="$(
-  cd "$(dirname "$0")" >/dev/null 2>&1
+  cd "$(dirname "$0")" >/dev/null 2>&1 || exit
   pwd -P
 )/"
 cd "$SCRIPT_PATH" || exit
@@ -11,7 +11,7 @@ echo "Ingress gateway ip:$IP"
 
 echo "Start test in loop:"
 for ((i = 1; i <= 100; i++)); do
-  curl -s $IP:8001/hello/feuyeux >/dev/null
+  curl -s "$IP":8001/hello/feuyeux >/dev/null
 done
 for ((i = 1; i <= 10; i++)); do
   curl -s $IP:8001/hello/feuyeux >>result
@@ -24,7 +24,7 @@ for ((i = 1; i <= 100; i++)); do
   curl -s $IP:8001/bye >/dev/null
 done
 for ((i = 1; i <= 10; i++)); do
-  curl -s $IP:8001/bye >>result
+  curl -s "$IP":8001/bye >>result
   echo "" >>result
 done
 sort result | uniq -c | sort -nrk1
