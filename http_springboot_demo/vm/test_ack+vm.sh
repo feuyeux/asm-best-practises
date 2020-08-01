@@ -11,7 +11,7 @@ IP=$(kubectl --kubeconfig "$USER_CONFIG" \
 echo "Ingress gateway ip:$IP"
 
 echo "Start test in loop:"
-for ((i = 1; i <= 100; i++)); do
+for ((i = 1; i <= 10; i++)); do
   curl -s "$IP":8001/hello/feuyeux
   echo
 done
