@@ -14,13 +14,14 @@ for ((i = 1; i <= 100; i++)); do
   curl -s "$IP":8001/hello/feuyeux >/dev/null
 done
 for ((i = 1; i <= 10; i++)); do
-  curl -s $IP:8001/hello/feuyeux >>result
+  curl -s "$IP":8001/hello/feuyeux >>result
   echo "" >>result
 done
 sort result | uniq -c | sort -nrk1
 rm -f result
 echo
 for ((i = 1; i <= 100; i++)); do
+  # shellcheck disable=SC2086
   curl -s $IP:8001/bye >/dev/null
 done
 for ((i = 1; i <= 10; i++)); do

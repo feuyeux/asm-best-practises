@@ -27,17 +27,16 @@ source vm.config
 
 #apt install openjdk-14-jre-headless -y
 scp http-hello-fr.jar root@"$VM_1_IP":/var/lib/http-hello-fr.jar
-ssh root@"$VM_1_IP" "java -jar /var/lib/http-hello-fr.jar"
-
 scp http-hello-es.jar root@"$VM_2_IP":/var/lib/http-hello-es.jar
-ssh root@"$VM_2_IP" "java -jar /var/lib/http-hello-es.jar"
-
-echo "test vm services"
-curl -vs "$VM_1_IP":8001/hello/fr-server
-curl -vs "$VM_2_IP":8001/hello/es-server
 
 rm -f http*.jar
-cd ..
+cd .. || exit
 mvn clean
 rm -f src/main/resources/application.properties
 rm -f src/main/java/org/feuyeux/http/api/HttpController.java
+
+alias k="kubectl --kubeconfig $USER_CONFIG"
+hello3_ip=$(k get service hello3-svc -n hello -o jsonpath={.spec.clusterIP})
+echo "$hello3_ip hello3-svc.hello.svc.cluster.local"
+ssh root@"$VM_1_IP" "echo $hello3_ip hello3-svc.hello.svc.cluster.local >> /etc/hosts"
+ssh root@"$VM_2_IP" "echo $hello3_ip hello3-svc.hello.svc.cluster.local >> /etc/hosts"

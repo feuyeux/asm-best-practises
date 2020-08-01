@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: hello
+  name: hello2-wl
+  labels:
+    app: hello2-wl
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: hello2-wl
+  template:
+    metadata:
+      labels:
+        app: hello2-wl
+    spec:
+      serviceAccountName: http-hello-sa
+      containers:
+        - name: hello-v1-deploy
+          image: feuyeux/http_springboot_v1:1.0.1
+          env:
+            - name: HTTP_HELLO_BACKEND
+              value: "hello3-svc.hello.svc.cluster.local"
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8001
