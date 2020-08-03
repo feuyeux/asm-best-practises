@@ -1,0 +1,27 @@
+## gRPC Traffic Shifting
+
+### 1 build docker
+```sh
+$ sh docker/docker.build.sh
+```
+
+#### test docker
+```sh
+docker/test/start.grpc_springboot_v1.sh
+```
+
+```sh
+docker/test/start.grpc_springboot_v2.sh
+```
+
+```sh
+docker/test/test.sh 
+```
+
+### appendix
+```sh
+$ brew install grpcurl
+```
+
+- https://github.com/LogNet/grpc-spring-boot-starter
+- https://github.com/fullstorydev/grpcurl
