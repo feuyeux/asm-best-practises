@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  namespace: hello
+  namespace: http-hello
   name: hello1-deploy
   labels:
     app: hello1-deploy
@@ -21,10 +21,10 @@ spec:
       serviceAccountName: http-hello-sa
       containers:
         - name: hello-v1-deploy
-          image: feuyeux/http_springboot_v1:1.0.1
+          image: registry.cn-beijing.aliyuncs.com/asm_repo/http_springboot_v1:1.0.1
           env:
             - name: HTTP_HELLO_BACKEND
-              value: "hello2-svc.hello.svc.cluster.local"
+              value: "hello2-svc.http-hello.svc.cluster.local"
           imagePullPolicy: Always
           ports:
             - containerPort: 8001

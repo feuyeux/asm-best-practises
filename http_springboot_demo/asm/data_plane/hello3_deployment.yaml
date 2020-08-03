@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  namespace: hello
+  namespace: http-hello
   name: hello3-deploy
   labels:
     app: hello3-deploy
@@ -21,7 +21,7 @@ spec:
       serviceAccountName: http-hello-sa
       containers:
         - name: hello-v1-deploy
-          image: feuyeux/http_springboot_v1:1.0.1
+          image: registry.cn-beijing.aliyuncs.com/asm_repo/http_springboot_v1:1.0.1
           imagePullPolicy: Always
           ports:
             - containerPort: 8001

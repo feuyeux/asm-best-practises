@@ -21,12 +21,14 @@ docker/test/test.sh
 
 ### 2 push docker
 ```sh
-docker login --username= registry.cn-beijing.aliyuncs.com
+CR_USER=
+docker login --username=$CR_USER registry.cn-beijing.aliyuncs.com
 docker/docker.push.sh
 ```
 
 ### 3 deploy to asm
 ```sh
+$ nano asm/asm.config
 $ sh asm/ack.deploy.sh
 $ sh asm/asm.deploy.sh
 ```

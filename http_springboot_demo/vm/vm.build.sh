@@ -36,7 +36,7 @@ rm -f src/main/resources/application.properties
 rm -f src/main/java/org/feuyeux/http/api/HttpController.java
 
 alias k="kubectl --kubeconfig $USER_CONFIG"
-hello3_ip=$(k get service hello3-svc -n hello -o jsonpath={.spec.clusterIP})
+hello3_ip=$(k get service hello3-svc -n http-hello -o jsonpath={.spec.clusterIP})
 echo "$hello3_ip hello3-svc.hello.svc.cluster.local"
 ssh root@"$VM_1_IP" "echo $hello3_ip hello3-svc.hello.svc.cluster.local >> /etc/hosts"
 ssh root@"$VM_2_IP" "echo $hello3_ip hello3-svc.hello.svc.cluster.local >> /etc/hosts"

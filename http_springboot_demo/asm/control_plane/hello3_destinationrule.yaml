@@ -1,7 +1,7 @@
 apiVersion: networking.istio.io/v1alpha3
 kind: DestinationRule
 metadata:
-  namespace: hello
+  namespace: http-hello
   name: hello3-dr
 spec:
   host: hello3-svc

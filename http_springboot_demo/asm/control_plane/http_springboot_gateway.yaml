@@ -1,7 +1,7 @@
 apiVersion: networking.istio.io/v1alpha3
 kind: Gateway
 metadata:
-  namespace: hello
+  namespace: http-hello
   name: hello-gateway-mesh
 spec:
   selector:
@@ -17,7 +17,7 @@ spec:
 apiVersion: networking.istio.io/v1alpha3
 kind: VirtualService
 metadata:
-  namespace: hello
+  namespace: http-hello
   name: hello-gateway-vs
 spec:
   hosts:

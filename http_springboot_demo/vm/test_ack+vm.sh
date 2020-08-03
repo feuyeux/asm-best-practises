@@ -12,6 +12,6 @@ echo "Ingress gateway ip:$IP"
 
 echo "Start test in loop:"
 for ((i = 1; i <= 10; i++)); do
-  curl -s "$IP":8001/hello/feuyeux
+  curl -s "$IP":8001/hello/eric
   echo
 done

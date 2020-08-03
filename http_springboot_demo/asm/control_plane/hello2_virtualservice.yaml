@@ -1,7 +1,7 @@
 apiVersion: networking.istio.io/v1alpha3
 kind: VirtualService
 metadata:
-  namespace: hello
+  namespace: http-hello
   name: hello2-vs
 spec:
   hosts:
@@ -15,15 +15,15 @@ spec:
         - destination:
             host: hello2-svc
             subset: v1
-          weight: 60
+          weight: 30
         - destination:
             host: hello2-svc
             subset: v2
-          weight: 20
+          weight: 60
         - destination:
             host: hello2-svc
             subset: v3
-          weight: 20
+          weight: 10
     - name: http-bye-route
       match:
         - uri:
@@ -36,9 +36,9 @@ spec:
         - destination:
             host: hello2-svc
             subset: v2
-          weight: 9
+          weight: 5
         - destination:
             host: hello2-svc
             subset: v3
-          weight: 1
+          weight: 5
 ---
