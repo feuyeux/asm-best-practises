@@ -1,4 +1,4 @@
-package org.feuyeux.http.api;
+package org.feuyeux.http.service;
 
 import okhttp3.OkHttpClient;
 import okhttp3.Request;

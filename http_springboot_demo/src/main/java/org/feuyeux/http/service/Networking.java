@@ -1,4 +1,4 @@
-package org.feuyeux.http.api;
+package org.feuyeux.http.service;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
