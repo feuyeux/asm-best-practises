@@ -1,0 +1,25 @@
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  namespace: grpc-hello
+  name: hello1-vs
+spec:
+  hosts:
+    - hello1-svc
+  http:
+    - name: grpc-hello-route
+      match:
+        - uri:
+            prefix: /org.feuyeux.grpc.Greeter/SayHello
+      route:
+        - destination:
+            host: hello1-svc
+            subset: v1
+    - name: grpc-bye-route
+      match:
+        - uri:
+            prefix: /org.feuyeux.grpc.Greeter/SayBye
+      route:
+        - destination:
+            host: hello1-svc
+            subset: v1

@@ -1,14 +1,11 @@
 apiVersion: networking.istio.io/v1alpha3
 kind: DestinationRule
 metadata:
-  name: provider-dr
+  namespace: grpc-hello
+  name: hello1-dr
 spec:
-  host: provider
+  host: hello1-svc
   subsets:
     - name: v1
       labels:
         version: v1
-    - name: v2
-      labels:
-        version: v2
-

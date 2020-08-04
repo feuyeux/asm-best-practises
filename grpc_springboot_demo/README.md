@@ -19,6 +19,30 @@ docker/test/start.grpc.consumer.sh
 docker/test/grpc.consumer.test.sh
 ```
 
+### 2 push docker
+https://cr.console.aliyun.com/cn-beijing/instances/credentials
+```sh
+CR_USER=
+docker login --username=$CR_USER registry.cn-beijing.aliyuncs.com
+docker/docker.push.sh
+```
+
+### 3 deploy to asm
+```sh
+nano asm/asm.config
+
+sh asm/ack.deploy.sh
+sh asm/asm.deploy.sh
+```
+
+#### test mesh
+```sh
+sh asm/test_kube.sh
+
+docker/test/start.grpc.consumer.sh
+sh asm/test_mesh.sh
+```
+
 ### appendix
 ```sh
 $ brew install grpcurl
