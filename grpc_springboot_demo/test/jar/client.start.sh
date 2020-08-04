@@ -4,5 +4,3 @@ cd "$SCRIPT_PATH"
 cd ../..
 mvn clean install -DskipTests -U
 ##
-export GRPC_PROVIDER_HOST=localhost
-java -jar consumer/target/consumer-1.0.0.jar

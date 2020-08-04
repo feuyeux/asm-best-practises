@@ -14,6 +14,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.concurrent.ExecutionException;
@@ -21,20 +22,11 @@ import java.util.concurrent.ExecutionException;
 @RestController
 public class GreeterController {
     private static final Logger LOGGER = LoggerFactory.getLogger(GreeterController.class);
-    private static String GRPC_PROVIDER_HOST;
-
-    static {
-        GRPC_PROVIDER_HOST = System.getenv("GRPC_PROVIDER_HOST");
-        if (GRPC_PROVIDER_HOST == null || GRPC_PROVIDER_HOST.isEmpty()) {
-            GRPC_PROVIDER_HOST = "provider";
-        }
-        LOGGER.info("GRPC_PROVIDER_HOST={}", GRPC_PROVIDER_HOST);
-    }
 
     @GetMapping(path = "/hello/{msg}")
-    public String sayHello(@PathVariable String msg) {
-        LOGGER.info("GRPC_PROVIDER_HOST={}, sayHello received message: {}", GRPC_PROVIDER_HOST, msg);
-        final ManagedChannel channel = ManagedChannelBuilder.forAddress(GRPC_PROVIDER_HOST, 6565)
+    public String sayHello(@PathVariable String msg, @RequestParam String host, @RequestParam int port) {
+        LOGGER.info("sayHello received message: {}", msg);
+        final ManagedChannel channel = ManagedChannelBuilder.forAddress(host, port)
                 .usePlaintext()
                 .build();
         final GreeterGrpc.GreeterFutureStub stub = GreeterGrpc.newFutureStub(channel);
@@ -48,9 +40,8 @@ public class GreeterController {
     }
 
     @GetMapping("bye")
-    public String sayBye() {
-        LOGGER.info("GRPC_PROVIDER_HOST={}, sayBye received message", GRPC_PROVIDER_HOST);
-        final ManagedChannel channel = ManagedChannelBuilder.forAddress(GRPC_PROVIDER_HOST, 6565)
+    public String sayBye(@RequestParam(name = "host") String host, @RequestParam(name = "port") int port) {
+        final ManagedChannel channel = ManagedChannelBuilder.forAddress(host, port)
                 .usePlaintext()
                 .build();
         final GreeterGrpc.GreeterFutureStub stub = GreeterGrpc.newFutureStub(channel);

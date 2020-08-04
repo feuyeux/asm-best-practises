@@ -20,6 +20,3 @@ grpcurl -v -plaintext localhost:6001 org.feuyeux.grpc.Greeter/SayBye
 echo
 echo "localhost:7001/bye"
 grpcurl -v -plaintext localhost:7001 org.feuyeux.grpc.Greeter/SayBye
-for ((i = 1; i <= 100; i++)); do
-  time curl localhost:6001/hello/eric
-done
