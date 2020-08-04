@@ -4,5 +4,6 @@ SCRIPT_PATH="$(
   pwd -P
 )/"
 cd "$SCRIPT_PATH" || exit
-source vm.config
-ssh root@"$VM_1_IP"
+cd ..
+source hybrid.config
+ssh root@"$VM_PUB_3"

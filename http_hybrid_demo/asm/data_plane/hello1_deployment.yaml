@@ -1,19 +1,22 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  namespace: http-hello
-  name: hello2-wl
+  namespace: hybrid-hello
+  name: hello1-deploy
   labels:
-    app: hello2-wl
+    app: hello1-deploy
+    version: v1
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: hello2-wl
+      app: hello1-deploy
+      version: v1
   template:
     metadata:
       labels:
-        app: hello2-wl
+        app: hello1-deploy
+        version: v1
     spec:
       serviceAccountName: http-hello-sa
       containers:
@@ -21,7 +24,7 @@ spec:
           image: registry.cn-beijing.aliyuncs.com/asm_repo/http_springboot_v1:1.0.1
           env:
             - name: HTTP_HELLO_BACKEND
-              value: "hello3-svc.hello.svc.cluster.local"
+              value: "hello2-svc.hybrid-hello.svc.cluster.local"
           imagePullPolicy: Always
           ports:
             - containerPort: 8001

@@ -1,0 +1,17 @@
+apiVersion: networking.istio.io/v1alpha3
+kind: ServiceEntry
+metadata:
+  name: mesh-expansion-hello2-svc
+  namespace: hybrid-hello
+spec:
+  hosts:
+    - hello2-svc.hybrid-hello.svc.cluster.local
+  location: MESH_INTERNAL
+  ports:
+    - name: http-8001
+      number: 8001
+      protocol: HTTP
+  resolution: STATIC
+  workloadSelector:
+    labels:
+      app: hello-workload

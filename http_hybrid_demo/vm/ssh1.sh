@@ -4,6 +4,6 @@ SCRIPT_PATH="$(
   pwd -P
 )/"
 cd "$SCRIPT_PATH" || exit
-source vm.config
-
-kubectl --kubeconfig "$USER_CONFIG" apply -f hello2.deployment.yaml
+cd ..
+source hybrid.config
+ssh root@"$VM_PUB_1"
