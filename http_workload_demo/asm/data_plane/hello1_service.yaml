@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  namespace: external-hello
+  name: hello1-svc
+  labels:
+    app: hello1-svc
+spec:
+  ports:
+    - name: http
+      port: 8002
+      targetPort: 8001
+      protocol: TCP
+  selector:
+    app: hello1-deploy

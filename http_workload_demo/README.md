@@ -1,4 +1,4 @@
-## Http Hybrid Traffic Shifting
+## Http WorkloadEntry Traffic Shifting
 
 ### 1 init vm ssh
 ```sh
