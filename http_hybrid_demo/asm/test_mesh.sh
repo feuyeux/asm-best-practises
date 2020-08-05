@@ -17,15 +17,15 @@ for vm in "${VMS[@]}"; do
 done
 echo
 echo "Test access hello2-svc"
-k exec "$hello1_pod" -c hello-v1-deploy -n hybrid-hello -- curl -sv hello2-svc.hybrid-hello.svc.cluster.local:8001/hello/eric
+k exec "$hello1_pod" -c hello-v1-deploy -n hybrid-hello -- curl -s hello2-svc.hybrid-hello.svc.cluster.local:8001/hello/eric
 echo
 echo
 echo "Test access hello1-svc"
-k exec "$hello1_pod" -c hello-v1-deploy -n hybrid-hello -- curl -s hello1-svc.hybrid-hello.svc.cluster.local:8002/hello/eric
+k exec "$hello1_pod" -c hello-v1-deploy -n hybrid-hello -- curl -s hello1-svc.hybrid-hello.svc.cluster.local:8003/hello/eric
 echo
 echo
 echo "Test route(hello2-svc) in a loop"
-for i in {1..10}; do
-  resp=$(k exec "$hello1_pod" -c hello-v1-deploy -n hybrid-hello -- curl -s hello1-svc.hybrid-hello.svc.cluster.local:8002/hello/eric)
+for i in {1..5}; do
+  resp=$(k exec "$hello1_pod" -c hello-v1-deploy -n hybrid-hello -- curl -s hello1-svc.hybrid-hello.svc.cluster.local:8003/hello/eric)
   echo $i "$resp"
 done

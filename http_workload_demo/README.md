@@ -48,16 +48,23 @@ sh vm/test_http.sh
 sh asm/ack.deploy.sh
 sh asm/asm.deploy.sh
 ```
-
 #### test mesh
 ```sh
 sh asm/test_mesh.sh
 ```
 
 ### 4 add traffic shift on asm
-
 ```sh
 sh asm/asm_traffic_shift.sh
+```
+
+#### edit workload
+```yaml
+spec:
+  address: 192.168.0.170
+  labels:
+    app: hello-workload
+    version: v1
 ```
 
 #### test traffic shift

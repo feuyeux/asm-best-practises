@@ -30,13 +30,24 @@ kubectl \
 kubectl \
   --kubeconfig "$USER_CONFIG" \
   apply -f data_plane/hello1_deployment.yaml
+kubectl \
+  --kubeconfig "$USER_CONFIG" \
+  apply -f data_plane/hello3_deployment.yaml
 
 echo "waiting for hello1-deploy"
 kubectl \
   --kubeconfig "$USER_CONFIG" \
   -n hybrid-hello \
   wait --for=condition=ready pod -l app=hello1-deploy
+echo "waiting for hello3-deploy"
+kubectl \
+  --kubeconfig "$USER_CONFIG" \
+  -n http-hello \
+  wait --for=condition=ready pod -l app=hello3-deploy
 
 kubectl \
   --kubeconfig "$USER_CONFIG" \
   apply -f data_plane/hello1_service.yaml
+kubectl \
+  --kubeconfig "$USER_CONFIG" \
+  apply -f data_plane/hello3_service.yaml
