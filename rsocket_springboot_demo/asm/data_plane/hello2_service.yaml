@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Service
+metadata:
+  namespace: http-hello
+  name: hello2-svc
+  labels:
+    app: hello2-svc
+spec:
+  ports:
+    - port: 8001
+      name: http
+  selector:
+    app: hello2-deploy
