@@ -1,0 +1,49 @@
+apiVersion: istio.alibabacloud.com/v1beta1
+kind: IstioGateway
+metadata:
+  name: ingressgateway
+  namespace: istio-system
+spec:
+  externalTrafficPolicy: Local
+  maxReplicas: 5
+  minReplicas: 2
+  ports:
+    - name: status-port
+      port: 15020
+      targetPort: 15020
+    - name: http2
+      port: 80
+      targetPort: 80
+    - name: https
+      port: 443
+      targetPort: 443
+    - name: tls
+      port: 15443
+      targetPort: 15443
+    - name: http-hello
+      port: 8001
+      targetPort: 8001
+    - name: grpc-hello
+      port: 7001
+      protocol: TCP
+      targetPort: 7001
+    - name: http-workload
+      port: 8002
+      targetPort: 8002
+    - name: http-hybrid
+      port: 8003
+      targetPort: 8003
+  replicaCount: 2
+  sds:
+    enabled: true
+    resources:
+      limits:
+        cpu: '2'
+        memory: 1Gi
+      requests:
+        cpu: 100m
+        memory: 128Mi
+  serviceAnnotations:
+    service.beta.kubernetes.io/alicloud-loadbalancer-address-type: internet
+    service.beta.kubernetes.io/alicloud-loadbalancer-spec: slb.s2.small
+  serviceType: LoadBalancer

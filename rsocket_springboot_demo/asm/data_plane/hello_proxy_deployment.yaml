@@ -1,0 +1,38 @@
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: hello-proxy-sa
+  labels:
+    account: hello-proxy-deploy
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: http-hello
+  name: http-hello-proxy
+  labels:
+    app: hello-proxy-deploy
+    version: v1
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: hello-proxy-deploy
+      version: v1
+  template:
+    metadata:
+      labels:
+        app: hello-proxy-deploy
+        version: v1
+    spec:
+      serviceAccountName: hello-proxy-sa
+      containers:
+        - name: hello-proxy-deploy
+          image: registry.cn-beijing.aliyuncs.com/asm_repo/rsocket_springboot_proxy:1.0.0
+          env:
+            - name: HTTP_HELLO_BACKEND
+              value: "http-hello-svc"
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 7001
+---

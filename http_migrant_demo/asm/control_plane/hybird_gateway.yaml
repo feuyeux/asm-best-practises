@@ -1,0 +1,32 @@
+apiVersion: networking.istio.io/v1alpha3
+kind: Gateway
+metadata:
+  namespace: migrant-hello
+  name: hybrid-gateway
+spec:
+  selector:
+    istio: ingressgateway
+  servers:
+    - port:
+        number: 8004
+        name: http
+        protocol: HTTP
+      hosts:
+        - "*"
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  namespace: migrant-hello
+  name: hybrid-gateway-vs
+spec:
+  hosts:
+    - "*"
+  gateways:
+    - hybrid-gateway
+  http:
+    - match:
+        - port: 8004
+      route:
+        - destination:
+            host: hello1-svc

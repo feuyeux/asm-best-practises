@@ -1,0 +1,30 @@
+apiVersion: networking.istio.io/v1alpha3
+kind: ServiceEntry
+metadata:
+  name: mesh-expansion-hello2-svc
+  namespace: pod-vm-hello
+spec:
+  hosts:
+  - hello2-svc.pod-vm-hello.svc.cluster.local
+  location: MESH_INTERNAL
+  ports:
+  - name: http
+    number: 8001
+    protocol: HTTP
+  resolution: STATIC
+  workloadSelector:
+    labels:
+      app: hello2-deploy
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: WorkloadEntry
+metadata:
+  name: vm1
+  namespace: pod-vm-hello
+spec:
+  address: 192.168.0.170
+  labels:
+    app: hello2-deploy
+    class: vm
+    version: v1
+  serviceAccount: http-hello-sa
