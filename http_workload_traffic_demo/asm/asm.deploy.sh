@@ -7,12 +7,12 @@ cd "$SCRIPT_PATH" || exit
 source ../hybrid.config
 
 alias k="kubectl --kubeconfig $USER_CONFIG"
-alias s="kubectl --kubeconfig $MESH_CONFIG"
+alias m="kubectl --kubeconfig $MESH_CONFIG"
 
 k delete svc hello2-svc -n external-hello
-s delete namespace external-hello
-s create ns external-hello
-s label ns external-hello istio-injection=enabled
+m delete namespace external-hello
+m create ns external-hello
+m label ns external-hello istio-injection=enabled
 
 MESH_ID=c9e8589cc0afa430c80bc1541b6d61f0f
 

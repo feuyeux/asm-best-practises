@@ -1,5 +1,16 @@
 ## ASM最佳实践示例
 
 - Traffic Shifting
-  - [grpc_springboot_demo](grpc_springboot_demo) [基于阿里云服务网格（ASM）的 GRPC 服务部署实践](https://xie.infoq.cn/article/b291ec5e4609482c9da977df8)
-  - [http_springboot_demo](http_springboot_demo) 
+  - http_springboot_demo
+  - grpc_springboot_demo
+  - rsocket_springboot_demo
+- Traffic Management
+  - fault_injection
+- Secure
+  - jwt_demo
+- Observe
+  - tracing_demo
+- Meshifying  
+  - http_workload_demo
+  - http_workload_traffic_demo
+  - http_hybrid_demo

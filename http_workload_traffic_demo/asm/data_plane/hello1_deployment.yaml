@@ -18,7 +18,6 @@ spec:
         app: hello1-deploy
         version: v1
     spec:
-      serviceAccountName: http-hello-sa
       containers:
         - name: hello-v1-deploy
           image: registry.cn-beijing.aliyuncs.com/asm_repo/http_springboot_v1:1.0.1

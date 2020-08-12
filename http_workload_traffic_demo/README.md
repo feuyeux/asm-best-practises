@@ -1,5 +1,5 @@
 ## Http WorkloadEntry Traffic Shifting
-<img src="../img/workload-traffic-demo.svg" height="300" />
+<img src="../img/workload-traffic-demo.png" height="300" />
 
 ### 1 init vm ssh
 ```sh
@@ -70,5 +70,5 @@ spec:
 
 #### test traffic shift
 ```sh
-sh asm/test_traffic_shift.sh
+sh test_traffic_shift.sh
 ```
