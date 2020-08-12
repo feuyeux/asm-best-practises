@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: pod-vm-hello
+  name: hello2-deploy-v2
+  labels:
+    app: hello2-deploy
+    version: v2
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: hello2-deploy
+      version: v2
+  template:
+    metadata:
+      labels:
+        app: hello2-deploy
+        version: v2
+    spec:
+      containers:
+        - name: hello-v1-deploy
+          image: registry.cn-beijing.aliyuncs.com/asm_repo/http_springboot_v2:1.0.1
+          ports:
+            - containerPort: 8001

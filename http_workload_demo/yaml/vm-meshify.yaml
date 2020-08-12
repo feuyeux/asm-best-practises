@@ -27,4 +27,4 @@ spec:
     app: hello2-deploy
     class: vm
     version: v1
-  serviceAccount: http-hello-sa
+#  serviceAccount: http-hello-sa
