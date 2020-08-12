@@ -23,12 +23,7 @@ spec:
   hosts:
     - "*"
   gateways:
-<<<<<<< HEAD
-    - hello-gateway
-#   - hello-gateway-mesh
-=======
     - hello-gateway-mesh
->>>>>>> 9cc6f6c8a3798b3ed86027e67f5ade05b6a3ada3
   http:
     - match:
         - port: 8001

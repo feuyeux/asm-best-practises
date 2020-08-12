@@ -22,12 +22,8 @@ docker/test/test.sh
 ### 2 push docker
 https://cr.console.aliyun.com/cn-beijing/instances/credentials
 ```sh
-<<<<<<< HEAD
-docker login --username= registry.cn-beijing.aliyuncs.com
-=======
 CR_USER=
 docker login --username=$CR_USER registry.cn-beijing.aliyuncs.com
->>>>>>> 9cc6f6c8a3798b3ed86027e67f5ade05b6a3ada3
 docker/docker.push.sh
 ```
 

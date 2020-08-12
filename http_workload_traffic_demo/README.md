@@ -1,4 +1,5 @@
 ## Http WorkloadEntry Traffic Shifting
+<img src="../img/workload-traffic-demo.svg" height="300" />
 
 ### 1 init vm ssh
 ```sh

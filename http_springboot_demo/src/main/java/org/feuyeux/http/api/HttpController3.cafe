@@ -23,20 +23,12 @@ public class HttpController {
         if (HTTP_HELLO_BACKEND == null) {
             String result = "Hola " + msg;
             LOGGER.info("{}", result);
-<<<<<<< HEAD
-            return result;
-=======
             return result + helloService.markIp();
->>>>>>> 9cc6f6c8a3798b3ed86027e67f5ade05b6a3ada3
         } else {
             String url = "http://" + HTTP_HELLO_BACKEND + ":8001/hello/" + msg;
             String backServiceResult = helloService.sayHello(url);
             String result = "Hola " + msg;
-<<<<<<< HEAD
-            return backServiceResult + ";" +result;
-=======
             return result + backServiceResult;
->>>>>>> 9cc6f6c8a3798b3ed86027e67f5ade05b6a3ada3
         }
     }
 
@@ -44,18 +36,11 @@ public class HttpController {
     public String sayBye() {
         if (HTTP_HELLO_BACKEND == null) {
             LOGGER.info(".");
-<<<<<<< HEAD
-            return "Adióbais";
-        } else {
-            String url = "http://" + HTTP_HELLO_BACKEND + ":8001/bye";
-            return helloService.sayBye(url);
-=======
             return "Adióbais" + helloService.markIp();
         } else {
             String url = "http://" + HTTP_HELLO_BACKEND + ":8001/bye";
             String backServiceResult = helloService.sayBye(url);
             return "Adióbais" + backServiceResult;
->>>>>>> 9cc6f6c8a3798b3ed86027e67f5ade05b6a3ada3
         }
     }
 }
