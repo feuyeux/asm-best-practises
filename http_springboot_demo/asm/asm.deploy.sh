@@ -5,6 +5,7 @@ SCRIPT_PATH="$(
 )/"
 cd "$SCRIPT_PATH" || exit
 source asm.config
+<<<<<<< HEAD
 echo "initialize..."
 kubectl \
   --kubeconfig "$USER_CONFIG" \
@@ -49,34 +50,51 @@ kubectl \
   --kubeconfig "$MESH_CONFIG" \
   create ns hello >/dev/null 2>&1
 
+=======
+
+echo "4 setup gateway"
 kubectl \
   --kubeconfig "$MESH_CONFIG" \
-  -n hello \
+  create ns http-hello >/dev/null 2>&1
+
+kubectl \
+  --kubeconfig "$MESH_CONFIG" \
   apply -f control_plane/http_springboot_gateway.yaml
 
-echo "setup virtual service"
+echo "5 setup virtual service"
 kubectl \
   --kubeconfig "$MESH_CONFIG" \
-  -n hello \
-  apply -f control_plane/http_springboot_virtualservice.yaml
+  apply -f control_plane/hello1_virtualservice.yaml
+>>>>>>> 9cc6f6c8a3798b3ed86027e67f5ade05b6a3ada3
+kubectl \
+  --kubeconfig "$MESH_CONFIG" \
+  apply -f control_plane/hello2_virtualservice.yaml
+kubectl \
+  --kubeconfig "$MESH_CONFIG" \
+  apply -f control_plane/hello3_virtualservice.yaml
 
 kubectl \
   --kubeconfig "$MESH_CONFIG" \
-  -n hello \
+  -n http-hello \
   get virtualservices
 
 #kubectl \
 #  --kubeconfig "$MESH_CONFIG" \
-#  -n hello \
-#  get virtualservices.networking.istio.io http-hello-vs -o yaml
+#  -n http-hello \
+#  get virtualservices.networking.istio.io http-http-hello-vs -o yaml
 
-echo "setup destination rule"
+echo "6 setup destination rule"
 kubectl \
   --kubeconfig "$MESH_CONFIG" \
-  -n hello \
-  apply -f control_plane/http_springboot_destinationrule.yaml
+  apply -f control_plane/hello1_destinationrule.yaml
+kubectl \
+  --kubeconfig "$MESH_CONFIG" \
+  apply -f control_plane/hello2_destinationrule.yaml
+kubectl \
+  --kubeconfig "$MESH_CONFIG" \
+  apply -f control_plane/hello3_destinationrule.yaml
 
 kubectl \
   --kubeconfig "$MESH_CONFIG" \
-  -n hello \
+  -n http-hello \
   get destinationrules

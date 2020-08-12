@@ -1,0 +1,32 @@
+apiVersion: networking.istio.io/v1alpha3
+kind: Gateway
+metadata:
+  namespace: grpc-hello
+  name: hello-gateway-mesh
+spec:
+  selector:
+    istio: ingressgateway
+  servers:
+    - port:
+        number: 7001
+        name: grpc
+        protocol: GRPC
+      hosts:
+        - "*"
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  namespace: grpc-hello
+  name: hello-gateway-vs
+spec:
+  hosts:
+    - "*"
+  gateways:
+    - hello-gateway-mesh
+  http:
+    - match:
+        - port: 7001
+      route:
+        - destination:
+            host: hello1-svc

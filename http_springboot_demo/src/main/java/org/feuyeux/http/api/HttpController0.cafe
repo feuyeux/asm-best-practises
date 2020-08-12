@@ -27,16 +27,13 @@ public class HttpController {
     }
 
     @GetMapping(path = "/hello/{msg}")
-    public String sayHello(@PathVariable String msg) throws IOException{
+    public String sayHello(@PathVariable String msg) throws IOException {
         String url = "http://" + HTTP_HELLO_HOST + ":8001/hello/" + msg;
-
         Request request = new Request.Builder()
                 .url(url)
                 .build();
-
         try (Response response = client.newCall(request).execute()) {
             if (!response.isSuccessful()) throw new IOException("Unexpected code " + response);
-
             Headers responseHeaders = response.headers();
             for (int i = 0; i < responseHeaders.size(); i++) {
                 LOGGER.debug(responseHeaders.name(i) + ": " + responseHeaders.value(i));
@@ -46,18 +43,16 @@ public class HttpController {
             return result;
         }
     }
+
     @GetMapping(path = "/bye")
     public String sayBye() throws IOException {
         LOGGER.info(".");
         String url = "http://" + HTTP_HELLO_HOST + ":8001/bye";
-
         Request request = new Request.Builder()
                 .url(url)
                 .build();
-
         try (Response response = client.newCall(request).execute()) {
             if (!response.isSuccessful()) throw new IOException("Unexpected code " + response);
-
             Headers responseHeaders = response.headers();
             for (int i = 0; i < responseHeaders.size(); i++) {
                 LOGGER.debug(responseHeaders.name(i) + ": " + responseHeaders.value(i));

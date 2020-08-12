@@ -1,0 +1,20 @@
+apiVersion: istio.alibabacloud.com/v1beta1
+kind: IstioGateway
+metadata:
+  namespace: http-hello
+  name: ingressgateway
+  namespace: istio-system
+spec:
+  clusterIds:
+    - "{CLUSTER_ID}"
+  externalTrafficPolicy: Local
+  maxReplicas: 2
+  minReplicas: 1
+  ports:
+    - name: status-port
+      port: 15020
+      targetPort: 15020
+    - name: http
+      port: 7001
+      targetPort: 7001
+  serviceType: LoadBalancer

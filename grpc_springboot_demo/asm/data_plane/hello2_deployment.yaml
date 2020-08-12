@@ -1,0 +1,95 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: grpc-hello
+  name: hello2-deploy-v1
+  labels:
+    app: hello2-deploy
+    version: v1
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: hello2-deploy
+      version: v1
+  template:
+    metadata:
+      labels:
+        app: hello2-deploy
+        version: v1
+    spec:
+      serviceAccountName: grpc-hello-sa
+      containers:
+        - name: hello-v1-deploy
+          image: registry.cn-beijing.aliyuncs.com/asm_repo/grpc_springboot_v1:1.0.0
+          env:
+            - name: GRPC_HELLO_BACKEND
+              value: "hello3-svc.grpc-hello.svc.cluster.local"
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 7001
+              name: grpc-port
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: grpc-hello
+  name: hello2-deploy-v2
+  labels:
+    app: hello2-deploy
+    version: v2
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: hello2-deploy
+      version: v2
+  template:
+    metadata:
+      labels:
+        app: hello2-deploy
+        version: v2
+    spec:
+      serviceAccountName: grpc-hello-sa
+      containers:
+        - name: hello-v2-deploy
+          image: registry.cn-beijing.aliyuncs.com/asm_repo/grpc_springboot_v2:1.0.0
+          env:
+            - name: GRPC_HELLO_BACKEND
+              value: "hello3-svc.grpc-hello.svc.cluster.local"
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 7001
+              name: grpc-port
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: grpc-hello
+  name: hello2-deploy-v3
+  labels:
+    app: hello2-deploy
+    version: v3
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: hello2-deploy
+      version: v3
+  template:
+    metadata:
+      labels:
+        app: hello2-deploy
+        version: v3
+    spec:
+      serviceAccountName: grpc-hello-sa
+      containers:
+        - name: hello-v3-deploy
+          image: registry.cn-beijing.aliyuncs.com/asm_repo/grpc_springboot_v3:1.0.0
+          env:
+            - name: GRPC_HELLO_BACKEND
+              value: "hello3-svc.grpc-hello.svc.cluster.local"
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 7001
+              name: grpc-port
