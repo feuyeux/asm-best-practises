@@ -1,0 +1,5 @@
+spring:
+  rsocket:
+    server:
+      port: 9001
+      transport: tcp

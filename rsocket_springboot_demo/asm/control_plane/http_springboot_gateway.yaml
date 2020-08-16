@@ -1,7 +1,7 @@
 apiVersion: networking.istio.io/v1alpha3
 kind: Gateway
 metadata:
-  namespace: http-hello
+  namespace: rsocket-hello
   name: hello-gateway-mesh
 spec:
   selector:
@@ -9,15 +9,15 @@ spec:
   servers:
     - port:
         number: 8001
-        name: http
-        protocol: HTTP
+        name: tcp
+        protocol: TCP
       hosts:
         - "*"
 ---
 apiVersion: networking.istio.io/v1alpha3
 kind: VirtualService
 metadata:
-  namespace: http-hello
+  namespace: rsocket-hello
   name: hello-gateway-vs
 spec:
   hosts:

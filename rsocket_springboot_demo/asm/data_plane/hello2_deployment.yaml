@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  namespace: http-hello
+  namespace: rsocket-hello
   name: hello2-deploy-v1
   labels:
     app: hello2-deploy
@@ -18,13 +18,13 @@ spec:
         app: hello2-deploy
         version: v1
     spec:
-      serviceAccountName: http-hello-sa
+      serviceAccountName: rsocket-hello-sa
       containers:
         - name: hello-v1-deploy
           image: registry.cn-beijing.aliyuncs.com/asm_repo/rsocket_springboot_v1:1.0.0
           env:
             - name: HTTP_HELLO_BACKEND
-              value: "hello3-svc.http-hello.svc.cluster.local"
+              value: "hello3-svc.rsocket-hello.svc.cluster.local"
           imagePullPolicy: Always
           ports:
             - containerPort: 8001
@@ -32,7 +32,7 @@ spec:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  namespace: http-hello
+  namespace: rsocket-hello
   name: hello2-deploy-v2
   labels:
     app: hello2-deploy
@@ -49,13 +49,13 @@ spec:
         app: hello2-deploy
         version: v2
     spec:
-      serviceAccountName: http-hello-sa
+      serviceAccountName: rsocket-hello-sa
       containers:
         - name: hello-v2-deploy
           image: registry.cn-beijing.aliyuncs.com/asm_repo/rsocket_springboot_v2:1.0.0
           env:
             - name: HTTP_HELLO_BACKEND
-              value: "hello3-svc.http-hello.svc.cluster.local"
+              value: "hello3-svc.rsocket-hello.svc.cluster.local"
           imagePullPolicy: Always
           ports:
             - containerPort: 8001
@@ -63,7 +63,7 @@ spec:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  namespace: http-hello
+  namespace: rsocket-hello
   name: hello2-deploy-v3
   labels:
     app: hello2-deploy
@@ -80,13 +80,13 @@ spec:
         app: hello2-deploy
         version: v3
     spec:
-      serviceAccountName: http-hello-sa
+      serviceAccountName: rsocket-hello-sa
       containers:
         - name: hello-v3-deploy
           image: registry.cn-beijing.aliyuncs.com/asm_repo/rsocket_springboot_v3:1.0.0
           env:
             - name: HTTP_HELLO_BACKEND
-              value: "hello3-svc.http-hello.svc.cluster.local"
+              value: "hello3-svc.rsocket-hello.svc.cluster.local"
           imagePullPolicy: Always
           ports:
             - containerPort: 8001

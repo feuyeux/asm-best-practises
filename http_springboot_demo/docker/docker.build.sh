@@ -34,7 +34,7 @@ docker build -f dockerfile2 -t registry.cn-beijing.aliyuncs.com/asm_repo/http_sp
 docker build -f dockerfile3 -t registry.cn-beijing.aliyuncs.com/asm_repo/http_springboot_v3:1.0.1 .
 
 rm -f http_*.jar
-cd ..
+cd .. || exit
 mvn clean
 rm -f src/main/resources/application.properties
 rm -f src/main/java/org/feuyeux/http/api/HttpController.java

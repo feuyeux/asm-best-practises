@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: Service
 metadata:
-  namespace: http-hello
+  namespace: rsocket-hello
   name: hello3-svc
   labels:
     app: hello3-svc

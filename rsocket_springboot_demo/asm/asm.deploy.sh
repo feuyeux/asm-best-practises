@@ -9,7 +9,7 @@ source asm.config
 echo "4 setup gateway"
 kubectl \
   --kubeconfig "$MESH_CONFIG" \
-  create ns http-hello >/dev/null 2>&1
+  create ns rsocket-hello >/dev/null 2>&1
 
 kubectl \
   --kubeconfig "$MESH_CONFIG" \
@@ -28,13 +28,13 @@ kubectl \
 
 kubectl \
   --kubeconfig "$MESH_CONFIG" \
-  -n http-hello \
+  -n rsocket-hello \
   get virtualservices
 
 #kubectl \
 #  --kubeconfig "$MESH_CONFIG" \
-#  -n http-hello \
-#  get virtualservices.networking.istio.io http-http-hello-vs -o yaml
+#  -n rsocket-hello \
+#  get virtualservices.networking.istio.io rsocket-rsocket-hello-vs -o yaml
 
 echo "6 setup destination rule"
 kubectl \
@@ -49,5 +49,5 @@ kubectl \
 
 kubectl \
   --kubeconfig "$MESH_CONFIG" \
-  -n http-hello \
+  -n rsocket-hello \
   get destinationrules

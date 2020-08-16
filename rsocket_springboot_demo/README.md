@@ -1,51 +1,55 @@
-## Http Traffic Shifting
+## RSocket Traffic Shifting
 
 ### 1 build docker
 ```sh
-$ sh docker/docker.build.sh
+sh docker/docker.build.sh
 ```
 
 #### test docker
 ```sh
-docker/test/start.rsocket_springboot_v3.sh
+sh docker/test/start.rsocket_springboot_v2.sh
 ```
 
 ```sh
-docker/test/start.rsocket_springboot_v3_proxy.sh
-#docker/test/start.rsocket_springboot_proxy.sh 
+sh docker/test/start.rsocket_springboot_v1.sh
 ```
 
 ```sh
-docker/test/test.sh 
+sh docker/test/start.rsocket.requester.8001.sh
+sh docker/test/start.rsocket.requester.9001.sh
 ```
 
+```sh
+sh docker/test/rsocket.requester.test.sh
+```
 ### 2 push docker
 https://cr.console.aliyun.com/cn-beijing/instances/credentials
 ```sh
-CR_USER=
+CR_USER=$(head $HOME/shop_config/cr)
 docker login --username=$CR_USER registry.cn-beijing.aliyuncs.com
 docker/docker.push.sh
 ```
 
 ### 3 deploy to asm
 ```sh
-$ nano asm/asm.config
-$ sh asm/ack.deploy.sh
-$ sh asm/asm.deploy.sh
+nano asm/asm.config
+
+sh asm/ack.deploy.sh
+sh asm/asm.deploy.sh
 ```
 
 #### test mesh
 ```sh
-$ sh asm/test_kube.sh
-$ sh asm/test_mesh.sh
+sh asm/test_kube.sh
+
+docker/test/start.grpc.consumer.sh
+sh asm/test_mesh.sh
 ```
 
-### all in one
+### appendix
 ```sh
-docker/docker.build.sh && docker/docker.push.sh && asm/ack.deploy.sh
-asm/asm.deploy.sh && sleep 20s && test/asm/test_mesh.sh
+$ brew install grpcurl
 ```
 
-```sh
-asm/asm.deploy.sh && sleep 20s && test/asm/test_mesh.sh
-```
+- https://github.com/LogNet/grpc-spring-boot-starter
+- https://github.com/fullstorydev/grpcurl

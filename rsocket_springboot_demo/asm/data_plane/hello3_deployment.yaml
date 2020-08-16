@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  namespace: http-hello
+  namespace: rsocket-hello
   name: hello3-deploy
   labels:
     app: hello3-deploy
@@ -18,7 +18,7 @@ spec:
         app: hello3-deploy
         version: v1
     spec:
-      serviceAccountName: http-hello-sa
+      serviceAccountName: rsocket-hello-sa
       containers:
         - name: hello-v1-deploy
           image: registry.cn-beijing.aliyuncs.com/asm_repo/rsocket_springboot_v1:1.0.0

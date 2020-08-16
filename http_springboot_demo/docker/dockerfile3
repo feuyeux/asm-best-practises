@@ -1,5 +1,5 @@
 #https://hub.docker.com/_/openjdk
-FROM openjdk:14-jdk-alpine
+FROM openjdk:8-jdk-alpine
 RUN apk --no-cache add curl
 ARG JAR_FILE=http_springboot_demo_3.jar
 COPY ${JAR_FILE} http_springboot_demo.jar

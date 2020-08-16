@@ -16,12 +16,10 @@ import java.util.concurrent.ExecutionException;
 @Service
 public class GreeterService {
     private static final Logger LOGGER = LoggerFactory.getLogger(GreeterService.class);
+    private GreeterGrpc.GreeterFutureStub stub;
 
     public String sayHello(String address, String name) {
-        final ManagedChannel channel = ManagedChannelBuilder.forAddress(address, 7001)
-                .usePlaintext()
-                .build();
-        final GreeterGrpc.GreeterFutureStub stub = GreeterGrpc.newFutureStub(channel);
+        final GreeterGrpc.GreeterFutureStub stub = getGreeterFutureStub(address);
         ListenableFuture<HelloReply> future = stub.sayHello(HelloRequest.newBuilder().setName(name).build());
         try {
             return mark() + future.get().getReply();
@@ -32,10 +30,7 @@ public class GreeterService {
     }
 
     public String sayBye(String address) {
-        final ManagedChannel channel = ManagedChannelBuilder.forAddress(address, 7001)
-                .usePlaintext()
-                .build();
-        final GreeterGrpc.GreeterFutureStub stub = GreeterGrpc.newFutureStub(channel);
+        final GreeterGrpc.GreeterFutureStub stub = getGreeterFutureStub(address);
         ListenableFuture<HelloReply> future = stub.sayBye(Empty.newBuilder().build());
         try {
             return mark() + future.get().getReply();
@@ -59,5 +54,15 @@ public class GreeterService {
             return "";
         }
         return "(" + localIp + ")<-";
+    }
+
+    private GreeterGrpc.GreeterFutureStub getGreeterFutureStub(String address) {
+        if (stub == null) {
+            final ManagedChannel channel = ManagedChannelBuilder.forAddress(address, 7001)
+                    .usePlaintext()
+                    .build();
+            stub = GreeterGrpc.newFutureStub(channel);
+        }
+        return stub;
     }
 }
