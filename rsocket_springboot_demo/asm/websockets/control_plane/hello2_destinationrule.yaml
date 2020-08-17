@@ -1,7 +1,7 @@
 apiVersion: networking.istio.io/v1alpha3
 kind: DestinationRule
 metadata:
-  namespace: http-hello
+  namespace: rsocket-ws-hello
   name: hello2-dr
 spec:
   host: hello2-svc

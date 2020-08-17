@@ -1,23 +1,23 @@
 apiVersion: networking.istio.io/v1alpha3
 kind: Gateway
 metadata:
-  namespace: rsocket-hello
+  namespace: rsocket-ws-hello
   name: hello-gateway-mesh
 spec:
   selector:
     istio: ingressgateway
   servers:
     - port:
-        number: 8001
-        name: tcp
-        protocol: TCP
+        number: 9001
+        name: websocket
+        protocol: Websocket
       hosts:
         - "*"
 ---
 apiVersion: networking.istio.io/v1alpha3
 kind: VirtualService
 metadata:
-  namespace: rsocket-hello
+  namespace: rsocket-ws-hello
   name: hello-gateway-vs
 spec:
   hosts:
@@ -26,7 +26,7 @@ spec:
     - hello-gateway-mesh
   http:
     - match:
-        - port: 8001
+        - port: 9001
       route:
         - destination:
             host: hello1-svc

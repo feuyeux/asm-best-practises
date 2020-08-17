@@ -1,13 +1,13 @@
 apiVersion: networking.istio.io/v1alpha3
 kind: VirtualService
 metadata:
-  namespace: rsocket-hello
+  namespace: rsocket-ws-hello
   name: hello1-vs
 spec:
   hosts:
     - hello1-svc
   http:
-    - name: rsocket-hello-route
+    - name: rsocket-ws-hello-route
       match:
         - uri:
             prefix: /hello
