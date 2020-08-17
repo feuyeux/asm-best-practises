@@ -4,28 +4,79 @@ SCRIPT_PATH="$(
   pwd -P
 )/"
 cd "$SCRIPT_PATH" || exit
-
-echo "start to build jars"
 cd ..
+echo "1 Build WS-1 JAR"
 cp responder/src/main/java/org/feuyeux/rsocket/api/RSocketController1.cafe responder/src/main/java/org/feuyeux/rsocket/api/RSocketController.java
+cp responder/src/main/resources/application_ws.yml responder/src/main/resources/application.yml
+mv responder/src/main/java/org/feuyeux/rsocket/service/RSocketTcpConfig.java responder/src/main/java/org/feuyeux/rsocket/service/RSocketTcpConfig.bk
 mvn clean install >/dev/null
-cp responder/target/responder-1.0.0.jar docker/rsocket_springboot_demo_1.jar
+mv responder/src/main/java/org/feuyeux/rsocket/service/RSocketTcpConfig.bk responder/src/main/java/org/feuyeux/rsocket/service/RSocketTcpConfig.java
+cp responder/target/responder-1.0.0.jar docker/rsocket_ws_springboot_demo_1.jar
 
+echo "2 Build TCP-1 JAR"
+cp responder/src/main/resources/application_tcp.yml responder/src/main/resources/application.yml
+mv responder/src/main/java/org/feuyeux/rsocket/service/RSocketWsConfig.java responder/src/main/java/org/feuyeux/rsocket/service/RSocketWsConfig.bk
+mvn clean install >/dev/null
+mv responder/src/main/java/org/feuyeux/rsocket/service/RSocketWsConfig.bk responder/src/main/java/org/feuyeux/rsocket/service/RSocketWsConfig.java
+cp responder/target/responder-1.0.0.jar docker/rsocket_tcp_springboot_demo_1.jar
+
+echo "3 Build WS-2 JAR"
 cp responder/src/main/java/org/feuyeux/rsocket/api/RSocketController2.cafe responder/src/main/java/org/feuyeux/rsocket/api/RSocketController.java
+cp responder/src/main/resources/application_ws.yml responder/src/main/resources/application.yml
+mv responder/src/main/java/org/feuyeux/rsocket/service/RSocketTcpConfig.java responder/src/main/java/org/feuyeux/rsocket/service/RSocketTcpConfig.bk
 mvn clean install >/dev/null
-cp responder/target/responder-1.0.0.jar docker/rsocket_springboot_demo_2.jar
+mv responder/src/main/java/org/feuyeux/rsocket/service/RSocketTcpConfig.bk responder/src/main/java/org/feuyeux/rsocket/service/RSocketTcpConfig.java
+cp responder/target/responder-1.0.0.jar docker/rsocket_ws_springboot_demo_2.jar
 
-cp responder/src/main/java/org/feuyeux/rsocket/api/RSocketController3.cafe responder/src/main/java/org/feuyeux/rsocket/api/RSocketController.java
+echo "4 Build TCP-2 JAR"
+cp responder/src/main/resources/application_tcp.yml responder/src/main/resources/application.yml
+mv responder/src/main/java/org/feuyeux/rsocket/service/RSocketWsConfig.java responder/src/main/java/org/feuyeux/rsocket/service/RSocketWsConfig.bk
 mvn clean install >/dev/null
-cp responder/target/responder-1.0.0.jar docker/rsocket_springboot_demo_3.jar
+mv responder/src/main/java/org/feuyeux/rsocket/service/RSocketWsConfig.bk responder/src/main/java/org/feuyeux/rsocket/service/RSocketWsConfig.java
+cp responder/target/responder-1.0.0.jar docker/rsocket_tcp_springboot_demo_2.jar
+
+echo "5 Build WS-3 JAR"
+cp responder/src/main/java/org/feuyeux/rsocket/api/RSocketController3.cafe responder/src/main/java/org/feuyeux/rsocket/api/RSocketController.java
+cp responder/src/main/resources/application_ws.yml responder/src/main/resources/application.yml
+mv responder/src/main/java/org/feuyeux/rsocket/service/RSocketTcpConfig.java responder/src/main/java/org/feuyeux/rsocket/service/RSocketTcpConfig.bk
+mvn clean install >/dev/null
+mv responder/src/main/java/org/feuyeux/rsocket/service/RSocketTcpConfig.bk responder/src/main/java/org/feuyeux/rsocket/service/RSocketTcpConfig.java
+cp responder/target/responder-1.0.0.jar docker/rsocket_ws_springboot_demo_3.jar
+
+echo "6 Build TCP-3 JAR"
+cp responder/src/main/resources/application_tcp.yml responder/src/main/resources/application.yml
+mv responder/src/main/java/org/feuyeux/rsocket/service/RSocketWsConfig.java responder/src/main/java/org/feuyeux/rsocket/service/RSocketWsConfig.bk
+mvn clean install >/dev/null
+mv responder/src/main/java/org/feuyeux/rsocket/service/RSocketWsConfig.bk responder/src/main/java/org/feuyeux/rsocket/service/RSocketWsConfig.java
+cp responder/target/responder-1.0.0.jar docker/rsocket_tcp_springboot_demo_3.jar
 
 cd docker
-echo "start to build images"
-docker build -f dockerfile1 -t registry.cn-beijing.aliyuncs.com/asm_repo/rsocket_springboot_v1:1.0.0 .
-docker build -f dockerfile2 -t registry.cn-beijing.aliyuncs.com/asm_repo/rsocket_springboot_v2:1.0.0 .
-docker build -f dockerfile3 -t registry.cn-beijing.aliyuncs.com/asm_repo/rsocket_springboot_v3:1.0.0 .
-
+echo "7 Build WS-1 IMG"
+docker build -f ws1.dockerfile -t registry.cn-beijing.aliyuncs.com/asm_repo/rsocket_ws_springboot_v1:1.0.0 .
+echo "8 Build TCP-1 IMG"
+docker build -f tcp1.dockerfile -t registry.cn-beijing.aliyuncs.com/asm_repo/rsocket_tcp_springboot_v1:1.0.0 .
+echo "9 Build WS-2 IMG"
+docker build -f ws2.dockerfile -t registry.cn-beijing.aliyuncs.com/asm_repo/rsocket_ws_springboot_v2:1.0.0 .
+echo "10 Build TCP-2 IMG"
+docker build -f tcp2.dockerfile -t registry.cn-beijing.aliyuncs.com/asm_repo/rsocket_tcp_springboot_v2:1.0.0 .
+echo "11 Build WS-3 IMG"
+docker build -f ws3.dockerfile -t registry.cn-beijing.aliyuncs.com/asm_repo/rsocket_ws_springboot_v3:1.0.0 .
+echo "12 Build TCP-3 IMG"
+docker build -f tcp3.dockerfile -t registry.cn-beijing.aliyuncs.com/asm_repo/rsocket_tcp_springboot_v3:1.0.0 .
+echo "RESPONDER DONE"
 rm -f rsocket_*.jar
 cd .. || exit
-mvn clean
 rm -f responder/src/main/java/org/feuyeux/rsocket/api/RSocketController.java
+
+echo "13 Build TCP JAR"
+mv requester/src/main/java/org/feuyeux/rsocket/RSocketWsConfig.java requester/src/main/java/org/feuyeux/rsocket/RSocketWsConfig.java.bk
+mvn clean install -DskipTests
+mv requester/src/main/java/org/feuyeux/rsocket/RSocketWsConfig.java.bk requester/src/main/java/org/feuyeux/rsocket/RSocketWsConfig.java
+mv requester/target/requester-1.0.0.jar test_jar/tcp-requester.jar
+
+echo "14 Build WS JAR"
+mv requester/src/main/java/org/feuyeux/rsocket/RSocketTcpConfig.java requester/src/main/java/org/feuyeux/rsocket/RSocketTcpConfig.java.bk
+mvn clean install -DskipTests
+mv requester/src/main/java/org/feuyeux/rsocket/RSocketTcpConfig.java.bk requester/src/main/java/org/feuyeux/rsocket/RSocketTcpConfig.java
+mv requester/target/requester-1.0.0.jar test_jar/ws-requester.jar
+echo "REQUESTER DONE"

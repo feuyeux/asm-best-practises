@@ -11,27 +11,10 @@ import org.springframework.messaging.rsocket.RSocketRequester;
 /**
  * @author feuyeux@gmail.com
  */
-@Slf4j
 @SpringBootApplication
 public class RequesterApplication {
     public static void main(String[] args) {
         SpringApplication.run(RequesterApplication.class);
-    }
-
-    @Value("${back.host}")
-    @Setter
-    private String host;
-
-    @Value("${back.port}")
-    @Setter
-    private int port;
-
-    @Bean
-    RSocketRequester rSocketRequester(RSocketRequester.Builder builder) {
-        log.info("host={},port={}", host, port);
-        return builder
-                .connectTcp(host, port)
-                .block();
     }
 }
 
