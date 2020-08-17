@@ -8,6 +8,6 @@ metadata:
 spec:
   ports:
     - port: 9001
-      name: rsocket
+      name: http
   selector:
     app: hello1-deploy

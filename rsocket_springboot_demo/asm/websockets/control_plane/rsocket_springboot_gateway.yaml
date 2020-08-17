@@ -9,8 +9,8 @@ spec:
   servers:
     - port:
         number: 9001
-        name: websocket
-        protocol: Websocket
+        name: http
+        protocol: http
       hosts:
         - "*"
 ---

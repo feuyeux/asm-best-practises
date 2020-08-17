@@ -3,6 +3,7 @@
 ### 1 build docker
 ```sh
 sh docker/docker.build.sh
+sh docker/requester.build.sh
 ```
 
 #### test tcp docker

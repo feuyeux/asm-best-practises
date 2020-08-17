@@ -67,16 +67,3 @@ echo "RESPONDER DONE"
 rm -f rsocket_*.jar
 cd .. || exit
 rm -f responder/src/main/java/org/feuyeux/rsocket/api/RSocketController.java
-
-echo "13 Build TCP JAR"
-mv requester/src/main/java/org/feuyeux/rsocket/RSocketWsConfig.java requester/src/main/java/org/feuyeux/rsocket/RSocketWsConfig.java.bk
-mvn clean install -DskipTests
-mv requester/src/main/java/org/feuyeux/rsocket/RSocketWsConfig.java.bk requester/src/main/java/org/feuyeux/rsocket/RSocketWsConfig.java
-mv requester/target/requester-1.0.0.jar test_jar/tcp-requester.jar
-
-echo "14 Build WS JAR"
-mv requester/src/main/java/org/feuyeux/rsocket/RSocketTcpConfig.java requester/src/main/java/org/feuyeux/rsocket/RSocketTcpConfig.java.bk
-mvn clean install -DskipTests
-mv requester/src/main/java/org/feuyeux/rsocket/RSocketTcpConfig.java.bk requester/src/main/java/org/feuyeux/rsocket/RSocketTcpConfig.java
-mv requester/target/requester-1.0.0.jar test_jar/ws-requester.jar
-echo "REQUESTER DONE"

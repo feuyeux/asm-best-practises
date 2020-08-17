@@ -9,10 +9,10 @@ alias k="kubectl --kubeconfig $USER_CONFIG"
 alias m="kubectl --kubeconfig $MESH_CONFIG"
 
 echo "1 initialize..."
-k delete namespace rsocket-ws-hello >/dev/null 2>&1
-m delete namespace rsocket-ws-hello >/dev/null 2>&1
-k create ns rsocket-ws-hello
-k label ns rsocket-ws-hello istio-injection=enabled
+#k delete namespace rsocket-ws-hello >/dev/null 2>&1
+#m delete namespace rsocket-ws-hello >/dev/null 2>&1
+#k create ns rsocket-ws-hello
+#k label ns rsocket-ws-hello istio-injection=enabled
 
 echo "2 setup deployment"
 k apply -f data_plane/hello_serviceaccount.yaml
