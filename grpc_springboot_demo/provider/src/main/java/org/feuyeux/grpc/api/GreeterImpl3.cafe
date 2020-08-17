@@ -1,0 +1,66 @@
+package org.feuyeux.grpc.api;
+
+import io.grpc.stub.StreamObserver;
+import org.feuyeux.grpc.proto.GreeterGrpc.GreeterImplBase;
+import org.feuyeux.grpc.proto.HelloReply;
+import org.feuyeux.grpc.proto.HelloRequest;
+import org.feuyeux.grpc.service.GreeterService;
+import org.lognet.springboot.grpc.GRpcService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+
+@GRpcService
+public class GreeterImpl extends GreeterImplBase {
+    private static final Logger LOGGER = LoggerFactory.getLogger(GreeterImpl.class);
+    private static String GRPC_HELLO_BACKEND = System.getenv("GRPC_HELLO_BACKEND");
+
+    @Autowired
+    private GreeterService greeterService;
+
+    @Override
+    public void sayHello(HelloRequest request, StreamObserver<HelloReply> responseObserver) {
+        long begin = System.currentTimeMillis();
+        LOGGER.info("server received {}", request);
+        if (GRPC_HELLO_BACKEND == null) {
+            String result = "Hola " + request.getName();
+            LOGGER.info("{}", result);
+            String message = result + greeterService.markIp();
+            HelloReply helloReply = HelloReply.newBuilder().setReply(message).build();
+            long end = System.currentTimeMillis();
+            LOGGER.info("server responded {} elapse:{}ms", message, end - begin);
+            responseObserver.onNext(helloReply);
+            responseObserver.onCompleted();
+        } else {
+            String backServiceResult = greeterService.sayHello(GRPC_HELLO_BACKEND, request.getName());
+            String result = "Hola " + request.getName();
+            String message = result + backServiceResult;
+            HelloReply helloReply = HelloReply.newBuilder().setReply(message).build();
+            long end = System.currentTimeMillis();
+            LOGGER.info("server responded {} elapse:{}ms", message, end - begin);
+            responseObserver.onNext(helloReply);
+            responseObserver.onCompleted();
+        }
+    }
+
+    @Override
+    public void sayBye(com.google.protobuf.Empty request, StreamObserver<HelloReply> responseObserver) {
+        long begin = System.currentTimeMillis();
+        if (GRPC_HELLO_BACKEND == null) {
+            String message = "Adióbais" + greeterService.markIp();
+            HelloReply helloReply = HelloReply.newBuilder().setReply(message).build();
+            long end = System.currentTimeMillis();
+            LOGGER.info("server responded {} elapse:{}ms", message, end - begin);
+            responseObserver.onNext(helloReply);
+            responseObserver.onCompleted();
+        } else {
+            String backServiceResult = greeterService.sayBye(GRPC_HELLO_BACKEND);
+            String message = "Adióbais" + backServiceResult;
+            HelloReply helloReply = HelloReply.newBuilder().setReply(message).build();
+            long end = System.currentTimeMillis();
+            LOGGER.info("server responded {} elapse:{}ms", message, end - begin);
+            responseObserver.onNext(helloReply);
+            responseObserver.onCompleted();
+        }
+    }
+}

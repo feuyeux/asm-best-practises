@@ -5,6 +5,8 @@ SCRIPT_PATH="$(
 )/"
 cd "$SCRIPT_PATH" || exit
 source asm.config
+alias k="kubectl --kubeconfig $USER_CONFIG"
+alias m="kubectl --kubeconfig $MESH_CONFIG"
 
 echo "4 setup gateway"
 kubectl \

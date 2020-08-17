@@ -8,13 +8,7 @@ $ sh docker/docker.build.sh
 #### test docker
 ```sh
 docker/test/start.grpc_springboot_v1.sh
-```
-
-```sh
 docker/test/start.grpc_springboot_v2.sh
-```
-
-```sh
 docker/test/start.grpc.consumer.sh
 docker/test/grpc.consumer.test.sh
 ```
@@ -24,20 +18,24 @@ https://cr.console.aliyun.com/cn-beijing/instances/credentials
 ```sh
 CR_USER=$(head $HOME/shop_config/cr)
 docker login --username=$CR_USER registry.cn-beijing.aliyuncs.com
+```
+
+```sh
 docker/docker.push.sh
 ```
 
 ### 3 deploy to asm
 ```sh
 nano asm/asm.config
-
-sh asm/ack.deploy.sh
-sh asm/asm.deploy.sh
 ```
 
-#### test mesh
 ```sh
+sh asm/ack.deploy.sh
 sh asm/test_kube.sh
+```
+
+```sh
+sh asm/asm.deploy.sh
 
 docker/test/start.grpc.consumer.sh
 sh asm/test_mesh.sh

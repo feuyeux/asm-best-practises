@@ -7,7 +7,7 @@ cd "$SCRIPT_PATH" || exit
 source asm.config
 IP=$(kubectl --kubeconfig "$USER_CONFIG" \
   -n istio-system get service istio-ingressgateway -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
-echo "curl localhost:7777/hello/eric?host=$IP&port=7001:"
+echo "curl localhost:7777/hello/eric?host=$IP&port=7001"
 curl -s "localhost:7777/hello/eric?host=$IP&port=7001"
 echo
 ####

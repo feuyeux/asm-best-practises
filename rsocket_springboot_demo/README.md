@@ -28,6 +28,8 @@ https://cr.console.aliyun.com/cn-beijing/instances/credentials
 ```sh
 CR_USER=$(head $HOME/shop_config/cr)
 docker login --username=$CR_USER registry.cn-beijing.aliyuncs.com
+```
+```sh
 docker/docker.push.sh
 ```
 

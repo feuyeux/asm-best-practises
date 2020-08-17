@@ -5,33 +5,17 @@ SCRIPT_PATH="$(
 )/"
 cd "$SCRIPT_PATH" || exit
 source asm.config
-kubectl \
-  --kubeconfig "$USER_CONFIG" version
+alias k="kubectl --kubeconfig $USER_CONFIG"
 
 echo "1 initialize..."
-kubectl \
-  --kubeconfig "$USER_CONFIG" \
-  delete namespace rsocket-hello >/dev/null 2>&1
-
-kubectl \
-  --kubeconfig "$MESH_CONFIG" \
-  delete namespace rsocket-hello >/dev/null 2>&1
-
-kubectl \
-  --kubeconfig "$USER_CONFIG" \
-  create ns rsocket-hello
-
-kubectl \
-  --kubeconfig "$USER_CONFIG" \
-  label ns rsocket-hello istio-injection=enabled
+k delete namespace rsocket-hello >/dev/null 2>&1
+k delete namespace rsocket-hello >/dev/null 2>&1
+k create ns rsocket-hello
+k label ns rsocket-hello istio-injection=enabled
 
 echo "2 setup deployment"
-kubectl \
-  --kubeconfig "$USER_CONFIG" \
-  apply -f data_plane/hello_serviceaccount.yaml
-kubectl \
-  --kubeconfig "$USER_CONFIG" \
-  apply -f data_plane/hello1_deployment.yaml
+k apply -f data_plane/hello_serviceaccount.yaml
+k apply -f data_plane/hello1_deployment.yaml
 kubectl \
   --kubeconfig "$USER_CONFIG" \
   apply -f data_plane/hello2_deployment.yaml
