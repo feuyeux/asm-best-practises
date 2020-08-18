@@ -24,6 +24,13 @@ sh docker/test/start.rsocket_springboot_v1.sh ws
 sh docker/test/start.rsocket.requester.sh ws 6666 8001
 sh docker/test/start.rsocket.requester.sh ws 6667 9001
 sh docker/test/rsocket.requester.test.sh
+
+#docker exec -it 5ae0785f0ded \
+/usr/local/rsocket-cli/bin/rsocket-cli \
+--request \
+--route=hello \
+-i '{"value":"eric"}' \
+ws://localhost:9001 
 ```
 
 ### 2 push docker
