@@ -55,25 +55,11 @@ sh asm/websockets/test_mesh.sh
 ```
 
 #### tcp 
+(TODO)
+
+### appendix
 ```sh
-sh asm/ack.deploy.sh
-sh asm/test_kube.sh
+$ brew install yschimke/tap/rsocket-cli
 ```
 
-```sh
-sh asm/asm.deploy.sh
-
-docker/test/start.grpc.consumer.sh
-sh asm/test_mesh.sh
-```
-
-
-
-#### test mesh
-```sh
-sh asm/test_kube.sh
-
-docker/test/start.grpc.consumer.sh
-sh asm/test_mesh.sh
-```
-
+- https://github.com/rsocket/rsocket-cli

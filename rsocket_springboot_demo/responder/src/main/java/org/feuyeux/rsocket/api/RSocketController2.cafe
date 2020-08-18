@@ -20,15 +20,16 @@ public class RSocketController {
     @MessageMapping("hello")
     Mono<HelloResponse> requestAndResponse(HelloRequest helloRequest) {
         log.info(" >> [Request-Response] data:{}", helloRequest);
+        String msg = helloRequest.getValue();
         if (RSOCKET_HELLO_BACKEND == null) {
-            String msg = helloRequest.getValue();
             String result = "Bonjour " + msg + helloService.markIp();
             return Mono.just(new HelloResponse(result));
         } else {
             return helloService.sayHello(helloRequest).map(r -> {
-                String msg = r.getValue();
                 String result = "Bonjour " + msg;
-                r.setValue(result);
+                String backServiceResult = r.getValue();
+                String message = result + backServiceResult;
+                r.setValue(message);
                 return r;
             });
         }

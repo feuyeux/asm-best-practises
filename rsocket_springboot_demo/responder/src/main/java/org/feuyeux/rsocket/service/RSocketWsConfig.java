@@ -13,16 +13,18 @@ import java.time.Duration;
 @Slf4j
 @Service
 public class RSocketWsConfig {
+    //TODO chose the fixed server, which missing runtime traffic shift ability
     @Bean
     RSocketRequester rSocketRequester(RSocketRequester.Builder builder) {
         String RSOCKET_HELLO_BACKEND = System.getenv("RSOCKET_HELLO_BACKEND");
         if (RSOCKET_HELLO_BACKEND != null) {
             String uri = String.format("ws://%s:%d", RSOCKET_HELLO_BACKEND, 9001);
             log.info("RSOCKET_HELLO_BACKEND WEBSOCKETS URI={}", uri);
-            return builder
+            RSocketRequester requester = builder
                     .connectWebSocket(URI.create(uri))
                     .timeout(Duration.ofMinutes(10))
                     .block();
+            return requester;
         }
         return fake();
     }
