@@ -13,4 +13,6 @@
 - Meshifying  
   - http_workload_demo
   - http_workload_traffic_demo
+  - http_reciprocal_demo
+  - grpc_reciprocal_demo
   - http_hybrid_demo

@@ -1,0 +1,88 @@
+# hello1
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: http-reciprocal-hello
+  name: hello1-deploy
+  labels:
+    app: hello1-deploy
+    version: v1
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: hello1-deploy
+      version: v1
+  template:
+    metadata:
+      labels:
+        app: hello1-deploy
+        version: v1
+    spec:
+      containers:
+        - name: hello-v1-deploy
+          image: registry.cn-beijing.aliyuncs.com/asm_repo/http_springboot_v1:1.0.1
+          env:
+            - name: HTTP_HELLO_BACKEND
+              value: "hello2-svc.http-reciprocal-hello.svc.cluster.local"
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8001
+---
+apiVersion: v1
+kind: Service
+metadata:
+  namespace: http-reciprocal-hello
+  name: hello1-svc
+  labels:
+    app: hello1-svc
+spec:
+  ports:
+    - name: http
+      port: 8004
+      targetPort: 8001
+      protocol: TCP
+  selector:
+    app: hello1-deploy
+---
+# hello3
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: http-reciprocal-hello
+  name: hello3-deploy
+  labels:
+    app: hello3-deploy
+    version: v1
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: hello3-deploy
+      version: v1
+  template:
+    metadata:
+      labels:
+        app: hello3-deploy
+        version: v1
+    spec:
+      containers:
+        - name: hello-v1-deploy
+          image: registry.cn-beijing.aliyuncs.com/asm_repo/http_springboot_v1:1.0.1
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8001
+---
+apiVersion: v1
+kind: Service
+metadata:
+  namespace: http-hello
+  name: hello3-svc
+  labels:
+    app: hello3-svc
+spec:
+  ports:
+    - port: 8001
+      name: http
+  selector:
+    app: hello3-deploy

@@ -1,0 +1,95 @@
+apiVersion: networking.istio.io/v1alpha3
+kind: Gateway
+metadata:
+  namespace: http-reciprocal-hello
+  name: hello-gateway
+spec:
+  selector:
+    istio: ingressgateway
+  servers:
+    - port:
+        number: 8004
+        name: http
+        protocol: HTTP
+      hosts:
+        - "*"
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  namespace: http-reciprocal-hello
+  name: gateway-vs
+spec:
+  hosts:
+    - "*"
+  gateways:
+    - hello-gateway
+  http:
+    - match:
+        - port: 8004
+      route:
+        - destination:
+            host: hello1-svc
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: DestinationRule
+metadata:
+  namespace: http-reciprocal-hello
+  name: hello2-dr
+spec:
+  host: hello2-svc
+  subsets:
+    - name: v1
+      labels:
+        version: v1
+    - name: v2
+      labels:
+        version: v2
+    - name: v3
+      labels:
+        version: v3
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  namespace: http-reciprocal-hello
+  name: hello2-vs
+spec:
+  hosts:
+    - hello2-svc
+  http:
+    - name: http-hello-route
+      match:
+        - uri:
+            prefix: /hello
+      route:
+        - destination:
+            host: hello2-svc
+            subset: v1
+          weight: 30
+        - destination:
+            host: hello2-svc
+            subset: v2
+          weight: 60
+        - destination:
+            host: hello2-svc
+            subset: v3
+          weight: 10
+    - name: http-bye-route
+      match:
+        - uri:
+            exact: /bye
+      route:
+        - destination:
+            host: hello2-svc
+            subset: v1
+          weight: 90
+        - destination:
+            host: hello2-svc
+            subset: v2
+          weight: 5
+        - destination:
+            host: hello2-svc
+            subset: v3
+          weight: 5
+---
