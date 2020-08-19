@@ -21,8 +21,8 @@ aliyun servicemesh AddVmAppToMesh \
   --Namespace grpc-reciprocal-hello \
   --ServiceName hello2-svc \
   --Ips "$VM_PRI_1","$VM_PRI_2","$VM_PRI_3" \
-  --Ports http:7001 \
-  --Labels app=hello-workload
+  --Ports grpc:7001 \
+  --Labels app=grpc-workload
 echo "done"
 
 k get svc hello2-svc -n grpc-reciprocal-hello -o yaml

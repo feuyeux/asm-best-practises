@@ -12,13 +12,12 @@ IP=$(k -n istio-system get service istio-ingressgateway -o jsonpath='{.status.lo
 echo "Ingress gateway ip:$IP"
 echo "Warm-up..."
 for i in {1..20}; do
-  curl -s "$IP":7004/hello/eric
-  echo
+  grpcurl -plaintext -d '{"name":"eric"}' "$IP":7004 org.feuyeux.grpc.Greeter/SayHello | jq '.reply'
 done
 echo "Test route n a loop"
 echo >test_traffic_shift_result
 for i in {1..100}; do
-  resp=$(curl -s "$IP":7004/hello/eric)
+  resp=$(grpcurl -plaintext -d '{"name":"eric"}' "$IP":7004 org.feuyeux.grpc.Greeter/SayHello | jq -r '.reply')
   echo "$resp" >>test_traffic_shift_result
 done
 
