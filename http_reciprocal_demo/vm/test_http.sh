@@ -5,7 +5,7 @@ SCRIPT_PATH="$(
 )/"
 cd "$SCRIPT_PATH" || exit
 cd ..
-source hybrid.config
+source reciprocal.config
 
 VMS=("$VM_PUB_1" "$VM_PUB_2" "$VM_PUB_3")
 for vm in "${VMS[@]}"; do

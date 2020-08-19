@@ -6,4 +6,4 @@ SCRIPT_PATH="$(
 cd "$SCRIPT_PATH" || exit
 source ../reciprocal.config
 alias m="kubectl --kubeconfig $MESH_CONFIG"
-m apply -f control_plane/http-reciprocal-hello-all.yaml
+m apply -f control_plane/grpc-reciprocal-hello-all.yaml

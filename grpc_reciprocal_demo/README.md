@@ -1,4 +1,4 @@
-## Http POD|VM Traffic Shifting
+## gRPC POD|VM Traffic Shifting
 
 ### 1 init vm ssh
 ```sh
@@ -15,8 +15,8 @@ docker run \
 --rm \
 --network host \
 --name http_v1 \
--e HTTP_HELLO_BACKEND=hello3-svc.http-reciprocal-hello.svc.cluster.local \
-registry.cn-beijing.aliyuncs.com/asm_repo/http_springboot_v1:1.0.1
+-e GRPC_HELLO_BACKEND=hello3-svc.grpc-reciprocal-hello.svc.cluster.local \
+registry.cn-beijing.aliyuncs.com/asm_repo/grpc_springboot_v1:1.0.0
 ```
 
 ```sh
@@ -26,8 +26,8 @@ docker run \
 --rm \
 --network host \
 --name http_v2 \
--e HTTP_HELLO_BACKEND=hello3-svc.http-reciprocal-hello.svc.cluster.local \
-registry.cn-beijing.aliyuncs.com/asm_repo/http_springboot_v2:1.0.1
+-e GRPC_HELLO_BACKEND=hello3-svc.grpc-reciprocal-hello.svc.cluster.local \
+registry.cn-beijing.aliyuncs.com/asm_repo/grpc_springboot_v2:1.0.0
 ```
 
 ```sh
@@ -37,13 +37,8 @@ docker run \
 --rm \
 --network host \
 --name http_v3 \
--e HTTP_HELLO_BACKEND=hello3-svc.http-reciprocal-hello.svc.cluster.local \
-registry.cn-beijing.aliyuncs.com/asm_repo/http_springboot_v3:1.0.1
-```
-
-#### test vm app
-```sh
-sh vm/test_http.sh
+-e GRPC_HELLO_BACKEND=hello3-svc.grpc-reciprocal-hello.svc.cluster.local \
+registry.cn-beijing.aliyuncs.com/asm_repo/grpc_springboot_v3:1.0.0
 ```
 
 ### 3 deploy to asm
@@ -71,5 +66,6 @@ sh asm/test_mesh.sh
 ```
 #### traffic shift
 ```sh
+sh start.grpc.consumer.sh
 sh test_traffic_shift.sh
 ```
