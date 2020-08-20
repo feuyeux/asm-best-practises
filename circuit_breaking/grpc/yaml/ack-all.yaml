@@ -1,0 +1,72 @@
+# hello1
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: grpc-circuit-breaking
+  name: hello1-deploy
+  labels:
+    app: hello1-deploy
+    version: v1
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: hello1-deploy
+      version: v1
+  template:
+    metadata:
+      labels:
+        app: hello1-deploy
+        version: v1
+    spec:
+      containers:
+        - name: hello-v2-deploy
+          image: registry.cn-beijing.aliyuncs.com/asm_repo/grpc_springboot_v2:1.0.0
+          env:
+            - name: GRPC_HELLO_BACKEND
+              value: "hello2-svc.grpc-circuit-breaking.svc.cluster.local"
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 7001
+---
+# hello2
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: grpc-circuit-breaking
+  name: hello2-deploy
+  labels:
+    app: hello2-deploy
+    version: v1
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: hello2-deploy
+      version: v1
+  template:
+    metadata:
+      labels:
+        app: hello2-deploy
+        version: v1
+    spec:
+      containers:
+        - name: hello-v3-deploy
+          image: registry.cn-beijing.aliyuncs.com/asm_repo/grpc_springboot_v3:1.0.0
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 7001
+---
+apiVersion: v1
+kind: Service
+metadata:
+  namespace: grpc-circuit-breaking
+  name: hello2-svc
+  labels:
+    app: hello2-svc
+spec:
+  ports:
+    - port: 7001
+      name: grpc-port
+  selector:
+    app: hello2-deploy

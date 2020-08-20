@@ -6,6 +6,7 @@
   - rsocket_springboot_demo
 - Traffic Management
   - fault_injection
+  - circuit_breaking
 - Secure
   - jwt_demo
 - Observe

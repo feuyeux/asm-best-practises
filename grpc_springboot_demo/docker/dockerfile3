@@ -2,5 +2,5 @@ FROM openjdk:8-jdk-alpine
 RUN apk --no-cache add curl
 ARG JAR_FILE=grpc_springboot_demo_3.jar
 COPY ${JAR_FILE} grpc_springboot_demo.jar
-COPY grpcurl /usr/bin/grpcurl
+ADD grpcurl.tar.gz ghz.tar.gz /usr/local/bin/
 ENTRYPOINT ["java","-jar","/grpc_springboot_demo.jar"]
