@@ -6,7 +6,7 @@ SCRIPT_PATH="$(
 cd "$SCRIPT_PATH" || exit
 source ../hybrid.config
 
-alias s="kubectl --kubeconfig $MESH_CONFIG"
+alias m="kubectl --kubeconfig $MESH_CONFIG"
 
-s apply -f control_plane/hello2_virtualservice.yaml
-s apply -f control_plane/hello2_destinationrule.yaml
+m apply -f control_plane/hello2_virtualservice.yaml
+m apply -f control_plane/hello2_destinationrule.yaml
