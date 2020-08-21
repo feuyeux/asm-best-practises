@@ -26,3 +26,6 @@ k exec "$hello1_pod" -c hello-v2-deploy -n grpc-circuit-breaking -- \
   -n 20 \
   -c 20 \
   localhost:7001
+
+k exec "$hello1_pod" -c hello-v2-deploy -n grpc-circuit-breaking -- \
+  ghz --insecure -c20 -n100 --call org.feuyeux.grpc.Greeter/SayHello -d '{"name":"eric"}' localhost:7001 -O csv
