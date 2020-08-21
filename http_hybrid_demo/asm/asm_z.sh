@@ -5,11 +5,6 @@ SCRIPT_PATH="$(
 )/"
 cd "$SCRIPT_PATH" || exit
 source ../hybrid.config
-
-kubectl \
-  --kubeconfig "$MESH_CONFIG" \
-  apply -f control_plane/hello1_destinationrule.yaml
-
-kubectl \
-  --kubeconfig "$MESH_CONFIG" \
-  apply -f control_plane/hybird_gateway.yaml
+alias m="kubectl --kubeconfig $MESH_CONFIG"
+m apply -f control_plane/hello1_destinationrule.yaml
+m apply -f control_plane/hybird_gateway.yaml

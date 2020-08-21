@@ -11,6 +11,7 @@ echo "$hello3_svc_ip hello3-svc.hybrid-hello.svc.cluster.local" > dns_record
 
 VMS=("$VM_PUB_2" "$VM_PUB_3")
 for vm in "${VMS[@]}"; do
+  ssh root@"$vm" "sed -i '/hello3-svc.hybrid-hello.svc.cluster.local/d' /etc/hosts"
   ssh root@"$vm" "cat >> /etc/hosts" < dns_record
 done
 rm -rf dns_record

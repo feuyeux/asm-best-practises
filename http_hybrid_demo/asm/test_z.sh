@@ -10,10 +10,12 @@ IP=$(k -n istio-system get service istio-ingressgateway -o jsonpath='{.status.lo
 echo "Ingress gateway ip:$IP"
 echo "Start test in loop:"
 echo >z_result
-for i in {1..100}; do
+for i in {1..100000}; do
   resp=$(curl -s "$IP":8003/hello/asm)
   echo $i "$resp"
   echo "$resp" >>z_result
 done
+echo
+echo "expected 30%(Hello eric)-60%(Bonjour eric)-10%(Hola eric):"
 sort z_result | uniq -c | sort -nrk1
 rm -rf z_result

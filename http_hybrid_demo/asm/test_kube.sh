@@ -12,6 +12,7 @@ hello1_pod=$(k get pod -l app=hello1-deploy -n hybrid-hello -o jsonpath={.items.
 echo "1 Test access vm ip directly"
 VMS=("$VM_PRI_2" "$VM_PRI_3")
 for vm in "${VMS[@]}"; do
+  echo "curl -s $vm:8001/hello/eric"
   k exec "$hello1_pod" -c hello-v1-deploy -n hybrid-hello -- curl -s "$vm":8001/hello/eric
   echo
 done
@@ -25,6 +26,7 @@ for i in {1..5}; do
   k exec "$hello1_pod" -c hello-v1-deploy -n hybrid-hello -- curl -s hello2-svc.hybrid-hello.svc.cluster.local:8001/hello/eric
   echo
 done
+echo
 echo "4 Test route hello1-svc -> hello2-svc "
 k exec "$hello1_pod" -c hello-v1-deploy -n hybrid-hello -- curl -s hello1-svc.hybrid-hello.svc.cluster.local:8003/hello/eric
 echo
