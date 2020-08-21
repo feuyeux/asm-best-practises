@@ -20,11 +20,16 @@ echo "2 Test access hello2-svc"
 k exec "$hello1_pod" -c hello-v1-deploy -n hybrid-hello -- curl -s hello2-svc.hybrid-hello.svc.cluster.local:8001/hello/eric
 echo
 echo
-echo "3 Test access hello1-svc"
+echo "3 Test access hello2-svc in a loop"
+for i in {1..5}; do
+  k exec "$hello1_pod" -c hello-v1-deploy -n hybrid-hello -- curl -s hello2-svc.hybrid-hello.svc.cluster.local:8001/hello/eric
+  echo
+done
+echo "4 Test route hello1-svc -> hello2-svc "
 k exec "$hello1_pod" -c hello-v1-deploy -n hybrid-hello -- curl -s hello1-svc.hybrid-hello.svc.cluster.local:8003/hello/eric
 echo
 echo
-echo "4 Test route(hello2-svc) in a loop"
+echo "5 Test route hello1-svc -> hello2-svc in a loop"
 for i in {1..5}; do
   resp=$(k exec "$hello1_pod" -c hello-v1-deploy -n hybrid-hello -- curl -s hello1-svc.hybrid-hello.svc.cluster.local:8003/hello/eric)
   echo $i "$resp"

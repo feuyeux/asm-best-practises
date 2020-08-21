@@ -9,7 +9,6 @@ source reciprocal.config
 
 VMS=("$VM_PUB_1" "$VM_PUB_2" "$VM_PUB_3")
 for vm in "${VMS[@]}"; do
-  echo "init $vm ssh authorized_keys"
-  ssh root@"$vm" "mkdir -p .ssh"
-  ssh root@"$vm" "cat >> .ssh/authorized_keys" <"$HOME"/.ssh/id_rsa.pub
+  echo "scp /tmp/istio-sidecar.deb root@$vm:/tmp/"
+  scp ~/shop/istio-sidecar.1.6.4.deb root@"$vm":/tmp/
 done
