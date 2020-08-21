@@ -3,4 +3,5 @@ RUN apk --no-cache add curl
 ARG JAR_FILE=grpc_springboot_demo_2.jar
 COPY ${JAR_FILE} grpc_springboot_demo.jar
 ADD grpcurl.tar.gz ghz.tar.gz /usr/local/bin/
+COPY hello.proto /opt/
 ENTRYPOINT ["java","-jar","/grpc_springboot_demo.jar"]
