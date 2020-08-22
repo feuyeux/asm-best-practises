@@ -17,4 +17,13 @@ k exec "$hello1_pod" -c hello-v2-deploy -n grpc-circuit-breaking -- \
   -n 2000 \
   -c 20 \
   -q 500 \
+  localhost:7001
+
+k exec "$hello1_pod" -c hello-v2-deploy -n grpc-circuit-breaking -- \
+  ghz --insecure -d '{"name":"eric"}' \
+  --proto /opt/hello.proto \
+  --call org.feuyeux.grpc.Greeter/SayHello \
+  -n 2000 \
+  -c 20 \
+  -q 500 \
   hello2-svc.grpc-circuit-breaking.svc.cluster.local:7001

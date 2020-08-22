@@ -15,7 +15,7 @@ k create ns hybrid-hello
 k label ns hybrid-hello istio-injection=enabled
 
 echo "2 setup kube"
-k apply -f data_plane/hello_sa.yaml
+#k apply -f data_plane/hello_sa.yaml
 k apply -f data_plane/hello1_deployment.yaml
 k apply -f data_plane/hello2_deployment.yaml
 k apply -f data_plane/hello3_deployment.yaml

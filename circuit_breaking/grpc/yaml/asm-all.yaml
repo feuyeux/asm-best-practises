@@ -16,15 +16,15 @@ spec:
     connectionPool:
       tcp:
         # HTTP1/TCP最大连接数
-        maxConnections: 10
+        maxConnections: 1
         # TCP connection timeout. format: 1h/1m/1s/1ms. MUST BE >=1ms. Default is 10s.
         connectTimeout: 10s
       http:
-        http1MaxPendingRequests: 10
-        http2MaxRequests: 10
+        http1MaxPendingRequests: 1
+        http2MaxRequests: 1
         # 每连接最大请求数
-        maxRequestsPerConnection: 10
-        maxRetries: 3
+        maxRequestsPerConnection: 1
+        maxRetries: 0
 
     # 离群点检测 controlling eviction of unhealthy hosts from the pool
     outlierDetection:
