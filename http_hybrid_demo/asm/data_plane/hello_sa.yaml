@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  namespace: hybrid-hello
+  name: hello-sa
+  labels:
+    account: hello-sa

@@ -21,6 +21,7 @@ aliyun servicemesh AddVmAppToMesh \
 --Ips "$VM_PRI_2","$VM_PRI_3" \
 --Ports http:8001 \
 --Labels app=hello2-deploy \
+--ServiceAccount hello-sa \
 --Force true
 
 echo "done"

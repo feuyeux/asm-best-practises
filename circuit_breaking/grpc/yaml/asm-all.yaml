@@ -3,7 +3,7 @@ apiVersion: networking.istio.io/v1alpha3
 kind: DestinationRule
 metadata:
   namespace: grpc-circuit-breaking
-  name: hello2-dr
+  name: grpc-hello2-dr
 spec:
   host: hello2-svc
   subsets:
@@ -16,21 +16,24 @@ spec:
     connectionPool:
       tcp:
         # HTTP1/TCP最大连接数
-        maxConnections: 1
+        maxConnections: 10
         # TCP connection timeout. format: 1h/1m/1s/1ms. MUST BE >=1ms. Default is 10s.
         connectTimeout: 10s
       http:
+        http1MaxPendingRequests: 10
+        http2MaxRequests: 10
         # 每连接最大请求数
-        maxRequestsPerConnection: 1
-        http2MaxRequests: 1
+        maxRequestsPerConnection: 10
+        maxRetries: 3
+
     # 离群点检测 controlling eviction of unhealthy hosts from the pool
     outlierDetection:
       # 连续错误数 502/503/504
       consecutiveErrors: 1
       # 检测间隔时间 format: 1h/1m/1s/1ms. MUST BE >=1ms. Default is 10s
-      interval: 1s
+      interval: 100ms
       # 逐出时长 format: 1h/1m/1s/1ms. MUST BE >=1ms. Default is 30s.
-      baseEjectionTime: 5s
+      baseEjectionTime: 30s
       # 连接池中节点的最大逐出比 Defaults to 10%
       maxEjectionPercent: 100
 # https://istio.io/latest/docs/reference/config/networking/destination-rule/

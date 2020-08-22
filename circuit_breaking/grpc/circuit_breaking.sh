@@ -11,37 +11,21 @@ k version --short
 
 echo "1 initialize..."
 k delete namespace grpc-circuit-breaking >/dev/null 2>&1
+m delete namespace grpc-circuit-breaking >/dev/null 2>&1
 k create ns grpc-circuit-breaking
 k label ns grpc-circuit-breaking istio-injection=enabled
+m create ns grpc-circuit-breaking
+m label ns grpc-circuit-breaking istio-injection=enabled
 
 echo "2 setup..."
 k apply -f yaml/ack-all.yaml
-k apply -f yaml/fortio-deploy.yaml
+m apply -f yaml/asm-all.yaml
 
 echo "waiting for hello1-deploy"
 k -n grpc-circuit-breaking wait --for=condition=ready pod -l app=hello1-deploy
 echo "waiting for hello2-deploy"
-k -n grpc-circuit-breaking wait --for=condition=ready pod -l app=hello1-deploy
+k -n grpc-circuit-breaking wait --for=condition=ready pod -l app=hello2-deploy
 
 echo "3 check crd..."
 k -n grpc-circuit-breaking get all -n grpc-circuit-breaking
 m -n grpc-circuit-breaking get virtualservice,destinationrule -n grpc-circuit-breaking
-
-echo "4 verify route..."
-hello1_pod=$(k get pod -l app=hello1-deploy -n grpc-circuit-breaking -o jsonpath={.items..metadata.name})
-hello2_pod=$(k get pod -l app=hello2-deploy -n grpc-circuit-breaking -o jsonpath={.items..metadata.name})
-
-k exec "$hello2_pod" -c hello-v3-deploy -n grpc-circuit-breaking -- \
-  grpcurl -plaintext -d '{"name":"eric"}' localhost:7001 \
-  org.feuyeux.grpc.Greeter/SayHello | jq '.reply'
-echo
-
-k exec "$hello1_pod" -c hello-v2-deploy -n grpc-circuit-breaking -- \
-  grpcurl -plaintext -d '{"name":"eric"}' localhost:7001 \
-  org.feuyeux.grpc.Greeter/SayHello | jq '.reply'
-echo
-
-k exec "$hello1_pod" -c hello-v2-deploy -n grpc-circuit-breaking -- \
-  grpcurl -plaintext -d '{"name":"eric"}' \
-  hello2-svc.grpc-circuit-breaking.svc.cluster.local:7001 \
-  org.feuyeux.grpc.Greeter/SayHello | jq '.reply'
