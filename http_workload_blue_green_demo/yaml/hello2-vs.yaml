@@ -1,0 +1,22 @@
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  namespace: hello-grouping
+  name: hello2-vs
+spec:
+  hosts:
+    - hello2-svc.hello-grouping.svc.cluster.local
+  http:
+    - name: http-route
+      match:
+        - uri:
+            prefix: /hello
+      route:
+        - destination:
+            host: hello2-svc
+            subset: v1
+          weight: 49
+        - destination:
+            host: hello2-svc
+            subset: v2
+          weight: 51

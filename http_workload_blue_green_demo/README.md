@@ -1,11 +1,6 @@
 ## Http WorkloadEntry Blue Green
 
-### setup mesh
-```sh
-sh sh/setup-pod-vm.sh
-```
-
-### setup vm
+### 1 setup vm
 vm1/vm2:
 ```sh
 sh sh/ssh1.sh
@@ -26,7 +21,17 @@ docker run \
 --name http_v2 \
 registry.cn-beijing.aliyuncs.com/asm_repo/http_springboot_v2:1.0.1
 ```
-### blue-green test
+test:
 ```sh
-sh sh/blue-green-test.sh
+sh sh/vm-http-test.sh
+```
+
+### 2 setup mesh
+```sh
+sh sh/setup.sh
+```
+
+### 3 blue-green test
+```sh
+sh sh/vm-traffic-test.sh
 ```
