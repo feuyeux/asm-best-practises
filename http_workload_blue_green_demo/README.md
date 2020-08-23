@@ -31,7 +31,19 @@ sh sh/vm-http-test.sh
 sh sh/setup.sh
 ```
 
+```yaml
+spec:
+  address: 192.168.0.171
+  labels:
+    app: http-workload
+    version: v1
+```
 ### 3 blue-green test
 ```sh
 sh sh/vm-traffic-test.sh
+```
+
+### 4 land-evict test
+```sh
+sh sh/vm-group-test.sh
 ```

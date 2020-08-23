@@ -1,11 +1,10 @@
 apiVersion: networking.istio.io/v1alpha3
 kind: WorkloadEntry
 metadata:
-  name: vm4
-  namespace: vm-blue-green
+  name: mesh-expansion-hello2-svc-4
+  namespace: hello-grouping
 spec:
   address: 192.168.0.198
   labels:
-    app: hello2-deploy
-    class: vm
+    app: http-workload
     version: v2

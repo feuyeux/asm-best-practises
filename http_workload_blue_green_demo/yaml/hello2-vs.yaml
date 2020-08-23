@@ -5,7 +5,7 @@ metadata:
   name: hello2-vs
 spec:
   hosts:
-    - hello2-svc.hello-grouping.svc.cluster.local
+    - hello2-svc
   http:
     - name: http-route
       match:
@@ -15,8 +15,8 @@ spec:
         - destination:
             host: hello2-svc
             subset: v1
-          weight: 49
+          weight: 50
         - destination:
             host: hello2-svc
             subset: v2
-          weight: 51
+          weight: 50

@@ -34,7 +34,7 @@ echo "done"
 
 echo "4 setup hello2 VirtualService/DestinationRule"
 m apply -f yaml/hello2-dr.yaml
-#m apply -f yaml/hello2-vs.yaml
+m apply -f yaml/hello2-vs.yaml
 
 echo "5 verify kube crd"
 k get svc -n hello-grouping -o wide

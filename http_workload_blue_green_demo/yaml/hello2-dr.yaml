@@ -4,7 +4,7 @@ metadata:
   namespace: hello-grouping
   name: hello2-dr
 spec:
-  host: hello2-svc.hello-grouping.svc.cluster.local
+  host: hello2-svc
   subsets:
     - name: v1
       labels:
