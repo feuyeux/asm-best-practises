@@ -69,5 +69,8 @@ sh asm/test_mesh.sh
 ### 6 end-2-end test traffic shift
 ```sh
 sh asm/asm_z.sh
+```
+
+```sh
 sh asm/test_z.sh
 ```

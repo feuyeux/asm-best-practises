@@ -17,3 +17,4 @@
   - http_reciprocal_demo
   - grpc_reciprocal_demo
   - http_hybrid_demo
+  - http_workload_blue_green_demo

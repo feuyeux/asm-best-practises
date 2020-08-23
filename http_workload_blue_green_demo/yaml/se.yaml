@@ -1,0 +1,17 @@
+apiVersion: networking.istio.io/v1alpha3
+kind: ServiceEntry
+metadata:
+  name: mesh-expansion-hello2-svc
+  namespace: vm-blue-green
+spec:
+  hosts:
+  - hello2-svc.vm-blue-green.svc.cluster.local
+  location: MESH_INTERNAL
+  ports:
+  - name: http
+    number: 8001
+    protocol: HTTP
+  resolution: STATIC
+  workloadSelector:
+    labels:
+      app: hello2-deploy

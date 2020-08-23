@@ -10,9 +10,14 @@ IP=$(k -n istio-system get service istio-ingressgateway -o jsonpath='{.status.lo
 echo "Ingress gateway ip:$IP"
 echo "Start test in loop:"
 echo >z_result
-for i in {1..100000}; do
+for i in {1..100}; do
   resp=$(curl -s "$IP":8003/hello/asm)
   echo $i "$resp"
+  if [[ -z $resp ]]; then
+    echo "error in accessing loop, stop."
+    rm -rf z_result
+    exit
+  fi
   echo "$resp" >>z_result
 done
 echo
