@@ -23,11 +23,14 @@ hello1_pod=$(k get pod -l app=hello1-deploy -n vm-blue-green -o jsonpath={.items
 echo "Check traffic from hello1 pod($hello1_pod) localhost:"
 k exec "$hello1_pod" -c hello-v1-deploy -n vm-blue-green -- curl -s localhost:8001/hello/eric
 
-m create ns vm-blue-green
-m apply -f yaml/se.yaml
-
-echo "Verify"
+echo "Verify kube crd"
 k get svc -n vm-blue-green -o wide
 k get pod -n vm-blue-green -o wide
 
+m create ns vm-blue-green
+m apply -f yaml/vm-meshify.yaml
+
+echo "Verify mesh crd"
+m get serviceentry -n vm-blue-green -o wide
+m get serviceentry -n vm-blue-green -o wide
 m get serviceentry -n vm-blue-green -o wide

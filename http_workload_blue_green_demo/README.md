@@ -6,7 +6,7 @@ sh sh/setup-pod-vm.sh
 ```
 
 ### setup vm
-vm1-vm4:
+vm1/vm2:
 ```sh
 sh sh/ssh1.sh
 
@@ -16,9 +16,17 @@ docker run \
 --name http_v1 \
 registry.cn-beijing.aliyuncs.com/asm_repo/http_springboot_v1:1.0.1
 ```
+vm3/vm4:
+```sh
+sh sh/ssh3.sh
 
+docker run \
+--rm \
+--network host \
+--name http_v2 \
+registry.cn-beijing.aliyuncs.com/asm_repo/http_springboot_v2:1.0.1
+```
 ### blue-green test
 ```sh
 sh sh/blue-green-test.sh
-
 ```

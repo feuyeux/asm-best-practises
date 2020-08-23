@@ -1,0 +1,55 @@
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  namespace: vm-blue-green
+  name: hello2-vs
+spec:
+  hosts:
+    - hello2-svc
+  http:
+    - name: http-hello-route
+      match:
+        - uri:
+            prefix: /hello
+      route:
+        - destination:
+            host: hello2-svc
+            subset: v1
+          weight: 50
+        - destination:
+            host: hello2-svc
+            subset: v2
+          weight: 50
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: DestinationRule
+metadata:
+  namespace: vm-blue-green
+  name: hello2-dr
+spec:
+  host: hello2-svc
+  subsets:
+    - name: v1
+      labels:
+        version: v1
+    - name: v2
+      labels:
+        version: v2
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: ServiceEntry
+metadata:
+  name: mesh-expansion-hello2-svc
+  namespace: vm-blue-green
+spec:
+  hosts:
+  - hello2-svc.vm-blue-green.svc.cluster.local
+  location: MESH_INTERNAL
+  ports:
+  - name: http
+    number: 8001
+    protocol: HTTP
+  resolution: STATIC
+  workloadSelector:
+    labels:
+      app: hello2-deploy

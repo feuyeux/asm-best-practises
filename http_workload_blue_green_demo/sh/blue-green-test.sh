@@ -8,15 +8,17 @@ cd ..
 source blue-green.config
 alias k="kubectl --kubeconfig $USER_CONFIG"
 alias m="kubectl --kubeconfig $MESH_CONFIG"
+
+hello1_pod=$(k get pod -l app=hello1-deploy -n vm-blue-green -o jsonpath={.items..metadata.name})
+
 verify_in_loop() {
   for i in {1..8}; do
-    echo ">>> test hello2 directly"
-    k exec "$hello1_pod" -c hello-v1-deploy -n vm-blue-green -- curl -s hello2-svc.vm-blue-green.svc.cluster.local:8001/hello/eric
+    echo "  >>> test hello2-svc.vm-blue-green.svc.cluster.local"
+    k exec "$hello1_pod" -c hello-v1-deploy -n vm-blue-green -- \
+    curl -s hello2-svc.vm-blue-green.svc.cluster.local:8001/hello/eric
     echo
   done
 }
-
-hello1_pod=$(k get pod -l app=hello1-deploy -n vm-blue-green -o jsonpath={.items..metadata.name})
 
 echo "1 Test blue-green 1:1"
 m apply -f yaml/wl1.yaml
