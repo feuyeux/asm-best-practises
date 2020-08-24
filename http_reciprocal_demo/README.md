@@ -27,6 +27,10 @@ spec:
 
 ### 3 start app on vm
 ```sh
+docker pull registry.cn-beijing.aliyuncs.com/asm_repo/http_springboot_v1:1.0.1
+docker pull registry.cn-beijing.aliyuncs.com/asm_repo/http_springboot_v2:1.0.1
+docker pull registry.cn-beijing.aliyuncs.com/asm_repo/http_springboot_v3:1.0.1
+
 sh vm/ssh1.sh
 
 docker run \
