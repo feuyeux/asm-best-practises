@@ -7,7 +7,25 @@ sh vm/init.ssh.sh
 sh vm/init.docker.sh
 ```
 
-### 2 start app on vm
+### 2 deploy to asm
+```sh
+sh asm/ack.deploy.sh
+
+sh asm/asm.deploy.sh
+sh asm/asm_traffic_shift.sh
+sh asm/dns.fake.sh
+```
+
+#### edit workload
+```yaml
+spec:
+  address: 192.168.0.170
+  labels:
+    app: hello-workload
+    version: v1
+```
+
+### 3 start app on vm
 ```sh
 sh vm/ssh1.sh
 
@@ -44,24 +62,6 @@ registry.cn-beijing.aliyuncs.com/asm_repo/http_springboot_v3:1.0.1
 #### test vm app
 ```sh
 sh vm/test_http.sh
-```
-
-### 3 deploy to asm
-```sh
-sh asm/ack.deploy.sh
-
-sh asm/asm.deploy.sh
-sh asm/asm_traffic_shift.sh
-sh asm/dns.fake.sh
-```
-
-#### edit workload
-```yaml
-spec:
-  address: 192.168.0.170
-  labels:
-    app: hello-workload
-    version: v1
 ```
 
 ### 4 test 
