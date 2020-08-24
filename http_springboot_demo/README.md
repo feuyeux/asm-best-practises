@@ -49,7 +49,6 @@ docker/docker.build.sh
 docker/docker.push.sh
 sh asm/ack.deploy.sh
 sh asm/asm.deploy.sh
-sleep 20s
 sh asm/test_kube.sh
 sh asm/test_mesh.sh
 ```

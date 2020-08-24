@@ -9,6 +9,7 @@ alias k="kubectl --kubeconfig $USER_CONFIG"
 alias m="kubectl --kubeconfig $MESH_CONFIG"
 m get IstioGateway -n istio-system -o jsonpath='{.items[0].spec.ports[?(@.name=="http-reciprocal")]}'
 IP=$(k -n istio-system get service istio-ingressgateway -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
+echo
 echo "Ingress gateway ip:$IP"
 echo "Warm-up..."
 for i in {1..20}; do
