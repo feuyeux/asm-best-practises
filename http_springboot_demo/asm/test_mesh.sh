@@ -9,27 +9,27 @@ IP=$(kubectl --kubeconfig "$USER_CONFIG" \
   -n istio-system get service istio-ingressgateway -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
 
 echo "Ingress gateway ip:$IP"
-curl http://$IP:7001/hello/feuyeux
+curl http://"$IP":8001/hello/eric
 echo
-curl http://$IP:7001/bye
+curl http://"$IP":8001/bye
 echo
 rm -f result
 echo "Start test in loop:"
 for ((i = 1; i <= 100; i++)); do
-  curl -s $IP:7001/hello/feuyeux >/dev/null
+  curl -s "$IP":8001/hello/eric >/dev/null
 done
 for ((i = 1; i <= 10; i++)); do
-  curl -s $IP:7001/hello/feuyeux >>result
+  curl -s "$IP":8001/hello/eric >>result
   echo "" >>result
 done
 sort result | uniq -c | sort -nrk1
 rm -f result
 echo
 for ((i = 1; i <= 100; i++)); do
-  curl -s $IP:7001/bye >/dev/null
+  curl -s "$IP":8001/bye >/dev/null
 done
 for ((i = 1; i <= 10; i++)); do
-  curl -s $IP:7001/bye >>result
+  curl -s "$IP":8001/bye >>result
   echo "" >>result
 done
 sort result | uniq -c | sort -nrk1

@@ -1,0 +1,42 @@
+apiVersion: log.alibabacloud.com/v1alpha1
+kind: AliyunLogConfig
+metadata:
+  # your config name, must be unique in you k8s cluster
+  name: mesh-access-log-config
+  namespace: kube-system
+spec:
+  # must use same project with k8s cluster
+  project: k8s-log-${K8SClusterID}
+  # logstore name to upload log
+  logstore: mesh-access-log
+  # product code always been mesh-access-log
+  productCode: mesh-access-log
+  # logtail config detail
+  logtailConfig:
+    # docker stdout's input type is 'plugin'
+    inputType: plugin
+    # logtail config name, should be same with [metadata.name]
+    configName: mesh-access-log-config
+    inputDetail:
+      plugin:
+        inputs:
+          - # input type
+            type: service_docker_stdout
+            detail:
+              # collect stdout and stderr
+              Stdout: true
+              Stderr: true
+              IncludeEnv:
+                ISTIO_META_POD_NAME: ""
+              IncludeLabel:
+                io.kubernetes.container.name: "istio-proxy"
+              ExcludeLabel:
+                io.kubernetes.pod.name: "^istio-ingressgateway-.*$"
+        processors:
+          - # 使用JSON解析type: processor_json
+            detail:
+              # 从docker采集的数据默认key为"content"
+              SourceKey: content
+              ExpandConnector: ""
+              # 保留原始字段KeepSource: true
+              NoKeyError: true

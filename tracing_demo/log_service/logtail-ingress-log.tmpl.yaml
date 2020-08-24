@@ -1,0 +1,67 @@
+apiVersion: log.alibabacloud.com/v1alpha1
+kind: AliyunLogConfig
+metadata:
+  # your config name, must be unique in you k8s cluster
+  name: mesh-ingress-log-config
+  namespace: kube-system
+spec:
+  project: k8s-log-${K8SClusterId}
+  # logstore name to upload log
+  logstore: mesh-ingress-log
+  # product code, you should not change it
+  productCode: k8s-istio-ingress
+  # logtail config detail
+  logtailConfig:
+    inputType: plugin
+    configName: mesh-ingress-log-config
+    inputDetail:
+      plugin:
+        inputs:
+          - detail:
+              IncludeLabel:
+                io.kubernetes.pod.name: ^istio-ingressgateway-.*$
+              Stderr: false
+              Stdout: true
+            type: service_docker_stdout
+        processors:
+          - detail:
+              Anchors:
+                - FieldName: log
+                  FieldType: json
+              KeepSource: true
+              NoKeyError: true
+              NoMatchError: true
+              SourceKey: content
+            type: processor_anchor
+          - type: processor_rename
+            detail:
+              DestKeys:
+                - host
+                - request_length
+                - body_bytes_sent
+                - request_time
+                - method
+                - url
+                - version
+                - req_id
+                - status
+                - proxy_upstream_name
+                - upstream_addr
+                - upstream_response_time
+                - http_user_agent
+                - x_forward_for
+              SourceKeys:
+                - log_authority
+                - log_bytes_received
+                - log_bytes_sent
+                - log_duration
+                - log_method
+                - log_path
+                - log_protocol
+                - log_request_id
+                - log_response_code
+                - log_upstream_cluster
+                - log_upstream_host
+                - log_upstream_service_time
+                - log_user_agent
+                - log_x_forwarded_for

@@ -6,41 +6,46 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.concurrent.TimeUnit;
+import java.util.Map;
+
 
 @RestController
 public class HttpController {
     private static final Logger LOGGER = LoggerFactory.getLogger(HttpController.class);
     private static String HTTP_HELLO_BACKEND = System.getenv("HTTP_HELLO_BACKEND");
+    public static final String HELLO = "Hola";
+    public static final String BYE = "Adióbais";
 
     @Autowired
     private HelloService helloService;
 
     @GetMapping(path = "/hello/{msg}")
-    public String sayHello(@PathVariable String msg) {
+    public String sayHello(@PathVariable String msg, @RequestHeader Map<String, String> headers) {
+        helloService.logHeaders(headers);
         if (HTTP_HELLO_BACKEND == null) {
-            String result = "Hola " + msg;
+            String result = HELLO + " " + msg;
             LOGGER.info("{}", result);
             return result + helloService.markIp();
         } else {
             String url = "http://" + HTTP_HELLO_BACKEND + ":8001/hello/" + msg;
-            String backServiceResult = helloService.sayHello(url);
-            String result = "Hola " + msg;
+            String backServiceResult = helloService.sayHello(url, headers);
+            String result = HELLO + " " + msg;
             return result + backServiceResult;
         }
     }
 
     @GetMapping(path = "/bye")
-    public String sayBye() {
+    public String sayBye(@RequestHeader Map<String, String> headers) {
+        helloService.logHeaders(headers);
         if (HTTP_HELLO_BACKEND == null) {
-            LOGGER.info(".");
-            return "Adióbais" + helloService.markIp();
+            return BYE + helloService.markIp();
         } else {
             String url = "http://" + HTTP_HELLO_BACKEND + ":8001/bye";
-            String backServiceResult = helloService.sayBye(url);
-            return "Adióbais" + backServiceResult;
+            String backServiceResult = helloService.sayBye(url, headers);
+            return BYE + backServiceResult;
         }
     }
 }

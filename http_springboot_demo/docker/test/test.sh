@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
-curl localhost:7001/hello/feuyeux
+curl localhost:7001/hello/eric
 echo
-curl localhost:8001/hello/feuyeux
+curl localhost:8001/hello/eric
 echo
 curl localhost:7001/bye
 echo
