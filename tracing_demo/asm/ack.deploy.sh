@@ -18,4 +18,4 @@ k -n trace-hello wait --for=condition=ready pod -l app=hello1-deploy
 echo "waiting for hello3-deploy"
 k -n trace-hello wait --for=condition=ready pod -l app=hello3-deploy
 
-k -n trace-hello get pod,svc
+k -n trace-hello get pod,svc -o wide

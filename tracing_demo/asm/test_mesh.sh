@@ -7,9 +7,9 @@ cd "$SCRIPT_PATH" || exit
 cd ..
 source tracing.config
 alias k="kubectl --kubeconfig $USER_CONFIG"
-
 hello1_pod=$(k get pod -l app=hello1-deploy -n trace-hello -o jsonpath={.items..metadata.name})
-echo "Test access vm ip directly"
+
+echo "Test access vm ip directly[$hello1_pod]"
 VMS=("$VM_PRI_1" "$VM_PRI_2" "$VM_PRI_3")
 for vm in "${VMS[@]}"; do
   k exec "$hello1_pod" -c hello-v1-deploy -n trace-hello -- curl -s "$vm":8001/hello/tracing

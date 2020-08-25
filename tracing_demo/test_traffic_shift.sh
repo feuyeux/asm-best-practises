@@ -4,7 +4,7 @@ SCRIPT_PATH="$(
   pwd -P
 )/"
 cd "$SCRIPT_PATH" || exit
-source reciprocal.config
+source tracing.config
 alias k="kubectl --kubeconfig $USER_CONFIG"
 alias m="kubectl --kubeconfig $MESH_CONFIG"
 m get IstioGateway -n istio-system -o jsonpath='{.items[0].spec.ports[?(@.name=="http-reciprocal")]}'
@@ -16,9 +16,9 @@ for i in {1..20}; do
   curl -s "$IP":8008/hello/eric
   echo
 done
-echo "Test route n a loop"
+echo "Test route in a loop"
 echo >test_traffic_shift_result
-for i in {1..100}; do
+for i in {1..1000}; do
   resp=$(curl -s "$IP":8008/hello/eric)
   echo "$resp" >>test_traffic_shift_result
 done

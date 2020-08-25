@@ -7,4 +7,4 @@ cd "$SCRIPT_PATH" || exit
 source ../tracing.config
 alias k="kubectl --kubeconfig $USER_CONFIG"
 k apply -f xtrace-service.yaml
-k get svc zipkin-slb -n istio-system
+k get svc zipkin-slb -n istio-system -o wide

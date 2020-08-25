@@ -18,10 +18,17 @@ public class HelloService {
     private final OkHttpClient client = new OkHttpClient();
 
     public String sayHello(String url, Map<String, String> headers) {
-        Map<String, String> nextHeaders = buildHeaders(headers);
+        Map<String, String> tracingHeaders = buildTracingHeaders(headers,
+                "x-request-id",
+                "x-b3-traceid",
+                "x-b3-spanid",
+                "x-b3-parentspanid",
+                "x-b3-sampled",
+                "x-b3-flags",
+                "x-ot-span-context");
         Request request = new Request.Builder()
                 //propagate tracing headers
-                .headers(Headers.of(nextHeaders))
+                .headers(Headers.of(tracingHeaders))
                 .url(url)
                 .build();
         try (Response response = client.newCall(request).execute()) {
@@ -35,23 +42,15 @@ public class HelloService {
         }
     }
 
-    private Map<String, String> buildHeaders(Map<String, String> headers) {
+    private Map<String, String> buildTracingHeaders(Map<String, String> headers, String... keys) {
         Map<String, String> nextHeaders = new HashMap<>();
-        fillHeader(headers, nextHeaders, "x-request-id");
-        fillHeader(headers, nextHeaders, "x-b3-traceid");
-        fillHeader(headers, nextHeaders, "x-b3-spanid");
-        fillHeader(headers, nextHeaders, "x-b3-parentspanid");
-        fillHeader(headers, nextHeaders, "x-b3-sampled");
-        fillHeader(headers, nextHeaders, "x-b3-flags");
-        fillHeader(headers, nextHeaders, "x-ot-span-context");
-        return nextHeaders;
-    }
-
-    private void fillHeader(Map<String, String> headers, Map<String, String> nextHeaders, String key) {
-        String value = headers.get(key);
-        if (value != null) {
-            nextHeaders.put(key, value);
+        for (String key : keys) {
+            String value = headers.get(key);
+            if (value != null) {
+                nextHeaders.put(key, value);
+            }
         }
+        return nextHeaders;
     }
 
     public void logHeaders(Map<String, String> headers) {

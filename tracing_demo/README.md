@@ -69,6 +69,13 @@ registry.cn-beijing.aliyuncs.com/asm_repo/http_springboot_v1:1.0.1
 ```
 
 ```sh
+sh vm/ssh1.sh
+
+curl -s hello3-svc.trace-hello.svc.cluster.local:8001/hello/hello2-local-to-hello3-message
+echo
+```
+
+```sh
 sh vm/ssh2.sh
 
 docker pull registry.cn-beijing.aliyuncs.com/asm_repo/http_springboot_v2:1.0.1
