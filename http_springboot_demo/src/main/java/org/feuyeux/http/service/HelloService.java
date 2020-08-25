@@ -20,6 +20,7 @@ public class HelloService {
     public String sayHello(String url, Map<String, String> headers) {
         Map<String, String> nextHeaders = buildHeaders(headers);
         Request request = new Request.Builder()
+                //propagate tracing headers
                 .headers(Headers.of(nextHeaders))
                 .url(url)
                 .build();
