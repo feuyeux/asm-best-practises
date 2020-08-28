@@ -6,7 +6,7 @@ SCRIPT_PATH="$(
 cd "$SCRIPT_PATH" || exit
 source ../reciprocal.config
 alias k="kubectl --kubeconfig $USER_CONFIG"
-hello3_svc_ip=$(k get svc hello3-svc -n hybrid-hello -o jsonpath='{.spec.clusterIP}')
+hello3_svc_ip=$(k get svc hello3-svc -n http-reciprocal-hello -o jsonpath='{.spec.clusterIP}')
 echo "$hello3_svc_ip hello3-svc.http-reciprocal-hello.svc.cluster.local" > dns_record
 
 VMS=("$VM_PUB_1" "$VM_PUB_2" "$VM_PUB_3")
