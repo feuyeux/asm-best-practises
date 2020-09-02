@@ -15,7 +15,7 @@ m create ns http-reciprocal-hello
 m label ns http-reciprocal-hello istio-injection=enabled
 
 MESH_ID=$(head -n 1 "$MESHID_CONFIG")
-
+echo "MESH_ID=$MESH_ID"
 aliyun servicemesh AddVmAppToMesh \
   --ServiceMeshId "$MESH_ID" \
   --Namespace http-reciprocal-hello \
