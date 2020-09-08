@@ -10,4 +10,4 @@ spec:
     - port: 8001
       name: http
   selector:
-    app: hello2-deploy
+    service: hello2-deploy

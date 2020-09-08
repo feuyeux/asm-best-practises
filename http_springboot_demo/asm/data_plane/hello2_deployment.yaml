@@ -4,18 +4,21 @@ metadata:
   namespace: http-hello
   name: hello2-deploy-v1
   labels:
-    app: hello2-deploy
+    app: hello2-deploy-v1
+    service: hello2-deploy
     version: v1
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: hello2-deploy
+      app: hello2-deploy-v1
+      service: hello2-deploy
       version: v1
   template:
     metadata:
       labels:
-        app: hello2-deploy
+        app: hello2-deploy-v1
+        service: hello2-deploy
         version: v1
     spec:
       serviceAccountName: http-hello-sa
@@ -35,18 +38,21 @@ metadata:
   namespace: http-hello
   name: hello2-deploy-v2
   labels:
-    app: hello2-deploy
+    app: hello2-deploy-v2
+    service: hello2-deploy
     version: v2
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: hello2-deploy
+      app: hello2-deploy-v2
+      service: hello2-deploy
       version: v2
   template:
     metadata:
       labels:
-        app: hello2-deploy
+        app: hello2-deploy-v2
+        service: hello2-deploy
         version: v2
     spec:
       serviceAccountName: http-hello-sa
@@ -66,18 +72,21 @@ metadata:
   namespace: http-hello
   name: hello2-deploy-v3
   labels:
-    app: hello2-deploy
+    app: hello2-deploy-v3
+    service: hello2-deploy
     version: v3
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: hello2-deploy
+      app: hello2-deploy-v3
+      service: hello2-deploy
       version: v3
   template:
     metadata:
       labels:
-        app: hello2-deploy
+        app: hello2-deploy-v3
+        service: hello2-deploy
         version: v3
     spec:
       serviceAccountName: http-hello-sa
