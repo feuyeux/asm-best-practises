@@ -11,6 +11,7 @@ alias m="kubectl --kubeconfig $MESH_CONFIG"
 echo "4 setup gateway"
 m create ns http-hello >/dev/null 2>&1
 m apply -f control_plane/http_springboot_gateway.yaml
+m -n http-hello get gateway
 
 echo "5 setup virtual service"
 m apply -f control_plane/hello1_virtualservice.yaml

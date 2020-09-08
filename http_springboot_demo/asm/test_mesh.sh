@@ -16,7 +16,8 @@ echo
 rm -f result
 echo "Start test in loop:"
 for ((i = 1; i <= 100; i++)); do
-  curl -s "$IP":8001/hello/eric >/dev/null
+  curl -s "$IP":8001/hello/eric
+  echo
 done
 for ((i = 1; i <= 10; i++)); do
   curl -s "$IP":8001/hello/eric >>result

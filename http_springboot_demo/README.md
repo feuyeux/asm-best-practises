@@ -54,5 +54,5 @@ sh asm/test_mesh.sh
 ```
 
 ```sh
-asm/asm.deploy.sh && sleep 20s && test/asm/test_mesh.sh
+asm/asm.deploy.sh && sleep 20s && sh asm/test_mesh.sh
 ```
