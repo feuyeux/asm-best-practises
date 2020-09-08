@@ -25,6 +25,15 @@ spec:
     version: v1
 ```
 
+```yaml
+spec:
+  address: 192.168.0.170
+  labels:
+    app: hello-workload
+    version: v1
+  serviceAccount: http-sa
+
+```
 ### 3 start app on vm
 ```sh
 docker pull registry.cn-beijing.aliyuncs.com/asm_repo/http_springboot_v1:1.0.1

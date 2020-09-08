@@ -12,6 +12,7 @@ k delete namespace http-reciprocal-hello >/dev/null 2>&1
 k create ns http-reciprocal-hello
 k label ns http-reciprocal-hello istio-injection=enabled
 
+k apply -f data_plane/hello-sa.yaml
 k apply -f data_plane/http-reciprocal-hello-all.yaml
 echo "waiting for hello1-deploy"
 k -n http-reciprocal-hello wait --for=condition=ready pod -l app=hello1-deploy

@@ -1,0 +1,5 @@
+VM_PUB_1=123.57.230.159
+VM_PRI_1=192.168.0.230
+USER_CONFIG=~/shop_config/ack_staging
+MESH_CONFIG=~/shop_config/asm_staging
+MESHID_CONFIG=~/shop_config/asm_staging_id

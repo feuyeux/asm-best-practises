@@ -22,7 +22,8 @@ aliyun servicemesh AddVmAppToMesh \
   --ServiceName hello2-svc \
   --Ips "$VM_PRI_1","$VM_PRI_2","$VM_PRI_3" \
   --Ports http:8001 \
-  --Labels app=hello-workload
+  --Labels app=hello-workload \
+  --ServiceAccount=http-sa
 echo "done"
 
 k get svc hello2-svc -n http-reciprocal-hello -o yaml
