@@ -8,7 +8,7 @@ source ../reciprocal.config
 alias k="kubectl --kubeconfig $USER_CONFIG"
 
 hello1_pod=$(k get pod -l app=hello1-deploy -n http-reciprocal-hello -o jsonpath={.items..metadata.name})
-echo "Test access vm ip directly"
+echo "1 Test access vm ip directly"
 VMS=("$VM_PRI_1" "$VM_PRI_2" "$VM_PRI_3")
 for vm in "${VMS[@]}"; do
   if [ "$vm" ]; then
@@ -20,12 +20,12 @@ for vm in "${VMS[@]}"; do
 done
 
 echo
-echo "Test access hello2-svc"
+echo "2 Test access hello2-svc"
 k exec "$hello1_pod" -c hello-v1-deploy -n http-reciprocal-hello \
   -- curl -s hello2-svc.http-reciprocal-hello.svc.cluster.local:8001/hello/eric
 echo
 echo
-echo "Test access hello1-svc"
+echo "3 Test access hello1-svc"
 k exec "$hello1_pod" -c hello-v1-deploy -n http-reciprocal-hello \
   -- curl -s hello1-svc.http-reciprocal-hello.svc.cluster.local:8004/hello/eric
 echo
