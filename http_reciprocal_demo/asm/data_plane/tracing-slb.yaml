@@ -1,0 +1,18 @@
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: tracing
+    component: zipkin
+  name: zipkin-slb
+  namespace: istio-system
+spec:
+  ports:
+    - name: zipkin
+      port: 9411
+      protocol: TCP
+      targetPort: 9411
+  selector:
+    app: tracing
+    component: zipkin
+  type: LoadBalancer
