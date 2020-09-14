@@ -29,7 +29,8 @@ echo "3 Test access hello1-svc"
 k exec "$hello1_pod" -c hello-v1-deploy -n http-reciprocal-hello \
   -- curl -s hello1-svc.http-reciprocal-hello.svc.cluster.local:8004/hello/eric
 echo
-
+echo
+echo "4 Test access hello3-svc"
 k exec "$hello1_pod" -c hello-v1-deploy -n http-reciprocal-hello \
   -- curl -s hello3-svc.http-reciprocal-hello.svc.cluster.local:8001/hello/eric
 echo

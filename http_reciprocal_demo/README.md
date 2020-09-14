@@ -14,6 +14,7 @@ sh asm/ack.deploy.sh
 sh asm/asm.deploy.sh
 sh asm/asm_traffic_shift.sh
 sh asm/dns.fake.sh
+sh asm/tracing.sh
 ```
 
 #### edit workload
@@ -41,6 +42,8 @@ docker pull registry.cn-beijing.aliyuncs.com/asm_repo/http_springboot_v2:1.0.1
 docker pull registry.cn-beijing.aliyuncs.com/asm_repo/http_springboot_v3:1.0.1
 
 sh vm/ssh1.sh
+
+curl hello3-svc.http-reciprocal-hello.svc.cluster.local:8001/hello/cool
 
 docker run \
 --rm \
@@ -70,11 +73,6 @@ docker run \
 --name http_v3 \
 -e HTTP_HELLO_BACKEND=hello3-svc.http-reciprocal-hello.svc.cluster.local \
 registry.cn-beijing.aliyuncs.com/asm_repo/http_springboot_v3:1.0.1
-```
-
-#### test vm app
-```sh
-sh vm/test_http.sh
 ```
 
 ### 4 test 
