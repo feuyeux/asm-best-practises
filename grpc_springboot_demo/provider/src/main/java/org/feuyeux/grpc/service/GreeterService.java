@@ -2,13 +2,13 @@ package org.feuyeux.grpc.service;
 
 import com.google.common.util.concurrent.ListenableFuture;
 import com.google.protobuf.Empty;
-import io.grpc.ManagedChannel;
-import io.grpc.ManagedChannelBuilder;
+import io.grpc.*;
 import org.feuyeux.grpc.proto.GreeterGrpc;
 import org.feuyeux.grpc.proto.HelloReply;
 import org.feuyeux.grpc.proto.HelloRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.concurrent.ExecutionException;
@@ -16,6 +16,8 @@ import java.util.concurrent.ExecutionException;
 @Service
 public class GreeterService {
     private static final Logger LOGGER = LoggerFactory.getLogger(GreeterService.class);
+    @Autowired
+    private ClientInterceptor globalCInterceptor;
     private GreeterGrpc.GreeterFutureStub stub;
 
     public String sayHello(String address, String name) {
@@ -61,7 +63,8 @@ public class GreeterService {
             final ManagedChannel channel = ManagedChannelBuilder.forAddress(address, 7001)
                     .usePlaintext()
                     .build();
-            stub = GreeterGrpc.newFutureStub(channel);
+            Channel interceptChannel = ClientInterceptors.intercept(channel, globalCInterceptor);
+            stub = GreeterGrpc.newFutureStub(interceptChannel);
         }
         return stub;
     }
