@@ -30,14 +30,19 @@ nano asm/asm.config
 ```
 
 ```sh
+# hello1-svc[7001] -> hello2-svc[7001] (v1/v2/v3) -> hello3-svc[7001]
 sh asm/ack.deploy.sh
 sh asm/test_kube.sh
 ```
 
 ```sh
+# ingressgateway[7001] -> hello1-svc[7001] -> hello2-svc[7001] (v1/v2/v3) -> hello3-svc[7001]
 sh asm/asm.deploy.sh
 
 docker/test/start.grpc.consumer.sh
+```
+
+```sh
 sh asm/test_mesh.sh
 ```
 

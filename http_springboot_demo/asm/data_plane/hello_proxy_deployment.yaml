@@ -28,7 +28,7 @@ spec:
       serviceAccountName: hello-proxy-sa
       containers:
         - name: hello-proxy-deploy
-          image: registry.cn-beijing.aliyuncs.com/asm_repo/http_springboot_proxy:1.0.1
+          image: registry.cn-beijing.aliyuncs.com/asm_repo/http_springboot_proxy:1.0.0
           env:
             - name: HTTP_HELLO_BACKEND
               value: "http-hello-svc"

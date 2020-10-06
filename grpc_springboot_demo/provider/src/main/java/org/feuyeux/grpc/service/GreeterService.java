@@ -13,12 +13,13 @@ import org.springframework.stereotype.Service;
 
 import java.util.concurrent.ExecutionException;
 
+
 @Service
 public class GreeterService {
     private static final Logger LOGGER = LoggerFactory.getLogger(GreeterService.class);
+    private GreeterGrpc.GreeterFutureStub stub;
     @Autowired
     private ClientInterceptor globalCInterceptor;
-    private GreeterGrpc.GreeterFutureStub stub;
 
     public String sayHello(String address, String name) {
         final GreeterGrpc.GreeterFutureStub stub = getGreeterFutureStub(address);
