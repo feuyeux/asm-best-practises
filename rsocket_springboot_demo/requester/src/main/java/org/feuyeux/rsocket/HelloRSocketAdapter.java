@@ -14,9 +14,11 @@ import reactor.core.publisher.Mono;
 @Component
 public class HelloRSocketAdapter {
     private final RSocketRequester rSocketRequester;
+
     public HelloRSocketAdapter(RSocketRequester rSocketRequester) {
         this.rSocketRequester = rSocketRequester;
     }
+
     public Mono<HelloResponse> getHello(String id) {
         return rSocketRequester
                 .route("hello")

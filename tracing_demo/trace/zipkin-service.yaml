@@ -9,10 +9,10 @@ metadata:
 spec:
   externalTrafficPolicy: Cluster
   ports:
-  - name: zipkin
-    port: 9411
-    protocol: TCP
-    targetPort: 9411
+    - name: zipkin
+      port: 9411
+      protocol: TCP
+      targetPort: 9411
   selector:
     app: zipkin-server
     component: zipkin

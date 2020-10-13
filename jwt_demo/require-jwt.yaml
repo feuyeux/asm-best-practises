@@ -9,6 +9,6 @@ spec:
       app: httpbin
   action: ALLOW
   rules:
-  - from:
-    - source:
-       requestPrincipals: ["testing@secure.istio.io/testing@secure.istio.io"]
+    - from:
+        - source:
+            requestPrincipals: [ "testing@secure.istio.io/testing@secure.istio.io" ]

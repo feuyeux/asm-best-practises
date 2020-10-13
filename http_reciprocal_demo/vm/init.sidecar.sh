@@ -14,8 +14,8 @@ echo "MESH_ID=$MESH_ID"
 aliyun servicemesh GetVmMeta \
   --ServiceMeshId "$MESH_ID" \
   --Namespace http-reciprocal-hello \
-  --ServiceAccount http-sa \
-  | jq '.VmMetaInfo' >asm_vm_proxy_meta.json
+  --ServiceAccount http-sa |
+  jq '.VmMetaInfo' >asm_vm_proxy_meta.json
 
 for vm in "${VMS[@]}"; do
   scp asm_vm_proxy_meta.json root@"$vm":/root

@@ -21,6 +21,6 @@ for i in {1..100}; do
 done
 
 echo "expected 30%(Hello eric)-60%(Bonjour eric)-10%(Hola eric):"
-sort test_traffic_shift_result | grep -v "^[[:space:]]*$"| uniq -c | sort -nrk1
+sort test_traffic_shift_result | grep -v "^[[:space:]]*$" | uniq -c | sort -nrk1
 
 rm -rf test_traffic_shift_result

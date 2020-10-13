@@ -5,12 +5,12 @@ metadata:
   namespace: pod-vm-hello
 spec:
   hosts:
-  - hello2-svc.pod-vm-hello.svc.cluster.local
+    - hello2-svc.pod-vm-hello.svc.cluster.local
   location: MESH_INTERNAL
   ports:
-  - name: http
-    number: 8001
-    protocol: HTTP
+    - name: http
+      number: 8001
+      protocol: HTTP
   resolution: STATIC
   workloadSelector:
     labels:

@@ -14,13 +14,13 @@ echo "Test route(hello2-svc) in a loop"
 # warm-up
 for i in {1..10}; do
   k exec "$hello1_pod" -c hello-v1-deploy -n hybrid-hello -- \
-  curl -s hello1-svc.hybrid-hello.svc.cluster.local:8003/hello/eric
+    curl -s hello1-svc.hybrid-hello.svc.cluster.local:8003/hello/eric
   echo
 done
 echo >test_traffic_shift_result
 for i in {1..100}; do
   resp=$(k exec "$hello1_pod" -c hello-v1-deploy -n hybrid-hello -- \
-  curl -s hello1-svc.hybrid-hello.svc.cluster.local:8003/hello/eric)
+    curl -s hello1-svc.hybrid-hello.svc.cluster.local:8003/hello/eric)
   echo "$resp" >>test_traffic_shift_result
 done
 

@@ -21,7 +21,7 @@ k apply -f data_plane/hello2_deployment.yaml
 k apply -f data_plane/hello3_deployment.yaml
 
 echo " waiting for hello1-deploy"
-k -n hybrid-hello  wait --for=condition=ready pod -l app=hello1-deploy
+k -n hybrid-hello wait --for=condition=ready pod -l app=hello1-deploy
 echo " waiting for hello2-deploy"
 k -n hybrid-hello wait --for=condition=ready pod -l app=hello2-deploy
 echo " waiting for hello3-deploy"

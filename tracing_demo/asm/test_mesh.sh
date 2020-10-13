@@ -18,14 +18,14 @@ done
 echo
 echo "Test access hello2-svc"
 k exec "$hello1_pod" -c hello-v1-deploy -n trace-hello \
--- curl -s hello2-svc.trace-hello.svc.cluster.local:8001/hello/tracing
+  -- curl -s hello2-svc.trace-hello.svc.cluster.local:8001/hello/tracing
 echo
 echo
 echo "Test access hello1-svc"
 k exec "$hello1_pod" -c hello-v1-deploy -n trace-hello \
--- curl -s hello1-svc.trace-hello.svc.cluster.local:8008/hello/tracing
+  -- curl -s hello1-svc.trace-hello.svc.cluster.local:8008/hello/tracing
 echo
 
 k exec "$hello1_pod" -c hello-v1-deploy -n trace-hello \
--- curl -s hello3-svc.trace-hello.svc.cluster.local:8001/hello/tracing
+  -- curl -s hello3-svc.trace-hello.svc.cluster.local:8001/hello/tracing
 echo

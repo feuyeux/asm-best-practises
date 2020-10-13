@@ -6,12 +6,12 @@ metadata:
 spec:
   replicas: 1
   template:
-   metadata:
-    labels:
-     app: zipkin-server
-     component: zipkin
-   spec:
-    containers:
-     - name: zipkin-server
-       image: openzipkin/zipkin
-       imagePullPolicy: IfNotPresent
+    metadata:
+      labels:
+        app: zipkin-server
+        component: zipkin
+    spec:
+      containers:
+        - name: zipkin-server
+          image: openzipkin/zipkin
+          imagePullPolicy: IfNotPresent

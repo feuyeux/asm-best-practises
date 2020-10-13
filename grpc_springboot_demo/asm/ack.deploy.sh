@@ -13,10 +13,10 @@ alias m="kubectl --kubeconfig $MESH_CONFIG"
 echo "1 initialize..."
 
 echo " delete ns grpc-hello for cluster"
-k delete namespace grpc-hello  >/dev/null 2>&1
+k delete namespace grpc-hello >/dev/null 2>&1
 sleep 10s
 echo " delete ns grpc-hello for mesh"
-m delete namespace grpc-hello  >/dev/null 2>&1
+m delete namespace grpc-hello >/dev/null 2>&1
 sleep 5s
 
 echo " create ns grpc-hello"

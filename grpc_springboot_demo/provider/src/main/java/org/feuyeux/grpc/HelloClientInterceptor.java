@@ -21,7 +21,7 @@ public class HelloClientInterceptor implements ClientInterceptor {
                     try {
                         Metadata headers = new Metadata();
                         Context context = Context.current();
-                        LOGGER.info("Context:{}",context.toString());
+                        LOGGER.info("Context:{}", context.toString());
                         for (int i = 0; i < tracingKeys.size(); i++) {
                             String metadata = contextKeys.get(i).get(context);
                             Metadata.Key<String> key = tracingKeys.get(i);
