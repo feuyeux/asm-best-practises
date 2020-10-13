@@ -22,7 +22,7 @@ spec:
       #      serviceAccountName: http-sa
       containers:
         - name: hello-v1-deploy
-          image: registry.cn-beijing.aliyuncs.com/asm_repo/http_springboot_v1:1.0.1
+          image: registry.cn-beijing.aliyuncs.com/asm_repo/http_springboot_v1:1.0.0
           env:
             - name: HTTP_HELLO_BACKEND
               value: "hello2-svc.http-reciprocal-hello.svc.cluster.local"
@@ -56,7 +56,7 @@ metadata:
     app: hello3-deploy
     version: v1
 spec:
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
       app: hello3-deploy
@@ -70,7 +70,7 @@ spec:
       #      serviceAccountName: http-sa
       containers:
         - name: hello-v1-deploy
-          image: registry.cn-beijing.aliyuncs.com/asm_repo/http_springboot_v1:1.0.1
+          image: registry.cn-beijing.aliyuncs.com/asm_repo/http_springboot_v1:1.0.0
           imagePullPolicy: Always
           ports:
             - containerPort: 8001

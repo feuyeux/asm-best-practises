@@ -13,15 +13,15 @@ MESH_ID=$(head -n 1 "$MESHID_CONFIG")
 
 m delete namespace hybrid-hello >/dev/null 2>&1
 
-if [ "aliyun not found" == "$(which aliyun)" ]; then
+check_aliyun_cli=$(which aliyun)
+if [ -z "$check_aliyun_cli" ]; then
   rm -rf aliyun-cli-macosx-latest-*
-  wget https://aliyuncli.alicdn.com/aliyun-cli-macosx-latest-amd64.tgz
-  tar xzvf aliyun-cli-macosx-latest-amd64.tgz
+  wget https://aliyuncli.alicdn.com/aliyun-cli-macosx-latest-amd64.tgz && \
+  tar xzvf aliyun-cli-macosx-latest-amd64.tgz  && \
   mv aliyun /usr/local/bin
   rm -rf aliyun-cli-macosx-latest-*
+  aliyun configure
 fi
-
-echo $check_aliyun_cli 127 ↵
 
 # https://help.aliyun.com/document_detail/178914.html
 aliyun servicemesh AddVmAppToMesh \

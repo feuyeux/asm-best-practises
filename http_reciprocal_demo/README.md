@@ -37,9 +37,9 @@ spec:
 ```
 ### 3 start app on vm
 ```sh
-docker pull registry.cn-beijing.aliyuncs.com/asm_repo/http_springboot_v1:1.0.1
-docker pull registry.cn-beijing.aliyuncs.com/asm_repo/http_springboot_v2:1.0.1
-docker pull registry.cn-beijing.aliyuncs.com/asm_repo/http_springboot_v3:1.0.1
+docker pull registry.cn-beijing.aliyuncs.com/asm_repo/http_springboot_v1:1.0.0
+docker pull registry.cn-beijing.aliyuncs.com/asm_repo/http_springboot_v2:1.0.0
+docker pull registry.cn-beijing.aliyuncs.com/asm_repo/http_springboot_v3:1.0.0
 
 sh vm/ssh1.sh
 
@@ -50,7 +50,7 @@ docker run \
 --network host \
 --name http_v1 \
 -e HTTP_HELLO_BACKEND=hello3-svc.http-reciprocal-hello.svc.cluster.local \
-registry.cn-beijing.aliyuncs.com/asm_repo/http_springboot_v1:1.0.1
+registry.cn-beijing.aliyuncs.com/asm_repo/http_springboot_v1:1.0.0
 ```
 
 ```sh
@@ -61,7 +61,7 @@ docker run \
 --network host \
 --name http_v2 \
 -e HTTP_HELLO_BACKEND=hello3-svc.http-reciprocal-hello.svc.cluster.local \
-registry.cn-beijing.aliyuncs.com/asm_repo/http_springboot_v2:1.0.1
+registry.cn-beijing.aliyuncs.com/asm_repo/http_springboot_v2:1.0.0
 ```
 
 ```sh
@@ -72,7 +72,7 @@ docker run \
 --network host \
 --name http_v3 \
 -e HTTP_HELLO_BACKEND=hello3-svc.http-reciprocal-hello.svc.cluster.local \
-registry.cn-beijing.aliyuncs.com/asm_repo/http_springboot_v3:1.0.1
+registry.cn-beijing.aliyuncs.com/asm_repo/http_springboot_v3:1.0.0
 ```
 
 ### 4 test 

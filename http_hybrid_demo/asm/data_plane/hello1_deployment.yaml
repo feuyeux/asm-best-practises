@@ -21,7 +21,7 @@ spec:
       #      serviceAccountName: hello-sa
       containers:
         - name: hello-v1-deploy
-          image: registry.cn-beijing.aliyuncs.com/asm_repo/http_springboot_v1:1.0.1
+          image: registry.cn-beijing.aliyuncs.com/asm_repo/http_springboot_v1:
           env:
             - name: HTTP_HELLO_BACKEND
               value: "hello2-svc.hybrid-hello.svc.cluster.local"

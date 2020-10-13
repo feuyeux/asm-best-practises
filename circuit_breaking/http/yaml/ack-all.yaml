@@ -21,7 +21,7 @@ spec:
     spec:
       containers:
         - name: hello-v2-deploy
-          image: registry.cn-beijing.aliyuncs.com/asm_repo/http_springboot_v2:1.0.1
+          image: registry.cn-beijing.aliyuncs.com/asm_repo/http_springboot_v2:1.0.0
           env:
             - name: HTTP_HELLO_BACKEND
               value: "hello2-svc.http-circuit-breaking.svc.cluster.local"
@@ -52,7 +52,7 @@ spec:
     spec:
       containers:
         - name: hello-v3-deploy
-          image: registry.cn-beijing.aliyuncs.com/asm_repo/http_springboot_v3:1.0.1
+          image: registry.cn-beijing.aliyuncs.com/asm_repo/http_springboot_v3:1.0.0
           imagePullPolicy: Always
           ports:
             - containerPort: 8001

@@ -16,7 +16,7 @@ docker run \
 --rm \
 --network host \
 --name http_v1 \
-registry.cn-beijing.aliyuncs.com/asm_repo/http_springboot_v1:1.0.1
+registry.cn-beijing.aliyuncs.com/asm_repo/http_springboot_v1:1.0.0
 ```
 
 ```sh
@@ -26,7 +26,7 @@ docker run \
 --rm \
 --network host \
 --name http_v2 \
-registry.cn-beijing.aliyuncs.com/asm_repo/http_springboot_v2:1.0.1
+registry.cn-beijing.aliyuncs.com/asm_repo/http_springboot_v2:1.0.0
 ```
 
 ```sh
@@ -36,7 +36,7 @@ docker run \
 --rm \
 --network host \
 --name http_v3 \
-registry.cn-beijing.aliyuncs.com/asm_repo/http_springboot_v3:1.0.1
+registry.cn-beijing.aliyuncs.com/asm_repo/http_springboot_v3:1.0.0
 ```
 
 #### test vm app
