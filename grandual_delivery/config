@@ -1,0 +1,3 @@
+USER_CONFIG=$HOME/shop_config/ack_zjk
+MESH_CONFIG=$HOME/shop_config/asm_zjk
+FLAAGER_SRC=/Users/han/cooding/gopath/src/github.com/weaveworks/flagger
