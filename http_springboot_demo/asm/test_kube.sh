@@ -9,9 +9,13 @@ alias k="kubectl --kubeconfig $USER_CONFIG"
 
 hello1_pod=$(k get pod -l app=hello1-deploy -n http-hello -o jsonpath={.items..metadata.name})
 hello3_pod=$(k get pod -l app=hello3-deploy -n http-hello -o jsonpath={.items..metadata.name})
-v1_pod=$(k get pod -l app=hello2-deploy -n http-hello -o jsonpath='{.items[0].metadata.name}')
-v2_pod=$(k get pod -l app=hello2-deploy -n http-hello -o jsonpath='{.items[1].metadata.name}')
-v3_pod=$(k get pod -l app=hello2-deploy -n http-hello -o jsonpath='{.items[2].metadata.name}')
+v1_pod=$(k get pod -l app=hello2-deploy-v1 -n http-hello -o jsonpath={.items..metadata.name})
+v2_pod=$(k get pod -l app=hello2-deploy-v2 -n http-hello -o jsonpath={.items..metadata.name})
+v3_pod=$(k get pod -l app=hello2-deploy-v3 -n http-hello -o jsonpath={.items..metadata.name})
+
+#v1_pod=$(k get pod -l app=hello2-deploy -n http-hello -o jsonpath='{.items[0].metadata.name}')
+#v2_pod=$(k get pod -l app=hello2-deploy -n http-hello -o jsonpath='{.items[1].metadata.name}')
+#v3_pod=$(k get pod -l app=hello2-deploy -n http-hello -o jsonpath='{.items[2].metadata.name}')
 
 if [ -z "$proxy_pod" ]; then
   echo "Check from $hello1_pod:"
