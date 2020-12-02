@@ -9,6 +9,11 @@ source hybrid.config
 
 VMS=("$VM_PUB_1" "$VM_PUB_2" "$VM_PUB_3")
 for vm in "${VMS[@]}"; do
-  ssh root@"$vm" "apt-get update && apt-get install -y docker.io"
-  ssh root@"$vm" "docker version"
+  if [ "$vm" = "" ]; then
+    echo "continue"
+  else
+    ssh root@"$vm" "apt-get update && apt-get install -y docker.io"
+    echo "docker verion on $vm:"
+    ssh root@"$vm" "docker version"
+  fi
 done

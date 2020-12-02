@@ -9,7 +9,11 @@ source hybrid.config
 
 VMS=("$VM_PUB_1" "$VM_PUB_2" "$VM_PUB_3")
 for vm in "${VMS[@]}"; do
-  echo "init $vm ssh authorized_keys"
-  ssh root@"$vm" "mkdir -p .ssh"
-  ssh root@"$vm" "cat >> .ssh/authorized_keys" <"$HOME"/.ssh/id_rsa.pub
+  if [ "$vm" = "" ]; then
+    echo "continue"
+  else
+    echo "init $vm ssh authorized_keys"
+    ssh root@"$vm" "mkdir -p .ssh"
+    ssh root@"$vm" "cat >> .ssh/authorized_keys" <"$HOME"/.ssh/id_rsa.pub
+  fi
 done
