@@ -15,7 +15,16 @@ import java.util.Map;
 @Service
 public class HelloService {
     private static final Logger LOGGER = LoggerFactory.getLogger(HelloService.class);
+    private static String HOST;
     private final OkHttpClient client = new OkHttpClient();
+
+    static {
+        String HOSTNAME = System.getenv("HOSTNAME");
+        if (HOSTNAME != null) {
+            String[] ss = HOSTNAME.split("-");
+            HOST = ss[0];
+        }
+    }
 
     public String sayHello(String url, Map<String, String> headers) {
         Map<String, String> tracingHeaders = buildTracingHeaders(headers,
@@ -79,7 +88,7 @@ public class HelloService {
         if (localIp == null) {
             return "";
         }
-        return "(" + localIp + ")";
+        return "@" + HOST + ":" + localIp;
     }
 
     private String mark() {
@@ -87,6 +96,6 @@ public class HelloService {
         if (localIp == null) {
             return "";
         }
-        return "(" + localIp + ")<-";
+        return "@" + HOST + ":" + localIp + "<";
     }
 }

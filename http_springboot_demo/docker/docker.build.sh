@@ -8,11 +8,6 @@ cd "$SCRIPT_PATH" || exit
 echo "start to build jars"
 cd ..
 
-#cp src/main/resources/application-proxy src/main/resources/application.properties
-#cp src/main/java/org/feuyeux/http/api/HttpController0.cafe src/main/java/org/feuyeux/http/api/HttpController.java
-#mvn clean install
-#cp target/spring-boot-http-1.0.0.jar docker/http_springboot_proxy.jar
-
 cp src/main/resources/application-hello src/main/resources/application.properties
 cp src/main/java/org/feuyeux/http/api/HttpController1.cafe src/main/java/org/feuyeux/http/api/HttpController.java
 mvn clean install

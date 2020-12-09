@@ -1,0 +1,23 @@
+apiVersion: flagger.app/v1beta1
+kind: MetricTemplate
+metadata:
+  name: error-rate
+  namespace: test
+spec:
+  provider:
+    address: http://prometheus-prometheus.monitoring:9090
+    type: prometheus
+  query: |
+    100 - rate(
+      http_requests_total{
+        namespace="{{ namespace }}",
+        job="{{ target }}-canary",
+        status!~"5.*"
+      }[{{ interval }}]) 
+    / 
+    rate(
+      http_requests_total{
+        namespace="{{ namespace }}",
+        job="{{ target }}-canary"
+      }[{{ interval }}]
+    ) * 100

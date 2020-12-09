@@ -1,0 +1,26 @@
+apiVersion: autoscaling/v2beta2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: podinfo
+  namespace: test
+  annotations:
+    metric-config.external.prometheus-query.prometheus/processed-requests-per-second: |
+      sum(rate(istio_requests_total{destination_workload_namespace="test",reporter="destination"}[2m]))
+spec:
+  maxReplicas: 5
+  minReplicas: 1
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: podinfo
+  metrics:
+    - type: External
+      external:
+        metric:
+          name: prometheus-query
+          selector:
+            matchLabels:
+              query-name: processed-requests-per-second
+        target:
+          type: AverageValue
+          averageValue: "10"

@@ -1,0 +1,64 @@
+apiVersion: flagger.app/v1beta1
+kind: Canary
+metadata:
+  name: podinfo
+  namespace: test
+spec:
+  targetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: podinfo
+    # the maximum time in seconds for the canary deployment
+  # to make progress before it is rollback (default 600s)
+  progressDeadlineSeconds: 60
+  # HPA reference (optional)
+  autoscalerRef:
+    apiVersion: autoscaling/v2beta1
+    kind: HorizontalPodAutoscaler
+    name: podinfo
+  service:
+    # service port number
+    port: 9898
+    # container port number or name (optional)
+    targetPort: 9898
+    # Istio gateways (optional)
+    gateways:
+    - ingressgateway.istio-system.svc.cluster.local
+    # Istio virtual service host names (optional)
+    hosts:
+    - podinfo
+    # Istio traffic policy (optional)
+    trafficPolicy:
+      tls:
+        # use ISTIO_MUTUAL when mTLS is enabled
+        mode: DISABLE
+    # Istio retry policy (optional)
+    retries:
+      attempts: 3
+      perTryTimeout: 1s
+      retryOn: "gateway-error,connect-failure,refused-stream"
+  analysis:
+    interval: 30s
+    iterations: 10
+    threshold: 2
+    metrics:
+    - name: error-rate
+      templateRef:
+        name: error-rate
+      thresholdRange:
+        max: 1
+      interval: 30s
+    - name: latency
+      templateRef:
+        name: latency
+      thresholdRange:
+        max: 0.5
+      interval: 30s
+    webhooks:
+      - name: load-test
+        type: rollout
+        url: "http://loadtester.flagger-system/"
+        timeout: 5s
+        metadata:
+          type: cmd
+          cmd: "hey -z 1m -q 10 -c 2 http://podinfo-canary.test/"
