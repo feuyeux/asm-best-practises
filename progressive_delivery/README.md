@@ -29,7 +29,7 @@
 - [ ] podinfo-canary
 
 #### issue...
-![](progressive_delivery/request-success-rate.png)
+<img src="request-success-rate.png" style="zoom:30%;" />
 
 ### reference
 https://docs.flagger.app/usage/metrics
