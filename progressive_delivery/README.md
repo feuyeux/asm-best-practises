@@ -1,25 +1,35 @@
 ## progressive_delivery
 
 ### 1 demo_mixerless.sh
-envoyfilter
-prometheus
-grafana
+部署
+- [x] envoyfilter
+- [x] prometheus
+- [x] grafana
+- [x] podinfo
 
-podinfo
-
-istio_requests_total
-istio_request_duration
+验证
+- [x] istio_requests_total
+- [x] istio_request_duration
 
 ### 2 demo_hpa.sh
-kube-metrics-adapter
-
-flagger-loadtester
-
-k apply -k $FLAAGER_SRC/kustomize/podinfo
-k apply -k $FLAAGER_SRC/kustomize/tester
+部署
+- [x] kube-metrics-adapter
+- [x] flagger-loadtester
+- [x] `$FLAAGER_SRC/kustomize/podinfo`
+- [x] `$FLAAGER_SRC/kustomize/tester`
+验证
+- [x] podinfo scaling
 
 ### 3 demo_canary.sh
-flagger
+部署
+- [x] flagger
+- [x] `$FLAAGER_SRC/kustomize/podinfo`
+- [x] `$FLAAGER_SRC/kustomize/tester`
+验证
+- [ ] podinfo-canary
 
-k apply -k $FLAAGER_SRC/kustomize/podinfo
-k apply -k $FLAAGER_SRC/kustomize/tester
+![](progressive_delivery/request-success-rate.png)
+
+### reference
+https://docs.flagger.app/usage/metrics
+https://flagger.app/intro/faq.html#metrics
