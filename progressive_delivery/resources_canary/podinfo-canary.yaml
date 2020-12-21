@@ -13,10 +13,10 @@ spec:
   # to make progress before it is rollback (default 600s)
   progressDeadlineSeconds: 60
   # HPA reference (optional)
-  autoscalerRef:
-    apiVersion: autoscaling/v2beta2
-    kind: HorizontalPodAutoscaler
-    name: podinfo
+  # autoscalerRef:
+  #   apiVersion: autoscaling/v2beta2
+  #   kind: HorizontalPodAutoscaler
+  #   name: podinfo
   service:
     # service port number
     port: 9898
@@ -62,13 +62,13 @@ spec:
       interval: 30s
     # testing (optional)
     webhooks:
-      - name: acceptance-test
-        type: pre-rollout
-        url: http://flagger-loadtester.test/
-        timeout: 30s
-        metadata:
-          type: bash
-          cmd: "curl -sd 'test' http://podinfo-canary:9898/token | grep token"
+      # - name: acceptance-test
+      #   type: pre-rollout
+      #   url: http://flagger-loadtester.test/
+      #   timeout: 30s
+      #   metadata:
+      #     type: bash
+      #     cmd: "curl -sd 'test' http://podinfo-canary:9898/token | grep token"
       - name: load-test
         url: http://flagger-loadtester.test/
         timeout: 5s
