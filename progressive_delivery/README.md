@@ -1,6 +1,7 @@
 ## progressive_delivery
 
-### 1 `demo_mixerless.sh`
+### 1 Mixerless Telemetry
+[demo_mixerless.sh](demo_mixerless.sh)
 #### 部署
 - [x] envoyfilter
 - [x] prometheus
@@ -11,7 +12,8 @@
 - [x] istio_requests_total
 - [x] istio_request_duration
 
-### 2 `demo_hpa.sh`
+### 2 HPA
+[demo_hpa.sh](demo_hpa.sh)
 #### 部署
 - [x] kube-metrics-adapter
 - [x] flagger-loadtester
@@ -20,7 +22,8 @@
 #### 验证
 - [x] podinfo scaling
 
-### 3 `demo_canary.sh`
+### 3 Canary
+[demo_canary.sh](demo_canary.sh)
 #### 部署
 - [x] flagger
 - [x] `$FLAAGER_SRC/kustomize/podinfo`
@@ -28,9 +31,6 @@
 #### 验证
 - [ ] podinfo-canary
 
-#### issue...
-<img src="request-success-rate.png" style="zoom:30%;" />
-
 ### reference
-https://docs.flagger.app/usage/metrics
-https://flagger.app/intro/faq.html#metrics
+- https://docs.flagger.app/usage/metrics
+- https://flagger.app/intro/faq.html#metrics
