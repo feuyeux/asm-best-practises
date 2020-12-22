@@ -52,29 +52,44 @@ k apply -k $FLAAGER_SRC/kustomize/podinfo
 #loader
 echo "Deploy the load testing service(flagger-loadtester) to generate traffic during the canary analysis"
 k apply -k $FLAAGER_SRC/kustomize/tester
+sleep 15s
+k -n test wait --for=condition=ready pod -l app=flagger-loadtester
+k -n test get svc,pod
+
+###########################################################################################################
+# k apply -f $PODINFO_SRC/kustomize/service.yaml -n test
+# podinfo_pod1=$(k get po -n test -l app=podinfo -o jsonpath="{.items[0].metadata.name}")
+# podinfo_pod2=$(k get po -n test -l app=podinfo -o jsonpath="{.items[1].metadata.name}")
+# # https://github.com/stefanprodan/podinfo
+# loadtester=$(k -n test get pod -l "app=flagger-loadtester" -o jsonpath='{.items..metadata.name}')
+# k -n test exec -it ${loadtester} -c loadtester -- curl -sI podinfo:9898/version
+# k -n test exec -it ${loadtester} -c loadtester -- hey -z 20m -c 10 -q 2 http://podinfo:9898/version
+# k exec $podinfo_pod1 -n test -c istio-proxy -- curl -s localhost:15090/stats/prometheus | grep istio_requests_total
+# k exec $podinfo_pod2 -n test -c istio-proxy -- curl -s localhost:15090/stats/prometheus | grep istio_request_duration
+# k delete -f $PODINFO_SRC/kustomize/service.yaml -n test
+###########################################################################################################
 
 # canary
 echo "Deploy canary resources"
 k apply -f resources_canary/podinfo-canary.yaml
-
-echo "Waiting 30s"
-sleep 30s
-echo "Verify"
-k -n test get svc,pod,hpa
-
-# echo "Start load"
-# loadtester=$(k -n test get pod -l "app=flagger-loadtester" -o jsonpath='{.items..metadata.name}')
-# k -n test exec -it ${loadtester} -c loadtester -- hey -z 20m -c 10 -q 2 http://podinfo:9898 &
+sleep 15s
 
 echo "Change deployment/podinfo to 3.1.1"
 k -n test set image deployment/podinfo podinfod=stefanprodan/podinfo:3.1.1
-m -n test get virtualservice,destinationrule
+sleep 15s
 
 # verify canary
-for ((i = 1; i <= 10; i++)); do
+for ((i = 1; i <= 30; i++)); do
   k -n test describe canary/podinfo
-  sleep 5s
+  sleep 10s
 done
+
+###############################################################################
+
+m -n test get virtualservice,destinationrule
+
+m -n test get virtualservice podinfo -o jsonpath="{.spec.http..route[0].weight}"
+m -n test get virtualservice podinfo -o jsonpath="{.spec.http..route[1].weight}"
 
 watch kubectl --kubeconfig $USER_CONFIG get canaries --all-namespaces
 

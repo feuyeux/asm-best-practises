@@ -13,10 +13,10 @@ spec:
   # to make progress before it is rollback (default 600s)
   progressDeadlineSeconds: 60
   # HPA reference (optional)
-  # autoscalerRef:
-  #   apiVersion: autoscaling/v2beta2
-  #   kind: HorizontalPodAutoscaler
-  #   name: podinfo
+  autoscalerRef:
+    apiVersion: autoscaling/v2beta2
+    kind: HorizontalPodAutoscaler
+    name: podinfo
   service:
     # service port number
     port: 9898
@@ -25,8 +25,8 @@ spec:
     # Istio gateways (optional)
     gateways:
     - public-gateway.istio-system.svc.cluster.local
-    # Istio virtual service host names (optional)
-    # Istio traffic policy (optional)
+    hosts:
+    - podinfo
     trafficPolicy:
       tls:
         # use ISTIO_MUTUAL when mTLS is enabled
@@ -52,23 +52,23 @@ spec:
       # minimum req success rate (non 5xx responses)
       # percentage (0-100)
       thresholdRange:
-        min: 99
+        min: 50
       interval: 1m
-    - name: request-duration
-      # maximum req duration P99
-      # milliseconds
-      thresholdRange:
-        max: 500
-      interval: 30s
+    # - name: request-duration
+    #   # maximum req duration P99
+    #   # milliseconds
+    #   thresholdRange:
+    #     max: 500
+    #   interval: 30s
     # testing (optional)
     webhooks:
-      # - name: acceptance-test
-      #   type: pre-rollout
-      #   url: http://flagger-loadtester.test/
-      #   timeout: 30s
-      #   metadata:
-      #     type: bash
-      #     cmd: "curl -sd 'test' http://podinfo-canary:9898/token | grep token"
+      - name: acceptance-test
+        type: pre-rollout
+        url: http://flagger-loadtester.test/
+        timeout: 30s
+        metadata:
+          type: bash
+          cmd: "curl -sd 'test' http://podinfo-canary:9898/token | grep token"
       - name: load-test
         url: http://flagger-loadtester.test/
         timeout: 5s

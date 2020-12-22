@@ -1,0 +1,1 @@
+$ISTIO_SRC/manifests/charts/istio-telemetry/prometheus

@@ -1,3 +1,7 @@
+https://docs.flagger.app/faq#metrics
+
+request-success-rate
+
 sum(
     rate(
       istio_requests_total{
@@ -19,3 +23,19 @@ sum(
     )
   ) 
   * 100
+
+===
+
+request-duration
+
+histogram_quantile(0.99, 
+  sum(
+    irate(
+      istio_request_duration_milliseconds_bucket{
+        reporter="destination",
+        destination_workload=~"podinfo",
+        destination_workload_namespace=~"test"
+      }[30s]
+    )
+  ) by (le)
+)
