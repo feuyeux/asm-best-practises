@@ -47,7 +47,7 @@ fi
 echo "Passed"
 
 echo "3. Creates the jwt-example request authentication policy"
-# kubectl --kubeconfig "$MESH_CONFIG" apply -f jwt-example.yaml
+kubectl --kubeconfig "$MESH_CONFIG" apply -f jwt-example.yaml
 kubectl --kubeconfig "$MESH_CONFIG" -n istio-system get requestauthentication
 
 echo "4. Verify that a request with an invalid JWT is denied(401)"
