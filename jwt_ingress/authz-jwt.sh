@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
-# https://istio.io/latest/docs/tasks/security/authorization/authz-jwt/
 # sleep --(token)--> httpbin
+# local --(token)--> ingressgateway --> httpbin
 
 SCRIPT_PATH="$(
   cd "$(dirname "$0")" >/dev/null 2>&1 || exit
