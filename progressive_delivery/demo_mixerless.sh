@@ -10,14 +10,15 @@ alias k="kubectl --kubeconfig $USER_CONFIG"
 alias m="kubectl --kubeconfig $MESH_CONFIG"
 alias h="helm --kubeconfig $USER_CONFIG"
 
-# 确认勾选开启采集Prometheus监控指标并生成envoyfilter
+# 1 确认勾选开启采集Prometheus监控指标并生成envoyfilter
 m get envoyfilter -n istio-system
 
-#
+# 2 部署prometheus
 # k delete -f $ISTIO_SRC/samples/addons/prometheus.yaml
 k apply -f $ISTIO_SRC/samples/addons/prometheus.yaml
 k get po -n istio-system
 
+# 3 配置prometheus
 # ../mixerless/scrape_configs.yaml
 
 # 部署prometheus (mixerless telemetry scrape)
@@ -33,7 +34,7 @@ k get po -n istio-system
 #   --set meshConfig.defaultConfig.proxyMetadata.DNS_AGENT="" \
 #   --namespace istio-system
 
-# 部署grafana
+# 4 部署grafana
 k apply -f $ISTIO_SRC/samples/addons/grafana.yaml
 
 # scraping configurations
@@ -47,7 +48,7 @@ k label namespace test istio-injection=enabled
 m create ns test
 m label namespace test istio-injection=enabled
 
-# init podinfo
+# 5 init podinfo
 k apply -f $PODINFO_SRC/kustomize/deployment.yaml -n test
 k apply -f $PODINFO_SRC/kustomize/service.yaml -n test
 podinfo_pod=$(k get po -n test -l app=podinfo -o jsonpath={.items..metadata.name})
