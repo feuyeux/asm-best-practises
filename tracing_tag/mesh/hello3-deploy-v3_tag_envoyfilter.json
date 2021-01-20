@@ -1,0 +1,56 @@
+{
+  "apiVersion": "networking.istio.io/v1alpha3",
+  "kind": "EnvoyFilter",
+  "metadata": {
+    "name": "hello3-deploy-v3-tag",
+    "namespace": "http-hello"
+  },
+  "spec": {
+    "workloadSelector": {
+      "labels": {
+        "app": "hello3-deploy-v3"
+      }
+    },
+    "configPatches": [
+      {
+        "applyTo": "NETWORK_FILTER",
+        "match": {
+          "proxy": {
+            "proxyVersion": "^1\\.7\\.*"
+          },
+          "listener": {
+            "filterChain": {
+              "filter": {
+                "name": "envoy.http_connection_manager"
+              }
+            }
+          }
+        },
+        "patch": {
+          "operation": "MERGE",
+          "value": {
+            "name": "envoy.http_connection_manager",
+            "typed_config": {
+              "@type": "type.googleapis.com/envoy.extensions.filters.network.http_connection_manager.v3.HttpConnectionManager",
+              "tracing": {
+                "custom_tags": [
+                  {
+                    "tag": "version-tag",
+                    "environment": {
+                      "name": "VERSION",
+                      "default_value": "v3"
+                    },
+                    "request_header": {
+                      "name": "VERSION",
+                      "default_value": "hello3-v3"
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        }
+      }
+    ]
+  }
+}

@@ -1,0 +1,24 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: zipkin-server
+  namespace: istio-system
+  labels:
+    app: zipkin-server
+    component: zipkin
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: zipkin-server
+      component: zipkin
+  template:
+    metadata:
+      labels:
+        app: zipkin-server
+        component: zipkin
+    spec:
+      containers:
+        - name: zipkin-server
+          image: openzipkin/zipkin
+          imagePullPolicy: IfNotPresent

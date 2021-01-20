@@ -8,10 +8,11 @@
   - [fault_injection](fault_injection)
   - [circuit_breaking](circuit_breaking)
   - [progressive_delivery](progressive_delivery)
+  - [blue_green_demo](blue_green_demo)
 - Secure
   - [jwt_demo](jwt_demo)
 - Observe
-  - [tracing_demo](tracing_demo)
+  - [tracing_tag](tracing_tag)
   - [mixerless](mixerless)
 - Meshifying  
   - [http_workload_demo](http_workload_demo)
@@ -20,3 +21,4 @@
   - [grpc_reciprocal_demo](grpc_reciprocal_demo)
   - [http_hybrid_demo](http_hybrid_demo)
   - [http_workload_blue_green_demo](http_workload_blue_green_demo)
+  - [vm_tracing_demo](vm_tracing_demo)

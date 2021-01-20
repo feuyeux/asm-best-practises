@@ -1,0 +1,16 @@
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  namespace: http-hello
+  name: hello2-vs
+spec:
+  hosts:
+    - hello2-svc
+  http:
+    - name: hello2-v2-route
+      match:
+        - port: 8001
+      route:
+        - destination:
+            host: hello2-svc
+            subset: v2
