@@ -8,56 +8,32 @@ spec:
     - hello2-svc
   http:
     - name: hello2-v1-route
-      headers:
-        request:
-          add:
-            target: blue-green21
       match:
         - port: 8001
-        - headers:
+        - queryParams:
             version:
               exact: v1
       route:
         - destination:
             host: hello2-svc
             subset: v1
-          headers:
-            response:
-              add:
-                version: v1
     - name: hello2-v2-route
-      headers:
-        request:
-          add:
-            target: blue-green22
       match:
         - port: 8001
-        - headers:
+        - queryParams:
             version:
               exact: v2
       route:
         - destination:
             host: hello2-svc
             subset: v2
-          headers:
-            response:
-              add:
-                version: v2
     - name: hello2-v3-route
-      headers:
-        request:
-          add:
-            target: blue-green23
       match:
         - port: 8001
-        - headers:
+        - queryParams:
             version:
               exact: v3
       route:
         - destination:
             host: hello2-svc
             subset: v3
-          headers:
-            response:
-              add:
-                version: v3

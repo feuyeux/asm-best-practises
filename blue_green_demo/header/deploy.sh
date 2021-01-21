@@ -25,7 +25,9 @@ echo "deploy"
 k apply -f kube
 
 echo "waiting for hello2-deploy-v1"
-k -n http-hello wait --for=condition=ready pod -l app=hello2-deploy-v1
+k -n http-hello wait --for=condition=ready pod -l app=hello3-deploy-v3
+k -n http-hello wait --for=condition=ready pod -l app=hello2-deploy-v2
+k -n http-hello wait --for=condition=ready pod -l app=hello1-deploy-v1
 
 #查看服务状态
 k get services -n http-hello
