@@ -6,8 +6,9 @@ SCRIPT_PATH="$(
 cd "$SCRIPT_PATH" || exit
 
 export ISTIO_HOME=${HOME}/shop/istio-1.7.5
-alias k="kubectl --kubeconfig ${HOME}/shop/KUBE"
-alias m="kubectl --kubeconfig ${HOME}/shop/MESH"
+source config
+alias k="kubectl --kubeconfig $USER_CONFIG"
+alias m="kubectl --kubeconfig $MESH_CONFIG"
 
 #部署数据平面
 k apply -f ${ISTIO_HOME}/samples/bookinfo/platform/kube/bookinfo.yaml
@@ -15,6 +16,9 @@ k apply -f ${ISTIO_HOME}/samples/bookinfo/platform/kube/bookinfo.yaml
 k get services
 #查看POD状态
 k get pods
+
+while ! k wait --for=condition=ready --timeout=600s pod -l app=productpage; do sleep 1; done
+
 #校验服务间的通信
 ratings_pod=$(k get pod -l app=ratings -o jsonpath='{.items[0].metadata.name}')
 k exec ${ratings_pod} -c ratings -- curl -s productpage:9080/productpage | grep -o "<title>.*</title>"
@@ -31,4 +35,4 @@ GATEWAY_URL=$(k -n istio-system get service istio-ingressgateway -o jsonpath='{.
 
 #验证
 echo "http://${GATEWAY_URL}/productpage"
-curl "http://${GATEWAY_URL}/productpage"
+curl -I "http://${GATEWAY_URL}/productpage"

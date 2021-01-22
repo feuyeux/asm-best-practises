@@ -1,0 +1,37 @@
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: bookinfo
+spec:
+  gateways:
+    - bookinfo-gateway
+  hosts:
+    - "*"
+  http:
+    - name: reviews-v2-route
+      match:
+        - uri:
+            prefix: /reviews/\d/
+        - queryParams:
+            star:
+              exact: black
+      route:
+        - destination:
+            host: reviews
+            subset: v2
+    - name: reviews-v3-route
+      match:
+        - uri:
+            prefix: /reviews/\d/
+        - queryParams:
+            star:
+              exact: red
+      route:
+        - destination:
+            host: reviews
+            subset: v3
+    - name: reviews-v1-route
+      route:
+        - destination:
+            host: reviews
+            subset: v1

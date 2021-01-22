@@ -5,6 +5,13 @@ SCRIPT_PATH="$(
 )/"
 cd "$SCRIPT_PATH" || exit
 
-export ISTIO_HOME=${HOME}/shop/istio-1.7.5
-alias k="kubectl --kubeconfig ${HOME}/shop/KUBE"
-alias m="kubectl --kubeconfig ${HOME}/shop/MESH"
+source config
+alias m="kubectl --kubeconfig $MESH_CONFIG"
+alias k="kubectl --kubeconfig $USER_CONFIG"
+
+echo "deploy control plane"
+m apply -f header/
+
+# echo "watching productpage log"
+# productpage_pod=$(k get pod -l app=productpage -o jsonpath='{.items[0].metadata.name}')
+# k logs -f $productpage_pod -c productpage 

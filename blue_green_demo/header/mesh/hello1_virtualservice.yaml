@@ -26,12 +26,7 @@ spec:
   gateways:
     - hello-gateway
   http:
-    - name: hello1-v1-route
-      headers:
-        request:
-          add:
-            target: blue-green11
-      match:
+    - match:
         - port: 8001
         - headers:
             version:
@@ -44,39 +39,3 @@ spec:
             response:
               add:
                 version: v1
-    - name: hello1-v2-route
-      headers:
-        request:
-          add:
-            target: blue-green12
-      match:
-        - port: 8001
-        - headers:
-            version:
-              exact: v2
-      route:
-        - destination:
-            host: hello1-svc
-            subset: v2
-          headers:
-            response:
-              add:
-                version: v2
-    - name: hello1-v3-route
-      headers:
-        request:
-          add:
-            target: blue-green13
-      match:
-        - port: 8001
-        - headers:
-            version:
-              exact: v3
-      route:
-        - destination:
-            host: hello1-svc
-            subset: v3
-          headers:
-            response:
-              add:
-                version: v3
