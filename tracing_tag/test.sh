@@ -8,7 +8,7 @@ source config
 
 alias k="kubectl --kubeconfig $USER_CONFIG"
 ingressGatewayIp=$(k -n istio-system get service istio-ingressgateway -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
-echo "access http://$ingressGatewayIp:8001/hello/eric"
+echo "access http://$ingressGatewayIp:8001/hello"
 for i in {10..60}; do
   curl -s "http://$ingressGatewayIp:8001/hello/$i"
   echo

@@ -43,4 +43,4 @@ k get pods -n http-hello
 # k exec "$hello2_v1_pod" -c hello-v1-deploy -n http-hello -- curl -s http://hello1-svc:8001/hello/eric
 # echo
 
-m apply -f mesh
+m apply -f mesh/
