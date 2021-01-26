@@ -11,9 +11,13 @@ alias m="kubectl --kubeconfig $MESH_CONFIG"
 alias h="helm --kubeconfig $USER_CONFIG"
 
 echo "1 Install Flagger in the istio-system namespace[kustomize]:"
-# k -n istio-system create secret generic istio-kubeconfig --from-file $MESH_CONFIG
-# k -n istio-system label secret istio-kubeconfig istio/multiCluster=true
+# Note that the Istio kubeconfig must be stored in a Kubernetes secret with a data key named kubeconfig. 
+cp $MESH_CONFIG kubeconfig
+# k -n istio-system delete secret istio-kubeconfig
+k -n istio-system create secret generic istio-kubeconfig --from-file kubeconfig
 # k -n istio-system get secret istio-kubeconfig -o yaml
+
+k -n istio-system label secret istio-kubeconfig istio/multiCluster=true
 
 h repo add flagger https://flagger.app
 h repo update
@@ -28,120 +32,27 @@ h upgrade -i flagger flagger/flagger --namespace=istio-system \
     --set istio.kubeconfig.secretName=istio-kubeconfig \
     --set istio.kubeconfig.key=kubeconfig
     # --set image.repository=registry.cn-beijing.aliyuncs.com/asm_repo/flagger
+k get pod -n istio-system
 
 echo "3 Create an ingress gateway to expose the demo app outside of the mesh:"
-cat <<EOF | k apply -f -
-apiVersion: networking.istio.io/v1alpha3
-kind: Gateway
-metadata:
-  name: public-gateway
-  namespace: istio-system
-spec:
-  selector:
-    istio: ingressgateway
-  servers:
-    - port:
-        number: 80
-        name: http
-        protocol: HTTP
-      hosts:
-        - "*"
-EOF
+m apply -f resources_canary/public-gateway.yaml
 
 echo
 echo "#### II Bootstrap ####"
 
 echo "1 Create a test namespace with Istio sidecar injection enabled:"
 k create ns test
-k label namespace test istio-injection=enabled
+m create ns test
+m label namespace test istio-injection=enabled
 
 echo "2 Create a deployment and a horizontal pod autoscaler:"
-k apply -k https://github.com/fluxcd/flagger//kustomize/podinfo?ref=main
+k apply -k "https://github.com/fluxcd/flagger//kustomize/podinfo?ref=main"
 
 echo "3 Deploy the load testing service to generate traffic during the canary analysis:"
-k apply -k https://github.com/fluxcd/flagger//kustomize/tester?ref=main
+k apply -k "https://github.com/fluxcd/flagger//kustomize/tester?ref=main"
 
 echo "4 Create a canary custom resource:"
-cat <<EOF | k apply -f -
-apiVersion: flagger.app/v1beta1
-kind: Canary
-metadata:
-  name: podinfo
-  namespace: test
-spec:
-  # deployment reference
-  targetRef:
-    apiVersion: apps/v1
-    kind: Deployment
-    name: podinfo
-  # the maximum time in seconds for the canary deployment
-  # to make progress before it is rollback (default 600s)
-  progressDeadlineSeconds: 60
-  # HPA reference (optional)
-  autoscalerRef:
-    apiVersion: autoscaling/v2beta2
-    kind: HorizontalPodAutoscaler
-    name: podinfo
-  service:
-    # service port number
-    port: 9898
-    # container port number or name (optional)
-    targetPort: 9898
-    # Istio gateways (optional)
-    gateways:
-    - public-gateway.istio-system.svc.cluster.local
-    # Istio virtual service host names (optional)
-    hosts:
-    - *
-    # Istio traffic policy (optional)
-    trafficPolicy:
-      tls:
-        # use ISTIO_MUTUAL when mTLS is enabled
-        mode: DISABLE
-    # Istio retry policy (optional)
-    retries:
-      attempts: 3
-      perTryTimeout: 1s
-      retryOn: "gateway-error,connect-failure,refused-stream"
-  analysis:
-    # schedule interval (default 60s)
-    interval: 1m
-    # max number of failed metric checks before rollback
-    threshold: 5
-    # max traffic percentage routed to canary
-    # percentage (0-100)
-    maxWeight: 50
-    # canary increment step
-    # percentage (0-100)
-    stepWeight: 10
-    metrics:
-    - name: request-success-rate
-      # minimum req success rate (non 5xx responses)
-      # percentage (0-100)
-      thresholdRange:
-        min: 99
-      interval: 1m
-    - name: request-duration
-      # maximum req duration P99
-      # milliseconds
-      thresholdRange:
-        max: 500
-      interval: 30s
-    # testing (optional)
-    webhooks:
-      - name: acceptance-test
-        type: pre-rollout
-        url: http://flagger-loadtester.test/
-        timeout: 30s
-        metadata:
-          type: bash
-          cmd: "curl -sd 'test' http://podinfo-canary:9898/token | grep token"
-      - name: load-test
-        url: http://flagger-loadtester.test/
-        timeout: 5s
-        metadata:
-          cmd: "hey -z 1m -q 10 -c 2 http://podinfo-canary.test:9898/"
-EOF
+k apply -f resources_canary/podinfo-canary.yaml
 
 echo
 echo "#### III Automated canary promotion ####"

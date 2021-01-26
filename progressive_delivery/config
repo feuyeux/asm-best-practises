@@ -4,8 +4,8 @@ USER_CONFIG=$HOME/shop_config/ack_zjk
 # kubeconfig of user's servicemesh cluster
 MESH_CONFIG=$HOME/shop_config/asm_zjk
 
-# flagger source code path [v1.6.0]
-# git co master
+# flagger source code path [v1.6.1]
+# github.com/weaveworks/flagger -> https://github.com/fluxcd/flagger
 FLAAGER_SRC=${HOME}/cooding/gopath/src/github.com/weaveworks/flagger
 
 # kube-metrics-adapter source code path
