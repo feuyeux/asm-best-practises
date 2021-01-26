@@ -5,29 +5,18 @@ SCRIPT_PATH="$(
 )/"
 cd "$SCRIPT_PATH" || exit
 
-source config
-alias k="kubectl --kubeconfig $USER_CONFIG"
-alias m="kubectl --kubeconfig $MESH_CONFIG"
-alias h="helm --kubeconfig $USER_CONFIG"
+export ISTIO_HOME=/Users/han/shop/istio-1.8.1
+export PATH=$PATH:$ISTIO_HOME/bin
+alias k="kubectl --kubeconfig istio-kubeconfig"
+alias i="istioctl --kubeconfig istio-kubeconfig"
 
-echo "1 Install Flagger in the istio-system namespace[kustomize]:"
-# k -n istio-system create secret generic istio-kubeconfig --from-file $MESH_CONFIG
-# k -n istio-system label secret istio-kubeconfig istio/multiCluster=true
-# k -n istio-system get secret istio-kubeconfig -o yaml
+echo "#### I Prerequisites ####"
+echo "1 Install Istio with telemetry support and Prometheus:"
+i manifest install --set profile=default
+k apply -f $ISTIO_HOME/samples/addons/prometheus.yaml
 
-h repo add flagger https://flagger.app
-h repo update
-k apply -f $FLAAGER_SRC/artifacts/flagger/crd.yaml
-
-## https://github.com/fluxcd/flagger/blob/main/charts/flagger/values.yaml
-## docker tag ghcr.io/fluxcd/flagger:1.6.1 registry.cn-beijing.aliyuncs.com/asm_repo/flagger:1.6.1
-h upgrade -i flagger flagger/flagger --namespace=istio-system \
-    --set crd.create=false \
-    --set meshProvider=istio \
-    --set metricsServer=http://prometheus:9090 \
-    --set istio.kubeconfig.secretName=istio-kubeconfig \
-    --set istio.kubeconfig.key=kubeconfig
-    # --set image.repository=registry.cn-beijing.aliyuncs.com/asm_repo/flagger
+echo "2 Install Flagger in the istio-system namespace[kustomize]:"
+k apply -k github.com/fluxcd/flagger//kustomize/istio
 
 echo "3 Create an ingress gateway to expose the demo app outside of the mesh:"
 cat <<EOF | k apply -f -

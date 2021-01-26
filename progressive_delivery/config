@@ -1,12 +1,18 @@
 # kubeconfig of user's kubenetes cluster
-USER_CONFIG=$HOME/shop_config/ack_canary
+USER_CONFIG=$HOME/shop_config/ack_zjk
+
 # kubeconfig of user's servicemesh cluster
-MESH_CONFIG=$HOME/shop_config/asm_canary
-# flagger source code path
+MESH_CONFIG=$HOME/shop_config/asm_zjk
+
+# flagger source code path [v1.6.0]
+# git co master
 FLAAGER_SRC=${HOME}/cooding/gopath/src/github.com/weaveworks/flagger
+
 # kube-metrics-adapter source code path
 KUBE_METRICS_ADAPTER_SRC=${HOME}/cooding/gopath/src/github.com/banzaicloud/kube-metrics-adapter
+
 # istio source code path
 ISTIO_SRC=${HOME}/shop/istio-1.7.5
+
 # podinfo source code path
 PODINFO_SRC=${HOME}/cooding/gopath/src/github.com/stefanprodan/podinfo

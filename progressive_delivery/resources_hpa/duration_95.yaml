@@ -1,11 +1,11 @@
 apiVersion: autoscaling/v2beta2
 kind: HorizontalPodAutoscaler
 metadata:
-  name: podinfo-total
+  name: podinfo-p95
   namespace: test
   annotations:
-    metric-config.external.prometheus-query.prometheus/processed-requests-per-second: |
-      sum(rate(istio_requests_total{destination_workload_namespace="test",reporter="destination"}[1m]))
+    metric-config.external.prometheus-query.prometheus/p95-latency: |
+      histogram_quantile(0.95,sum(irate(istio_request_duration_milliseconds_bucket{destination_workload_namespace="test",destination_canonical_service="podinfo"}[5m]))by (le))
 spec:
   maxReplicas: 5
   minReplicas: 1
@@ -20,7 +20,7 @@ spec:
           name: prometheus-query
           selector:
             matchLabels:
-              query-name: processed-requests-per-second
+              query-name: p95-latency
         target:
           type: AverageValue
-          averageValue: "10"
+          averageValue: "4"

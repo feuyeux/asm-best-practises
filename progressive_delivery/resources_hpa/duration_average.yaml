@@ -1,0 +1,27 @@
+apiVersion: autoscaling/v2beta2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: podinfo-latency-avg
+  namespace: test
+  annotations:
+    metric-config.external.prometheus-query.prometheus/latency-average: |
+      sum(rate(istio_request_duration_milliseconds_sum{destination_workload_namespace="test",reporter="destination"}[1m]))
+      /sum(rate(istio_request_duration_milliseconds_count{destination_workload_namespace="test",reporter="destination"}[1m]))
+spec:
+  maxReplicas: 5
+  minReplicas: 1
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: podinfo
+  metrics:
+    - type: External
+      external:
+        metric:
+          name: prometheus-query
+          selector:
+            matchLabels:
+              query-name: latency-average
+        target:
+          type: AverageValue
+          averageValue: "0.005"

@@ -5,7 +5,6 @@
 #### 部署
 - [x] envoyfilter
 - [x] prometheus
-- [x] grafana
 - [x] podinfo
 
 #### 验证

@@ -25,8 +25,10 @@ spec:
     # Istio gateways (optional)
     gateways:
     - public-gateway.istio-system.svc.cluster.local
+    # Istio virtual service host names (optional)
     hosts:
-    - podinfo
+    - '*'
+    # Istio traffic policy (optional)
     trafficPolicy:
       tls:
         # use ISTIO_MUTUAL when mTLS is enabled
@@ -52,14 +54,14 @@ spec:
       # minimum req success rate (non 5xx responses)
       # percentage (0-100)
       thresholdRange:
-        min: 50
+        min: 99
       interval: 1m
-    # - name: request-duration
-    #   # maximum req duration P99
-    #   # milliseconds
-    #   thresholdRange:
-    #     max: 500
-    #   interval: 30s
+    - name: request-duration
+      # maximum req duration P99
+      # milliseconds
+      thresholdRange:
+        max: 500
+      interval: 30s
     # testing (optional)
     webhooks:
       - name: acceptance-test
