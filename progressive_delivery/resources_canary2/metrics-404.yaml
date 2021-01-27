@@ -1,0 +1,30 @@
+apiVersion: flagger.app/v1beta1
+kind: MetricTemplate
+metadata:
+  name: not-found-percentage
+  namespace: istio-system
+spec:
+  provider:
+    type: prometheus
+    address: http://prometheus.istio-system:9090
+  query: |
+    100 - sum(
+        rate(
+            istio_requests_total{
+              reporter="destination",
+              destination_workload_namespace="{{ namespace }}",
+              destination_workload="{{ target }}",
+              response_code!="404"
+            }[{{ interval }}]
+        )
+    )
+    /
+    sum(
+        rate(
+            istio_requests_total{
+              reporter="destination",
+              destination_workload_namespace="{{ namespace }}",
+              destination_workload="{{ target }}"
+            }[{{ interval }}]
+        )
+    ) * 100

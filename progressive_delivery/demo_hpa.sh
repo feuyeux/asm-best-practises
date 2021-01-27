@@ -5,8 +5,6 @@ SCRIPT_PATH="$(
 )/"
 cd "$SCRIPT_PATH" || exit
 
-echo $SCRIPT_PATH
-
 source config
 alias k="kubectl --kubeconfig $USER_CONFIG"
 alias m="kubectl --kubeconfig $MESH_CONFIG"

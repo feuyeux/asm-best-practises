@@ -1,22 +1,57 @@
 #!/usr/bin/env sh
+# https://docs.flagger.app/tutorials/istio-progressive-delivery
+
 SCRIPT_PATH="$(
     cd "$(dirname "$0")" >/dev/null 2>&1
     pwd -P
 )/"
 cd "$SCRIPT_PATH" || exit
-
-export ISTIO_HOME=/Users/han/shop/istio-1.8.1
+export ISTIO_HOME=/Users/han/shop/istio-1.7.5
 export PATH=$PATH:$ISTIO_HOME/bin
-alias k="kubectl --kubeconfig istio-kubeconfig"
-alias i="istioctl --kubeconfig istio-kubeconfig"
+alias k="kubectl --kubeconfig $HOME/shop_config/ack_istio"
+alias i="istioctl --kubeconfig $HOME/shop_config/ack_istio"
 
 echo "#### I Prerequisites ####"
 echo "1 Install Istio with telemetry support and Prometheus:"
-i manifest install --set profile=default
+k delete ns test
+k delete ns istio-system
+i manifest install --set profile=default -y
 k apply -f $ISTIO_HOME/samples/addons/prometheus.yaml
+k get pod,svc -n istio-system
+# NAME                                        READY   STATUS    RESTARTS   AGE
+# pod/istio-ingressgateway-7bb888bf54-966df   1/1     Running   0          7m41s
+# pod/istiod-74676d784-wlsw6                  1/1     Running   0          7m47s
+# pod/prometheus-9d5676d95-nh5vx              2/2     Running   0          6m54s
+
+# NAME                           TYPE           CLUSTER-IP     EXTERNAL-IP     PORT(S)                                                      AGE
+# service/istio-ingressgateway   LoadBalancer   172.21.8.101   39.105.187.16   15021:31055/TCP,80:32247/TCP,443:30164/TCP,15443:31932/TCP   7m41s
+# service/istiod                 ClusterIP      172.21.12.20   <none>          15010/TCP,15012/TCP,443/TCP,15014/TCP,853/TCP                7m47s
+# service/prometheus             ClusterIP      172.21.5.189   <none>          9090/TCP                                                     6m54s
+
+k get cm prometheus -n istio-system -o jsonpath={.data.prometheus\\.yml} | grep job_name                                                                                                                        130 ↵
+# - job_name: prometheus
+#   job_name: kubernetes-apiservers
+#   job_name: kubernetes-nodes
+#   job_name: kubernetes-nodes-cadvisor
+# - job_name: kubernetes-service-endpoints
+# - job_name: kubernetes-service-endpoints-slow
+#   job_name: prometheus-pushgateway
+# - job_name: kubernetes-services
+# - job_name: kubernetes-pods
+# - job_name: kubernetes-pods-slow
 
 echo "2 Install Flagger in the istio-system namespace[kustomize]:"
 k apply -k github.com/fluxcd/flagger//kustomize/istio
+k get pod,svc -n istio-system
+# NAME                                        READY   STATUS    RESTARTS   AGE
+# pod/flagger-759dfbb57f-dcdjr                1/1     Running   0          18s
+# pod/istio-ingressgateway-7bb888bf54-966df   1/1     Running   0          8m30s
+# pod/istiod-74676d784-wlsw6                  1/1     Running   0          8m36s
+# pod/prometheus-9d5676d95-nh5vx              2/2     Running   0          7m43s
+
+# NAME                           TYPE           CLUSTER-IP     EXTERNAL-IP     PORT(S)                                                      AGE
+# service/istio-ingressgateway   LoadBalancer   172.21.8.101   39.105.187.16   15021:31055/TCP,80:32247/TCP,443:30164/TCP,15443:31932/TCP   8m30s
+# service/istiod                 ClusterIP      172.21.12.20   <none>          15010/TCP,15012/TCP,443/TCP,15014/TCP,853/TCP                8m36s
 
 echo "3 Create an ingress gateway to expose the demo app outside of the mesh:"
 cat <<EOF | k apply -f -
@@ -37,7 +72,8 @@ spec:
         - "*"
 EOF
 
-echo
+echo "......"
+sleep 10s
 echo "#### II Bootstrap ####"
 
 echo "1 Create a test namespace with Istio sidecar injection enabled:"
@@ -46,10 +82,23 @@ k label namespace test istio-injection=enabled
 
 echo "2 Create a deployment and a horizontal pod autoscaler:"
 k apply -k https://github.com/fluxcd/flagger//kustomize/podinfo?ref=main
+k get pod,svc -n test
+# NAME                           READY   STATUS    RESTARTS   AGE
+# pod/podinfo-689f645b78-swfrt   2/2     Running   0          3m25s
+# pod/podinfo-689f645b78-vjvkw   2/2     Running   0          3m40s
 
 echo "3 Deploy the load testing service to generate traffic during the canary analysis:"
 k apply -k https://github.com/fluxcd/flagger//kustomize/tester?ref=main
+k get pod,svc -n test
+# NAME                                      READY   STATUS    RESTARTS   AGE
+# pod/flagger-loadtester-76798b5f4c-7nrsb   2/2     Running   0          100s
+# pod/podinfo-689f645b78-swfrt              2/2     Running   0          5m45s
+# pod/podinfo-689f645b78-vjvkw              2/2     Running   0          6m
 
+# NAME                         TYPE        CLUSTER-IP     EXTERNAL-IP   PORT(S)   AGE
+# service/flagger-loadtester   ClusterIP   172.21.6.200   <none>        80/TCP    100s
+echo "......"
+sleep 20s
 echo "4 Create a canary custom resource:"
 cat <<EOF | k apply -f -
 apiVersion: flagger.app/v1beta1
@@ -81,7 +130,7 @@ spec:
     - public-gateway.istio-system.svc.cluster.local
     # Istio virtual service host names (optional)
     hosts:
-    - *
+    - "*"
     # Istio traffic policy (optional)
     trafficPolicy:
       tls:
@@ -132,7 +181,21 @@ spec:
           cmd: "hey -z 1m -q 10 -c 2 http://podinfo-canary.test:9898/"
 EOF
 
-echo
+k get pod,svc -n test
+# NAME                                      READY   STATUS    RESTARTS   AGE
+# pod/flagger-loadtester-76798b5f4c-7nrsb   2/2     Running   0          3m9s
+# pod/podinfo-689f645b78-swfrt              2/2     Running   0          7m14s
+# pod/podinfo-689f645b78-vjvkw              2/2     Running   0          7m29s
+# pod/podinfo-primary-7b7dd49c6f-l72z5      2/2     Running   0          38s
+# pod/podinfo-primary-7b7dd49c6f-m78sb      2/2     Running   0          38s
+
+# NAME                         TYPE        CLUSTER-IP     EXTERNAL-IP   PORT(S)    AGE
+# service/flagger-loadtester   ClusterIP   172.21.6.200   <none>        80/TCP     3m9s
+# service/podinfo-canary       ClusterIP   172.21.0.83    <none>        9898/TCP   38s
+# service/podinfo-primary      ClusterIP   172.21.9.9     <none>        9898/TCP   38s
+
+echo "......"
+sleep 20s
 echo "#### III Automated canary promotion ####"
 
 echo "1 Trigger a canary deployment by updating the container image:"
@@ -141,33 +204,20 @@ k -n test set image deployment/podinfo podinfod=stefanprodan/podinfo:3.1.1
 echo "2 Flagger detects that the deployment revision changed and starts a new rollout:"
 
 while true; do k -n test describe canary/podinfo; sleep 10s;done
-
 # Events:
-#   Type    Reason  Age   From     Message
-#   ----    ------  ----  ----     -------
-#   Normal  Synced  6m8s  flagger  New revision detected! Scaling up podinfo.test
-#   Normal  Synced  5m8s  flagger  New revision detected! Restarting analysis for podinfo.test
-#   Normal  Synced  4m8s  flagger  Starting canary analysis for podinfo.test
-#   Normal  Synced  4m8s  flagger  Pre-rollout check acceptance-test passed
-#   Normal  Synced  4m7s  flagger  Advance podinfo.test canary weight 10
-#   Normal  Synced  3m8s  flagger  Advance podinfo.test canary weight 20
-#   Normal  Synced  2m8s  flagger  Advance podinfo.test canary weight 30
-#   Normal  Synced  68s   flagger  Advance podinfo.test canary weight 40
-#   Normal  Synced  8s    flagger  Advance podinfo.test canary weight 50
-
-# Events:
-#   Type    Reason  Age               From     Message
-#   ----    ------  ----              ----     -------
-#   Normal  Synced  8m9s              flagger  New revision detected! Scaling up podinfo.test
-#   Normal  Synced  7m9s              flagger  New revision detected! Restarting analysis for podinfo.test
-#   Normal  Synced  6m9s              flagger  Starting canary analysis for podinfo.test
-#   Normal  Synced  6m9s              flagger  Pre-rollout check acceptance-test passed
-#   Normal  Synced  6m8s              flagger  Advance podinfo.test canary weight 10
-#   Normal  Synced  5m9s              flagger  Advance podinfo.test canary weight 20
-#   Normal  Synced  4m9s              flagger  Advance podinfo.test canary weight 30
-#   Normal  Synced  3m9s              flagger  Advance podinfo.test canary weight 40
-#   Normal  Synced  2m9s              flagger  Advance podinfo.test canary weight 50
-#   Normal  Synced  9s (x2 over 69s)  flagger  (combined from similar events): Routing all traffic to primary
+#   Type     Reason  Age                From     Message
+#   ----     ------  ----               ----     -------
+#   Warning  Synced  39m                flagger  podinfo-primary.test not ready: waiting for rollout to finish: observed deployment generation less then desired generation
+#   Normal   Synced  38m (x2 over 39m)  flagger  all the metrics providers are available!
+#   Normal   Synced  38m                flagger  Initialization done! podinfo.test
+#   Normal   Synced  37m                flagger  New revision detected! Scaling up podinfo.test
+#   Normal   Synced  36m                flagger  Starting canary analysis for podinfo.test
+#   Normal   Synced  36m                flagger  Pre-rollout check acceptance-test passed
+#   Normal   Synced  36m                flagger  Advance podinfo.test canary weight 10
+#   Normal   Synced  35m                flagger  Advance podinfo.test canary weight 20
+#   Normal   Synced  34m                flagger  Advance podinfo.test canary weight 30
+#   Normal   Synced  33m                flagger  Advance podinfo.test canary weight 40
+#   Normal   Synced  29m (x4 over 32m)  flagger  (combined from similar events): Promotion completed! Scaling down podinfo.test
 
 watch kubectl --kubeconfig istio-kubeconfig get canaries --all-namespaces
 

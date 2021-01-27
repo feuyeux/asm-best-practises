@@ -20,29 +20,26 @@ echo "3 make sure about prometheus config"
 # 请使用 ../mixerless/scrape_configs.yaml
 k get cm prometheus -n istio-system -o jsonpath={.data.prometheus\\.yml} | grep job_name
 
-echo "4 deploy grafana"
-k apply -f $ISTIO_SRC/samples/addons/grafana.yaml
-
 ## ==================================== ##
-echo "5 init test namespace"
+echo "4 init test namespace"
 k create ns test
 k label namespace test istio-injection=enabled
 m create ns test
 m label namespace test istio-injection=enabled
 
-echo "6 init podinfo pod"
+echo "5 init podinfo pod"
 k apply -f $PODINFO_SRC/kustomize/deployment.yaml -n test
 k apply -f $PODINFO_SRC/kustomize/service.yaml -n test
+
+echo "6 access to generate metrics data"
 podinfo_pod=$(k get po -n test -l app=podinfo -o jsonpath={.items..metadata.name})
 echo "podinfo_pod=$podinfo_pod"
-
-echo "7 access to generate metrics data"
 for i in {1..10}; do
    k exec $podinfo_pod -c podinfod -n test -- curl -s podinfo:9898/version
   echo
 done
 
-echo "8 check metrics data from envoy"
+echo "7 check metrics data from envoy"
 echo ":::: istio_requests_total ::::"
 k exec $podinfo_pod -n test -c istio-proxy -- curl -s localhost:15090/stats/prometheus | grep istio_requests_total
 echo ":::: istio_request_duration ::::"

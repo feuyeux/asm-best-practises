@@ -10,13 +10,7 @@ alias k="kubectl --kubeconfig $USER_CONFIG"
 alias m="kubectl --kubeconfig $MESH_CONFIG"
 alias h="helm --kubeconfig $USER_CONFIG"
 
-echo "#### I Prerequisites ####"
-sh install_flagger.sh
-echo "......"
-sleep 10s
-
-echo "#### II Bootstrap ####"
-
+echo "#### I Bootstrap ####"
 echo "1 Create a test namespace with Istio sidecar injection enabled:"
 k delete ns test
 m delete ns test
@@ -25,8 +19,9 @@ m create ns test
 m label namespace test istio-injection=enabled
 
 echo "2 Create a deployment and a horizontal pod autoscaler:"
-k apply -k "https://github.com/fluxcd/flagger//kustomize/podinfo?ref=main"
-
+k apply -f $FLAAGER_SRC/kustomize/podinfo/deployment.yaml -n test
+k apply -f resources_hpa/requests_total_hpa.yaml
+k get hpa -n test
 
 echo "3 Deploy the load testing service to generate traffic during the canary analysis:"
 k apply -k "https://github.com/fluxcd/flagger//kustomize/tester?ref=main"
@@ -36,11 +31,12 @@ echo "......"
 sleep 40s
 
 echo "4 Create a canary custom resource:"
-k apply -f resources_canary/podinfo-canary.yaml
+k apply -f resources_canary2/metrics-404.yaml
+k apply -f resources_canary2/podinfo-canary.yaml
 
 k get pod,svc -n test
 echo "......"
-sleep 40s
+sleep 120s
 
 echo "#### III Automated canary promotion ####"
 
@@ -90,3 +86,5 @@ watch kubectl --kubeconfig $USER_CONFIG get canaries --all-namespaces
 
 # NAMESPACE   NAME      STATUS       WEIGHT   LASTTRANSITIONTIME
 # test        podinfo   Finalising   0        2021-01-26T05:42:16Z
+
+watch kubectl --kubeconfig $USER_CONFIG -n test get hpa/podinfo-total

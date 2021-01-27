@@ -28,7 +28,12 @@
 - [x] `$FLAAGER_SRC/kustomize/podinfo`
 - [x] `$FLAAGER_SRC/kustomize/tester`
 #### 验证
-- [ ] podinfo-canary
+- [x] podinfo-canary
+
+### 4 Advanced
+[demo_advanced_canary.sh](demo_advanced_canary.sh)
+入口网关请求
+- [hey-podinfo.sh](hey-podinfo.sh)
 
 ### reference
 - https://docs.flagger.app/usage/metrics
