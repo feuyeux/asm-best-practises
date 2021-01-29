@@ -7,10 +7,57 @@ spec:
   hosts:
     - hello3-svc
   http:
-    - name: hello3-v3-route
+    - name: hello3-v1-route
+      headers:
+        request:
+          add:
+            target: blue-green31
       match:
         - port: 8001
+        - headers:
+            version:
+              exact: v1
+      route:
+        - destination:
+            host: hello3-svc
+            subset: v1
+          headers:
+            response:
+              add:
+                version: v1
+    - name: hello3-v2-route
+      headers:
+        request:
+          add:
+            target: blue-green32
+      match:
+        - port: 8001
+        - headers:
+            version:
+              exact: v2
+      route:
+        - destination:
+            host: hello3-svc
+            subset: v2
+          headers:
+            response:
+              add:
+                version: v2
+    - name: hello3-v3-route
+      headers:
+        request:
+          add:
+            target: blue-green33
+      match:
+        - port: 8001
+        - headers:
+            version:
+              exact: v3
       route:
         - destination:
             host: hello3-svc
             subset: v3
+          headers:
+            response:
+              add:
+                version: v3

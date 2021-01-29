@@ -13,7 +13,7 @@ echo "1 make sure about envoyfilters"
 m get envoyfilter -n istio-system
 
 echo "2 deploy prometheus"
-# k delete -f $ISTIO_SRC/samples/addons/prometheus.yaml
+k delete -f $ISTIO_SRC/samples/addons/prometheus.yaml
 k apply -f $ISTIO_SRC/samples/addons/prometheus.yaml
 
 echo "3 make sure about prometheus config"
@@ -22,8 +22,9 @@ k get cm prometheus -n istio-system -o jsonpath={.data.prometheus\\.yml} | grep 
 
 ## ==================================== ##
 echo "4 init test namespace"
+k delete ns test
+m delete ns test
 k create ns test
-k label namespace test istio-injection=enabled
 m create ns test
 m label namespace test istio-injection=enabled
 
@@ -42,5 +43,7 @@ done
 echo "7 check metrics data from envoy"
 echo ":::: istio_requests_total ::::"
 k exec $podinfo_pod -n test -c istio-proxy -- curl -s localhost:15090/stats/prometheus | grep istio_requests_total
+# https://istio.io/latest/docs/ops/integrations/prometheus/
+k exec $podinfo_pod -n test -c istio-proxy -- curl -s localhost:15020/stats/prometheus | grep istio_requests_total
 echo ":::: istio_request_duration ::::"
 k exec $podinfo_pod -n test -c istio-proxy -- curl -s localhost:15090/stats/prometheus | grep istio_request_duration
