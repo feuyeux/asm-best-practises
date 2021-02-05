@@ -9,6 +9,8 @@
   - [circuit_breaking](circuit_breaking)
   - [progressive_delivery](progressive_delivery)
   - [blue_green_demo](blue_green_demo)
+- Traffic decode
+  - [grpc_transcoder](grpc_transcoder)
 - Secure
   - [jwt_demo](jwt_demo)
 - Observe
