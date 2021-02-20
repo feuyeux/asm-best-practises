@@ -1,3 +1,4 @@
+#!/usr/bin/env sh
 echo "==== Configure the virtual machine ===="
 
 echo "1 Install the root certificate at /etc/certs"

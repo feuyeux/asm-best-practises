@@ -1,2 +1,9 @@
-USER_CONFIG=$HOME/shop_config/kubeconfig/ack_istio_staging
-VM=114.215.168.115
+USER_CONFIG=${HOME}/shop_config/kubeconfig/ack_istio_staging
+#VM=114.215.168.115
+VM=8.136.114.2
+version=1.8.3
+ISTIO_HOME=${HOME}/shop/istio-${version}
+VM_APP=vm-app
+VM_NAMESPACE=vm-namespace
+WORK_DIR=work_dir
+SERVICE_ACCOUNT=vm-sa

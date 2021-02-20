@@ -1,4 +1,5 @@
 #!/usr/bin/env sh
+
 set -e
 SCRIPT_PATH="$(
   cd "$(dirname "$0")" >/dev/null 2>&1
