@@ -1,0 +1,2 @@
+USER_CONFIG=$HOME/shop_config/kubeconfig/ack_istio_staging
+VM=114.215.168.115
