@@ -7,3 +7,8 @@
 1. [run istio proxy on vm](run_on_vm.sh)
 1. [deploy sample](sample.sh)
 1. [test sample on vm](test_sample_on_vm.sh): istio proxy to sample (service discovery and route)
+
+optional
+1. [east-west-istiogateway log](ew.gateway.log.sh)
+1. [istiod log](istiod.log.sh)
+1. [run avp on vm](run_avp_on_vm.sh)

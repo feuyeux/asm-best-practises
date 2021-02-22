@@ -10,16 +10,16 @@ cp "${HOME}"/cluster.env /opt/asm_vm_proxy/meta/cluster.env
 cp "${HOME}"/mesh.yaml /opt/asm_vm_proxy/meta/
 cp "${HOME}"/hosts /opt/asm_vm_proxy/meta/
 
-echo "2 Pull avp image"
-version=1.8.3
-IMAGE_REPO=registry.cn-hangzhou.aliyuncs.com/acs/asm-vm-proxy:$version-aliyun
-docker pull $IMAGE_REPO
-
-echo "3 Clean"
+echo "2 Clean"
 rm -f /var/log/istio/*.log
 docker stop $(docker ps -a -q) >/dev/null 2>&1
 docker rm $(docker ps -a -q) >/dev/null 2>&1
 docker rmi -f $(docker images | grep none | awk "{print $3}") >/dev/null 2>&1
+
+echo "3 Pull avp image"
+version=1.8.3
+IMAGE_REPO=registry.cn-hangzhou.aliyuncs.com/acs/asm-vm-proxy:$version-aliyun
+docker pull $IMAGE_REPO
 
 echo "4 Start avp"
 docker run -d \
