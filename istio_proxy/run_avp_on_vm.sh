@@ -3,7 +3,7 @@
 echo "==== Configure the virtual machine ===="
 
 echo "1 Setup the root certificate|token|cluster.env|Mesh Config"
-test -d /opt/asm_vm_proxy/meta || /opt/asm_vm_proxy/meta
+test -d /opt/asm_vm_proxy/meta || mkdir -p /opt/asm_vm_proxy/meta
 cp "${HOME}"/root-cert.pem /opt/asm_vm_proxy/meta/root-cert.pem
 cp "${HOME}"/istio-token /opt/asm_vm_proxy/meta/istio-token
 cp "${HOME}"/cluster.env /opt/asm_vm_proxy/meta/cluster.env
