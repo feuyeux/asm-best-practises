@@ -5,9 +5,9 @@
 sh envoyfilter/gen.sh
 ```
 
-2 verify envoy config
+2 apply and verify envoy config
 ```sh
-sh envoyfilter/verify.sh
+sh envoyfilter/apply-then-verify.sh
 ```
 
 3 deploy grpc service

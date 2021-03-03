@@ -4,9 +4,9 @@ SCRIPT_PATH="$(
     pwd -P
 )/"
 cd "$SCRIPT_PATH" || exit
-
-alias k="kubectl --kubeconfig ~/shop_config/ack_cd"
-alias m="kubectl --kubeconfig ~/shop_config/asm_cd"
+. ../kube/config.env
+alias k="kubectl --kubeconfig $ACK_KUBECONFIG"
+alias m="kubectl --kubeconfig $ASM_KUBECONFIG"
 
 dump() {
     if [ ! $2 ]; then
@@ -27,14 +27,18 @@ dump() {
     #     -- curl -s "http://localhost:15000/config_dump" >config_dump-"$3".json
 }
 
+apply() {
+    echo "apply yaml files to istio-system"
+    m apply -f $GRPC_TRANSCODER_HOME/grpc-transcoder-envoyfilter.yaml -n istio-system
+
+    # no need
+    #m apply -f $GRPC_TRANSCODER_HOME/header2metadata-envoyfilter.yaml -n istio-system
+    sleep 10s
+}
+
+apply
+
 rm -rf *json
-echo "apply yaml files to istio-system"
-m apply -f grpc-transcoder-envoyfilter.yaml -n istio-system
-
-# no need
-#m apply -f header2metadata-envoyfilter.yaml -n istio-system
-
-sleep 10s
 timestamp=$(date "+%Y%m%d-%H%M%S")
 dump istio-ingressgateway istio-system "$timestamp"
 echo "grep:"

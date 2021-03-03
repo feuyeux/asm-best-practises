@@ -4,18 +4,16 @@ SCRIPT_PATH="$(
     pwd -P
 )/"
 cd "$SCRIPT_PATH" || exit
+. config.env
+alias k="kubectl --kubeconfig $ACK_KUBECONFIG"
 
-alias k="kubectl --kubeconfig ~/shop_config/ack_cd"
-alias m="kubectl --kubeconfig ~/shop_config/asm_cd"
+# client_java_pod=$(k get pod -l app=grpc-client-java -n grpc-best -o jsonpath={.items..metadata.name})
+# echo "[test talk] from $client_java_pod"
+# k exec "$client_java_pod" -c grpc-client-java -n grpc-best -- java -jar /grpc-client.jar
 
 INGRESS_IP=$(k -n istio-system get service istio-ingressgateway -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
 echo "INGRESS_IP=$INGRESS_IP"
-
-#client_java_pod=$(k get pod -l app=grpc-client-java -n grpc-best -o jsonpath={.items..metadata.name})
-#k exec "$client_java_pod" -c grpc-client-java -n grpc-best -- java -jar /grpc-client.jar
-
-
-echo "1 [test talk] curl http://$INGRESS_IP:9996/v1/talk/0/java"
+echo "[test talk] curl http://$INGRESS_IP:9996/v1/talk/0/java"
 curl -H 'x:aaa' -H 'y:bbb' -H 'a:xxx' -H 'b:yyy' http://$INGRESS_IP:9996/v1/talk/0/java
 # echo
 # echo "2 [test talk1n] http://$INGRESS_IP:9996/v1/talk1n/0,1,2/java"
