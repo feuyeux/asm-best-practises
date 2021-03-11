@@ -1,4 +1,7 @@
 #!/usr/bin/env sh
+
+# https://istio.io/latest/docs/setup/install/multicluster/primary-remote/
+
 alias i1="istioctl --kubeconfig ~/shop_config/kubeconfig/istio-primary"
 alias i2="istioctl --kubeconfig ~/shop_config/kubeconfig/istio-remote"
 alias k1="kubectl --kubeconfig ~/shop_config/kubeconfig/istio-primary"
@@ -26,8 +29,8 @@ i1 install -f cluster1.yaml
 
 echo "2 Install the east-west gateway in cluster1"
 samples/multicluster/gen-eastwest-gateway.sh \
-    --mesh mesh1 --cluster cluster1 --network network1 |
-    i1 install -y -f -
+  --mesh mesh1 --cluster cluster1 --network network1 |
+  i1 install -y -f -
 
 k1 get svc istio-eastwestgateway -n istio-system
 
@@ -36,14 +39,14 @@ k1 apply -f samples/multicluster/expose-istiod.yaml
 
 echo "4 Enable API Server Access to cluster2"
 i1 x create-remote-secret \
-    --name=cluster2 |
-    k1 apply -f -
+  --name=cluster2 |
+  k1 apply -f -
 
 echo "5 Configure cluster2 as a remote"
 
 export DISCOVERY_ADDRESS=$(k1 \
-    -n istio-system get svc istio-eastwestgateway \
-    -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
+  -n istio-system get svc istio-eastwestgateway \
+  -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
 
 cat <<EOF >cluster2.yaml
 apiVersion: install.istio.io/v1alpha1
@@ -61,6 +64,7 @@ EOF
 
 i2 -f cluster2.yaml
 
+# https://istio.io/latest/docs/setup/install/multicluster/verify/
 echo "\nVerify the installation"
 echo "========\n"
 
@@ -88,7 +92,24 @@ k1 get pod -n sample -l app=sleep
 k2 get pod -n sample -l app=sleep
 
 echo "5 Verifying Cross-Cluster Traffic"
-k1 exec -n sample -c sleep "$(k1 get pod -n sample -l app=sleep -o jsonpath='{.items[0].metadata.name}')" \
+for i in {1..5}; do
+  k1 exec -n sample -c sleep "$(k1 get pod -n sample -l app=sleep -o jsonpath='{.items[0].metadata.name}')" \
     -- curl -sS helloworld.sample:5000/hello
-k2 exec -n sample -c sleep "$(k2 get pod -n sample -l app=sleep -o jsonpath='{.items[0].metadata.name}')" \
+done
+
+for i in {1..5}; do
+  k2 exec -n sample -c sleep "$(k2 get pod -n sample -l app=sleep -o jsonpath='{.items[0].metadata.name}')" \
     -- curl -sS helloworld.sample:5000/hello
+done
+
+# https://istio.io/latest/docs/ops/integrations/kiali/#installation
+echo "\nInstall Kiali"
+echo "========\n"
+k2 create namespace istio-system
+k2 apply -f samples/addons/prometheus.yaml
+k2 apply -f samples/addons/kiali.yaml
+echo "\nAccess Kiali"
+i1 dashboard kiali
+
+
+# https://istio.io/latest/docs/tasks/observability/gateways/
