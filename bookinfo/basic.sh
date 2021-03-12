@@ -9,10 +9,10 @@ export ISTIO_HOME=${HOME}/shop/istio-${version}
 source config
 alias k="kubectl --kubeconfig $USER_CONFIG"
 alias m="kubectl --kubeconfig $MESH_CONFIG"
+k label ns default istio-injection=enabled
 m label ns default istio-injection=enabled
-
 #部署数据平面
-# k delete -f ${ISTIO_HOME}/samples/bookinfo/platform/kube/bookinfo.yaml
+k delete -f ${ISTIO_HOME}/samples/bookinfo/platform/kube/bookinfo.yaml
 k apply -f ${ISTIO_HOME}/samples/bookinfo/platform/kube/bookinfo.yaml
 #查看服务状态
 k get services
