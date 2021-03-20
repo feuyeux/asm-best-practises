@@ -4,7 +4,7 @@ SCRIPT_PATH="$(
   pwd -P
 )/"
 cd "$SCRIPT_PATH" || exit
-version=1.8.3
+version=1.8.4
 export ISTIO_HOME=${HOME}/shop/istio-${version}
 source config
 alias k="kubectl --kubeconfig $USER_CONFIG"
