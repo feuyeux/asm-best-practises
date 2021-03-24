@@ -172,7 +172,7 @@ test_tls() {
     echo "\n==== curl httpbin.example.com:$SECURE_INGRESS_PORT => $INGRESS_HOST ===="
     curl -v -HHost:httpbin.example.com \
         --resolve "httpbin.example.com:$SECURE_INGRESS_PORT:$INGRESS_HOST" \
-        --cacert example.com.crt \
+        -k \
         "https://httpbin.example.com:$SECURE_INGRESS_PORT/status/418"
 }
 
@@ -199,7 +199,7 @@ test_new_cert() {
         sleep 6
         echo "\n ==== [$n] curl httpbin.example.com:$SECURE_INGRESS_PORT => $INGRESS_HOST ===="
         curl -v -HHost:httpbin.example.com --resolve "httpbin.example.com:$SECURE_INGRESS_PORT:$INGRESS_HOST" \
-            --cacert new_certificates/example.com.crt "https://httpbin.example.com:$SECURE_INGRESS_PORT/status/418"
+            -k "https://httpbin.example.com:$SECURE_INGRESS_PORT/status/418"
     done
 }
 
