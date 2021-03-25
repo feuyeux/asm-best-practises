@@ -81,7 +81,22 @@ EOF
     echo "SECURE_INGRESS_PORT=$SECURE_INGRESS_PORT"
     curl -s -I -HHost:httpbin.example.com "http://$INGRESS_HOST:$INGRESS_PORT/status/200"
 }
-
+create_secret() {
+    # docker-registry 创建一个给 Docker registry 使用的 secret
+    # generic         从本地 file, directory 或者 literal value 创建一个 secret
+    # tls             创建一个 TLS secret
+    secret_flag=tls
+    k -n istio-system create secret $secret_flag \
+        httpbin-credential-$timestamp \
+        --key=httpbin.example.com.key \
+        --cert=httpbin.example.com.crt
+}
+create_secret_2() {
+    k create -n istio-system secret tls \
+        httpbin-credential-$timestamp \
+        --key=new_certificates/httpbin.example.com.key \
+        --cert=new_certificates/httpbin.example.com.crt
+}
 setup_tls() {
     echo
     echo "==== 2 httpbin tls(443) ===="
@@ -111,14 +126,7 @@ setup_tls() {
     # https://istio.io/latest/docs/tasks/traffic-management/ingress/secure-ingress/#configure-a-tls-ingress-gateway-for-a-single-host
 
     echo "Create a secret for the ingress gateway:"
-    # docker-registry 创建一个给 Docker registry 使用的 secret
-    # generic         从本地 file, directory 或者 literal value 创建一个 secret
-    # tls             创建一个 TLS secret
-    secret_flag=tls
-    k -n istio-system create secret $secret_flag \
-        httpbin-credential-$timestamp \
-        --key=httpbin.example.com.key \
-        --cert=httpbin.example.com.crt
+    create_secret
     sleep 10
 }
 
@@ -172,7 +180,7 @@ test_tls() {
     echo "\n==== curl httpbin.example.com:$SECURE_INGRESS_PORT => $INGRESS_HOST ===="
     curl -v -HHost:httpbin.example.com \
         --resolve "httpbin.example.com:$SECURE_INGRESS_PORT:$INGRESS_HOST" \
-        -k \
+        --cacert example.com.crt \
         "https://httpbin.example.com:$SECURE_INGRESS_PORT/status/418"
 }
 
@@ -191,15 +199,17 @@ test_new_cert() {
         -in new_certificates/httpbin.example.com.csr \
         -out new_certificates/httpbin.example.com.crt
     #
-    k create -n istio-system secret tls httpbin-credential-$timestamp \
-        --key=new_certificates/httpbin.example.com.key \
-        --cert=new_certificates/httpbin.example.com.crt
+    create_secret_2
+
+    export INGRESS_HOST=$(k -n istio-system get service istio-ingressgateway -o jsonpath='{.status.loadBalancer.ingress[0].ip}') \
+    export SECURE_INGRESS_PORT=$(k -n istio-system get service istio-ingressgateway -o jsonpath='{.spec.ports[?(@.name=="https")].port}')
 
     for ((n = 1; n <= 10; n++)); do
         sleep 6
         echo "\n ==== [$n] curl httpbin.example.com:$SECURE_INGRESS_PORT => $INGRESS_HOST ===="
         curl -v -HHost:httpbin.example.com --resolve "httpbin.example.com:$SECURE_INGRESS_PORT:$INGRESS_HOST" \
-            -k "https://httpbin.example.com:$SECURE_INGRESS_PORT/status/418"
+            --cacert new_certificates/example.com.crt \
+            "https://httpbin.example.com:$SECURE_INGRESS_PORT/status/418"
     done
 }
 
@@ -209,4 +219,5 @@ setup_tls
 setup_tls_mesh
 test_tls
 test_new_cert
-echo "kubectl --kubeconfig $USER_CONFIG -n istio-system delete secret httpbin-credential-$timestamp"
+
+echo "kubectl --kubeconfig $USER_CONFIG -n istio-system delete secret httpbin-credential-$timestamp" >clean

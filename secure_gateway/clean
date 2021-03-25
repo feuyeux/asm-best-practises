@@ -1,0 +1,1 @@
+kubectl --kubeconfig /Users/han/shop_config/kubeconfig/ack_production -n istio-system delete secret httpbin-credential-20210324-212820

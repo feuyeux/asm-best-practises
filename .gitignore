@@ -39,3 +39,7 @@ up.push.git.sh
 rsocket_springboot_demo/test_jar
 progressive_delivery/kubeconfig
 work_dir
+secure_gateway/*.crt
+secure_gateway/*.key
+secure_gateway/*.csr
+secure_gateway/new_certificates
