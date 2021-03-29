@@ -1,0 +1,79 @@
+apiVersion: networking.istio.io/v1beta1
+kind: Gateway
+metadata:
+  name: hello-gateway
+spec:
+  selector:
+    istio: ingressgateway
+  servers:
+    - hosts:
+        - '*'
+      port:
+        name: http
+        number: 12321
+        protocol: HTTP
+---
+apiVersion: networking.istio.io/v1beta1
+kind: VirtualService
+metadata:
+  name: hello-virtual-service
+spec:
+  gateways:
+    - hello-gateway
+  hosts:
+    - '*'
+  http:
+    - match:
+        - uri:
+            exact: /123
+        - uri:
+            exact: /hello2/123
+      rewrite:
+        uri: /bye/123
+      route:
+        - destination:
+            host: http-hello
+            port:
+              number: 12321
+---
+apiVersion: networking.istio.io/v1beta1
+kind: VirtualService
+metadata:
+  name: hello-virtual-service2
+spec:
+  gateways:
+    - hello-gateway
+  hosts:
+    - '*'
+  http:
+    - match:
+        - uri:
+            prefix: /hello3
+      rewrite:
+        uri: /bye
+      route:
+        - destination:
+            host: http-hello
+            port:
+              number: 12321
+---
+apiVersion: networking.istio.io/v1beta1
+kind: VirtualService
+metadata:
+  name: hello-virtual-service3
+spec:
+  gateways:
+    - hello-gateway
+  hosts:
+    - '*'
+  http:
+    - match:
+        - uri:
+            prefix: /hello
+        - uri:
+            prefix: /bye
+      route:
+        - destination:
+            host: http-hello
+            port:
+              number: 12321

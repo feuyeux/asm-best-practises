@@ -1,5 +1,6 @@
 package org.feuyeux.http.api;
 
+import org.feuyeux.http.exception.*;
 import org.feuyeux.http.service.HelloService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -9,43 +10,62 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.io.IOException;
 import java.util.Map;
-
 
 @RestController
 public class HttpController {
     private static final Logger LOGGER = LoggerFactory.getLogger(HttpController.class);
     private static String HTTP_HELLO_BACKEND = System.getenv("HTTP_HELLO_BACKEND");
-    public static final String HELLO = "Bonjour";
-    public static final String BYE = "Au revoir";
 
     @Autowired
     private HelloService helloService;
 
     @GetMapping(path = "/hello/{msg}")
-    public String sayHello(@PathVariable String msg, @RequestHeader Map<String, String> headers) {
+    public String sayHello(@PathVariable String msg, @RequestHeader Map<String, String> headers) throws HelloException, IOException {
+        long begin = System.currentTimeMillis();
+        String result;
         helloService.logHeaders(headers);
         if (HTTP_HELLO_BACKEND == null) {
-            String result = HELLO + " " + msg;
-            LOGGER.info("{}", result);
-            return result + helloService.markIp();
+            if ("404".equals(msg)) {
+                LOGGER.warn("return 404");
+                throw new Hello404Exception();
+            }
+            if ("400".equals(msg)) {
+                LOGGER.warn("return 400");
+                throw new Hello400Exception();
+            }
+            if ("500".equals(msg)) {
+                LOGGER.warn("return 500");
+                throw new Hello500Exception();
+            }
+            if ("503".equals(msg)) {
+                LOGGER.warn("return 503");
+                throw new Hello503Exception();
+            }
+            String response = Instant.version2.hello() + " " + msg;
+            LOGGER.info("{}", response);
+            long elapsed = System.currentTimeMillis() - begin;
+            result = response + helloService.markIp() + "[" + elapsed + "ms]";
         } else {
             String url = "http://" + HTTP_HELLO_BACKEND + ":8001/hello/" + msg;
             String backServiceResult = helloService.sayHello(url, headers);
-            String result = HELLO + " " + msg;
-            return result + backServiceResult;
+            String response = Instant.version2.hello() + " " + msg;
+            long elapsed = System.currentTimeMillis() - begin;
+            result = response + helloService.markIp() + "[" + elapsed + "ms]<" + backServiceResult;
         }
+        return result;
     }
 
     @GetMapping(path = "/bye")
     public String sayBye(@RequestHeader Map<String, String> headers) {
         helloService.logHeaders(headers);
         if (HTTP_HELLO_BACKEND == null) {
-            return BYE + helloService.markIp();
+            return Instant.version2.bye() + helloService.markIp();
         } else {
             String url = "http://" + HTTP_HELLO_BACKEND + ":8001/bye";
             String backServiceResult = helloService.sayBye(url, headers);
-            return BYE + backServiceResult;
+            return Instant.version2.bye() + backServiceResult;
         }
     }
 }

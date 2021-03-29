@@ -4,7 +4,7 @@ SCRIPT_PATH="$(
   pwd -P
 )/"
 cd "$SCRIPT_PATH" || exit
-version=1.8.4
+version=1.9.5
 export ISTIO_HOME=${HOME}/shop/istio-${version}
 source config
 alias k="kubectl --kubeconfig $USER_CONFIG"
@@ -39,3 +39,5 @@ GATEWAY_URL=$(k -n istio-system get service istio-ingressgateway -o jsonpath='{.
 #验证
 echo "http://${GATEWAY_URL}/productpage"
 curl -I "http://${GATEWAY_URL}/productpage"
+
+# siege -c 5 "http://${GATEWAY_URL}/productpage"

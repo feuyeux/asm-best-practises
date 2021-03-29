@@ -1,0 +1,20 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: http-hello
+  labels:
+    app: http-hello
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: http-hello
+  template:
+    metadata:
+      labels:
+        app: http-hello
+    spec:
+      containers:
+        - name: http-hello
+          image: feuyeux/http-hello:0.0.1
+          imagePullPolicy: Always

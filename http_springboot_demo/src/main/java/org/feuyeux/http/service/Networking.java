@@ -14,7 +14,7 @@ public class Networking {
     static String getLocalIp() {
         try {
             InetAddress inetAddress = InetAddress.getLocalHost();
-            if (!isValidAddress(inetAddress)) {
+            if (invalidAddress(inetAddress)) {
                 return getLocalhostByNetworkInterface();
             } else {
                 return inetAddress.getHostAddress();
@@ -38,7 +38,7 @@ public class Networking {
             Enumeration<InetAddress> addrs = networkInterface.getInetAddresses();
             while (addrs.hasMoreElements()) {
                 InetAddress address = addrs.nextElement();
-                if (!isValidAddress(address)) {
+                if (invalidAddress(address)) {
                     continue;
                 }
                 // ip4 highter priority
@@ -56,10 +56,10 @@ public class Networking {
         return null;
     }
 
-    static boolean isValidAddress(InetAddress address) {
-        return address != null
-                && !address.isLoopbackAddress() // filter 127.x.x.x
-                && !address.isAnyLocalAddress() // filter 0.0.0.0
-                && !address.isLinkLocalAddress(); // filter 169.254.0.0/16
+    static boolean invalidAddress(InetAddress address) {
+        return address == null
+                || address.isLoopbackAddress() // filter 127.x.x.x
+                || address.isAnyLocalAddress() // filter 0.0.0.0
+                || address.isLinkLocalAddress(); // filter 169.254.0.0/16
     }
 }

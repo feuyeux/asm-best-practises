@@ -1,0 +1,203 @@
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: http-hello-sa
+  labels:
+    account: hello-sa
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: hello-a-svc
+  labels:
+    app: hello-a-svc
+spec:
+  ports:
+    - port: 8001
+      name: http
+  selector:
+    app: hello-a-deploy    
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: hello-b-svc
+  labels:
+    app: hello-b-svc
+spec:
+  ports:
+    - port: 8001
+      name: http
+  selector:
+    app: hello-b-deploy    
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hello-a-deploy-v1
+  labels:
+    app: hello-a-deploy
+    version: v1
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: hello-a-deploy
+      version: v1
+  template:
+    metadata:
+      labels:
+        app: hello-a-deploy
+        version: v1
+    spec:
+      serviceAccountName: http-hello-sa
+      containers:
+        - name: hello-a-deploy
+          image: feuyeux/http_springboot_v1:1.0.0
+          env:
+            - name: HTTP_HELLO_BACKEND
+              value: "hello-b-svc.http-hello.svc.cluster.local"
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8001
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hello-a-deploy-v2
+  labels:
+    app: hello-a-deploy
+    version: v2
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: hello-a-deploy
+      version: v2
+  template:
+    metadata:
+      labels:
+        app: hello-a-deploy
+        version: v2
+    spec:
+      serviceAccountName: http-hello-sa
+      containers:
+        - name: hello-a-deploy
+          image: feuyeux/http_springboot_v2:1.0.0
+          env:
+            - name: HTTP_HELLO_BACKEND
+              value: "hello-b-svc.http-hello.svc.cluster.local"
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8001
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hello-a-deploy-v3
+  labels:
+    app: hello-a-deploy
+    version: v3
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: hello-a-deploy
+      version: v3
+  template:
+    metadata:
+      labels:
+        app: hello-a-deploy
+        version: v3
+    spec:
+      serviceAccountName: http-hello-sa
+      containers:
+        - name: hello-a-deploy
+          image: feuyeux/http_springboot_v3:1.0.0
+          env:
+            - name: HTTP_HELLO_BACKEND
+              value: "hello-b-svc.http-hello.svc.cluster.local"
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8001
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hello-b-deploy-v1
+  labels:
+    app: hello-b-deploy
+    version: v1
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: hello-b-deploy
+      version: v1
+  template:
+    metadata:
+      labels:
+        app: hello-b-deploy
+        version: v1
+    spec:
+      serviceAccountName: http-hello-sa
+      containers:
+        - name: hello-b-deploy
+          image: feuyeux/http_springboot_v1:1.0.0
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8001
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hello-b-deploy-v2
+  labels:
+    app: hello-b-deploy
+    version: v2
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: hello-b-deploy
+      version: v2
+  template:
+    metadata:
+      labels:
+        app: hello-b-deploy
+        version: v2
+    spec:
+      serviceAccountName: http-hello-sa
+      containers:
+        - name: hello-b-deploy
+          image: feuyeux/http_springboot_v2:1.0.0
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8001
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hello-b-deploy-v3
+  labels:
+    app: hello-b-deploy
+    version: v3
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: hello-b-deploy
+      version: v3
+  template:
+    metadata:
+      labels:
+        app: hello-b-deploy
+        version: v3
+    spec:
+      serviceAccountName: http-hello-sa
+      containers:
+        - name: hello-b-deploy
+          image: feuyeux/http_springboot_v3:1.0.0
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8001

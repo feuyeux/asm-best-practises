@@ -1,0 +1,20 @@
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: hello-gateway-vs
+spec:
+  gateways:
+    - hello-gateway
+  hosts:
+    - 'feuyeux.org'
+  http:
+    - match:
+        - port: 8001
+      route:
+        - destination:
+            host: hello-a-svc
+            subset: v1
+      # timeout: 5s
+      # retries:
+      #   attempts: 3
+      #   perTryTimeout: 1s

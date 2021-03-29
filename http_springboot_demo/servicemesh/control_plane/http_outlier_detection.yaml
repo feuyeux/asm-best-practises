@@ -1,0 +1,70 @@
+apiVersion: networking.istio.io/v1alpha3
+kind: Gateway
+metadata:
+  name: hello-gateway-mesh
+spec:
+  selector:
+    istio: ingressgateway
+  servers:
+    - port:
+        number: 8001
+        name: http
+        protocol: HTTP
+      hosts:
+        - "*"
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: hello-gateway-vs
+spec:
+  hosts:
+    - "*"
+  gateways:
+    - hello-gateway-mesh
+  http:
+    - match:
+        - port: 8001
+      route:
+        - destination:
+            host: hello-a-svc
+            subset: v1
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: DestinationRule
+metadata:
+  name: hello-a-dr
+spec:
+  host: hello-a-svc
+  subsets:
+    - name: v1
+      labels:
+        version: v1
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: DestinationRule
+metadata:
+  name: hello-b-dr
+spec:
+  host: hello-b-svc
+  subsets:
+    - name: v1
+      labels:
+        version: v1
+    - name: v2
+      labels:
+        version: v2
+    - name: v3
+      labels:
+        version: v3
+  trafficPolicy:
+    connectionPool:
+      tcp:
+        maxConnections: 100
+      http:
+        http2MaxRequests: 1000
+        maxRequestsPerConnection: 10
+    outlierDetection:
+      consecutive5xxErrors: 7
+      interval: 5m
+      baseEjectionTime: 15m

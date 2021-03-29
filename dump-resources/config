@@ -1,0 +1,4 @@
+# kubeconfig of user's kubenetes cluster
+ACK_CONFIG=$HOME/shop_config/kubeconfig/ack_production
+# kubeconfig of user's servicemesh cluster
+MESH_CONFIG=$HOME/shop_config/kubeconfig/asm_production

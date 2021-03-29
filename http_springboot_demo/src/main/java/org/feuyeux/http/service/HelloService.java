@@ -1,11 +1,10 @@
 package org.feuyeux.http.service;
 
-import okhttp3.Headers;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.Response;
+import okhttp3.*;
+import org.feuyeux.http.exception.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -26,28 +25,42 @@ public class HelloService {
         }
     }
 
-    public String sayHello(String url, Map<String, String> headers) {
-        Map<String, String> tracingHeaders = buildTracingHeaders(headers,
-                "x-request-id",
-                "x-b3-traceid",
-                "x-b3-spanid",
-                "x-b3-parentspanid",
-                "x-b3-sampled",
-                "x-b3-flags",
-                "x-ot-span-context");
+    public String sayHello(String url, Map<String, String> headers) throws HelloException, IOException {
+        Map<String, String> tracingHeaders = buildTracingHeaders(headers);
         Request request = new Request.Builder()
                 //propagate tracing headers
                 .headers(Headers.of(tracingHeaders))
                 .url(url)
                 .build();
         try (Response response = client.newCall(request).execute()) {
-            if (!response.isSuccessful()) throw new IOException("Unexpected code " + response);
-            String result = response.body().string();
+            return handleResponse(url, response);
+        }
+    }
+
+    private String handleResponse(String url, Response response) throws HelloException, IOException {
+        if (response.isSuccessful()) {
+            ResponseBody body = response.body();
+            if (body == null) {
+                return "???";
+            }
+            String result = body.string();
             LOGGER.info("url:{} result:{}", url, result);
-            return mark() + result;
-        } catch (IOException e) {
-            LOGGER.error("", e);
-            return mark();
+            return result;
+        } else {
+            LOGGER.info("url:{} error code:{}", url, response.code());
+            if (response.code() == HttpStatus.NOT_FOUND.value()) {
+                throw new Hello404Exception();
+            }
+            if (response.code() == HttpStatus.BAD_REQUEST.value()) {
+                throw new Hello400Exception();
+            }
+            if (response.code() == HttpStatus.INTERNAL_SERVER_ERROR.value()) {
+                throw new Hello500Exception();
+            }
+            if (response.code() == HttpStatus.SERVICE_UNAVAILABLE.value()) {
+                throw new Hello503Exception();
+            }
+            throw new HelloException();
         }
     }
 
@@ -73,13 +86,10 @@ public class HelloService {
                 .url(url)
                 .build();
         try (Response response = client.newCall(request).execute()) {
-            if (!response.isSuccessful()) throw new IOException("Unexpected code " + response);
-            String result = response.body().string();
-            LOGGER.info("url:{} result:{}", url, result);
-            return mark() + result;
+            return handleResponse(url, response);
         } catch (IOException e) {
             LOGGER.error("", e);
-            return mark();
+            return markIp() + "<";
         }
     }
 
@@ -91,11 +101,15 @@ public class HelloService {
         return "@" + HOST + ":" + localIp;
     }
 
-    private String mark() {
-        String localIp = Networking.getLocalIp();
-        if (localIp == null) {
-            return "";
-        }
-        return "@" + HOST + ":" + localIp + "<";
+    private Map<String, String> buildTracingHeaders(Map<String, String> headers) {
+        return buildTracingHeaders(headers,
+                "x-request-id",
+                "x-b3-traceid",
+                "x-b3-spanid",
+                "x-b3-parentspanid",
+                "x-b3-sampled",
+                "x-b3-flags",
+                "x-ot-span-context");
     }
 }
+
