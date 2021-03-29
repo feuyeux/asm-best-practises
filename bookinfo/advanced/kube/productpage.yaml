@@ -14,43 +14,36 @@ spec:
     name: http
   selector:
     app: productpage
----
-apiVersion: v1
-kind: ServiceAccount
-metadata:
-  name: bookinfo-productpage
-  labels:
-    account: productpage
----
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: productpage-v1
-  labels:
-    app: productpage
-    version: v1
-spec:
-  replicas: 1
-  selector:
-    matchLabels:
-      app: productpage
-      version: v1
-  template:
-    metadata:
-      labels:
-        app: productpage
-        version: v1
-    spec:
-      serviceAccountName: bookinfo-productpage
-      containers:
-      - name: productpage
-        image: registry.cn-beijing.aliyuncs.com/asm_repo/examples-bookinfo-productpage-v1
-        imagePullPolicy: IfNotPresent
-        ports:
-        - containerPort: 9080
-        volumeMounts:
-        - name: tmp
-          mountPath: /tmp
-      volumes:
-      - name: tmp
-        emptyDir: {}
+# ---
+# apiVersion: apps/v1
+# kind: Deployment
+# metadata:
+#   name: productpage-v1
+#   labels:
+#     app: productpage
+#     version: v1
+# spec:
+#   replicas: 1
+#   selector:
+#     matchLabels:
+#       app: productpage
+#       version: v1
+#   template:
+#     metadata:
+#       labels:
+#         app: productpage
+#         version: v1
+#     spec:
+#       serviceAccountName: bookinfo-productpage
+#       containers:
+#       - name: productpage
+#         image: registry.cn-beijing.aliyuncs.com/asm_repo/examples-bookinfo-productpage-v1:1.16.2
+#         imagePullPolicy: IfNotPresent
+#         ports:
+#         - containerPort: 9080
+#         volumeMounts:
+#         - name: tmp
+#           mountPath: /tmp
+#       volumes:
+#       - name: tmp
+#         emptyDir: {}

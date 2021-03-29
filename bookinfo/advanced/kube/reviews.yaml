@@ -14,10 +14,3 @@ spec:
     name: http
   selector:
     app: reviews
----
-apiVersion: v1
-kind: ServiceAccount
-metadata:
-  name: bookinfo-reviews
-  labels:
-    account: reviews

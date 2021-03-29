@@ -14,37 +14,3 @@ spec:
     name: http
   selector:
     app: ratings
----
-apiVersion: v1
-kind: ServiceAccount
-metadata:
-  name: bookinfo-ratings
-  labels:
-    account: ratings
----
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: ratings-v1
-  labels:
-    app: ratings
-    version: v1
-spec:
-  replicas: 1
-  selector:
-    matchLabels:
-      app: ratings
-      version: v1
-  template:
-    metadata:
-      labels:
-        app: ratings
-        version: v1
-    spec:
-      serviceAccountName: bookinfo-ratings
-      containers:
-      - name: ratings
-        image: registry.cn-beijing.aliyuncs.com/asm_repo/examples-bookinfo-ratings-v1
-        imagePullPolicy: IfNotPresent
-        ports:
-        - containerPort: 9080

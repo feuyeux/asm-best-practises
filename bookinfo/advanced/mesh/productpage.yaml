@@ -1,0 +1,28 @@
+apiVersion: networking.istio.io/v1alpha3
+kind: WorkloadEntry
+metadata:
+  name: productpage
+spec:
+  serviceAccount: bookinfo-productpage
+  address: 10.0.0.13
+  labels:
+    app: productpage
+    instance-id: productpage-avp-ubuntu-1
+    class: vm
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: ServiceEntry
+metadata:
+  name: productpage
+spec:
+  hosts:
+  - productpage.bookinfo.svc
+  location: MESH_INTERNAL
+  ports:
+  - number: 9080
+    name: http
+    protocol: HTTP
+  resolution: STATIC
+  workloadSelector:
+    labels:
+      app: productpage
