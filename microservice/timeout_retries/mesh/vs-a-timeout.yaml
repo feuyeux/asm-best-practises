@@ -14,7 +14,4 @@ spec:
         - destination:
             host: hello-a-svc
             subset: v1
-      # timeout: 5s
-      # retries:
-      #   attempts: 3
-      #   perTryTimeout: 1s
+      timeout: 1s

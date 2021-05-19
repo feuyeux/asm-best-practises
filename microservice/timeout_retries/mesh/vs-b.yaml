@@ -6,9 +6,11 @@ spec:
   hosts:
     - hello-b-svc
   http:
-    - match:
-        - uri:
-            prefix: /hello
+    - fault:
+        delay:
+          fixedDelay: 2s
+          percent: 50
       route:
         - destination:
             host: hello-b-svc
+            subset: v2

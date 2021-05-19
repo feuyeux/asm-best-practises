@@ -1,0 +1,75 @@
+apiVersion: networking.istio.io/v1alpha3
+kind: Gateway
+metadata:
+  name: hello-gateway
+spec:
+  selector:
+    istio: ingressgateway
+  servers:
+    - port:
+        number: 8001
+        name: http
+        protocol: HTTP
+      hosts:
+        - "mirror.feuyeux.org"
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: hello-gateway-vs
+spec:
+  gateways:
+    - hello-gateway
+  hosts:
+    - 'mirror.feuyeux.org'
+  http:
+    - match:
+        - port: 8001
+      route:
+        - destination:
+            host: hello-a-svc
+            subset: v1
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: hello-b-vs
+spec:
+  hosts:
+    - hello-b-svc
+  http:
+  - route:
+    - destination:
+        host: hello-b-svc
+        subset: v2
+      weight: 100
+    # mirror:
+    #   host: hello-b-svc
+    #   subset: v3
+    # mirrorPercentage:
+    #   value: 100.0
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: DestinationRule
+metadata:
+  name: hello-a-dr
+spec:
+  host: hello-a-svc
+  subsets:
+    - name: v1
+      labels:
+        version: v1
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: DestinationRule
+metadata:
+  name: hello-b-dr
+spec:
+  host: hello-b-svc
+  subsets:
+    - name: v2
+      labels:
+        version: v2
+    - name: v3
+      labels:
+        version: v3
