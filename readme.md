@@ -1,9 +1,16 @@
 ## ASM最佳实践示例
-
+- MicroServices
+  - [outlier_detection](outlier_detection)
+  - [circuit_breaking](circuit_breaking)
+  - [rate_limit](rate_limit)
+  - [fault_injection](fault_injection)
+  - [timeout_retries](timeout_retries)
+  - [mirror](mirror)
 - Traffic Shifting
   - [http_springboot_demo](http_springboot_demo)
   - [grpc_springboot_demo](grpc_springboot_demo)
   - [rsocket_springboot_demo](rsocket_springboot_demo)
+  - [websocket](websocket)
 - Traffic Management
   - [fault_injection](fault_injection)
   - [circuit_breaking](circuit_breaking)
@@ -12,10 +19,13 @@
 - Traffic decode
   - [grpc_transcoder](grpc_transcoder)
 - Secure
+  - [secure_gateway](secure_gateway)
   - [jwt_demo](jwt_demo)
+  - [jwt_ingress](jwt_ingress)
 - Observe
   - [tracing_tag](tracing_tag)
   - [mixerless](mixerless)
+  - [skywalking](skywalking)
 - Meshifying  
   - [http_workload_demo](http_workload_demo)
   - [http_workload_traffic_demo](http_workload_traffic_demo)
@@ -24,3 +34,10 @@
   - [http_hybrid_demo](http_hybrid_demo)
   - [http_workload_blue_green_demo](http_workload_blue_green_demo)
   - [vm_tracing_demo](vm_tracing_demo)
+  - [istio_proxy](istio_proxy)
+- Bookinfo
+  - [basic](basic)
+  - [advanced](advanced)
+  
+### tools
+- [dump-resources](dump-resources)
