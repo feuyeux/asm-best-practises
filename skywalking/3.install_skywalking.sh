@@ -2,7 +2,7 @@
 set -e
 export skywalking_kubernetes_home=~/cooding/github/skywalking-kubernetes
 export PATH=$PATH:~/shop/istio-${istio_version}/bin
-alias h="helm --kubeconfig ~/shop_config/kubeconfig/istio-remote"
+alias h="helm --kubeconfig ~/shop_config/kubeconfig/ack_production"
 
 cd ${skywalking_kubernetes_home}
 # git co v4.0.0
@@ -10,9 +10,9 @@ cd ${skywalking_kubernetes_home}
 export SKYWALKING_RELEASE_NAME=skywalking
 export SKYWALKING_RELEASE_NAMESPACE=istio-system
 # https://hub.docker.com/r/apache/skywalking-oap-server/tags?page=1&ordering=last_updated
-export OAP_IMAGE_TAG=8.4.0-es7
+export OAP_IMAGE_TAG=8.5.0-es7
 # https://hub.docker.com/r/apache/skywalking-ui/tags?page=1&ordering=last_updated
-export UI_IMAGE_TAG=8.4.0
+export UI_IMAGE_TAG=8.5.0
 
 cd chart
 h repo add elastic https://helm.elastic.co >/dev/null 2>&1
