@@ -6,7 +6,7 @@
     <artifactId>spring-boot-http</artifactId>
     <version>1.0.0</version>
     <properties>
-        <spring-boot.version>2.4.5</spring-boot.version>
+        <spring-boot.version>2.5.12</spring-boot.version>
         <okhttp.version>4.9.1</okhttp.version>
     </properties>
 
