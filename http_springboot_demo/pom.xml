@@ -7,7 +7,7 @@
     <version>1.0.0</version>
     <properties>
         <spring-boot.version>2.4.5</spring-boot.version>
-        <okhttp.version>4.9.1</okhttp.version>
+        <okhttp.version>4.9.2</okhttp.version>
     </properties>
 
     <modelVersion>4.0.0</modelVersion>
